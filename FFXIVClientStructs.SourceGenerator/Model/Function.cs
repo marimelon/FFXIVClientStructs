@@ -11,6 +11,7 @@ namespace FFXIVClientStructs.SourceGenerator.Model
         public string ReturnType { get; }
         public List<FunctionArgument> Arguments { get; } = new();
         public FunctionType FunctionType { get; }
+        
         public Function(MethodDeclarationSyntax methodDeclarationSyntax, IMethodSymbol methodSymbol,
             SemanticModel model)
         {

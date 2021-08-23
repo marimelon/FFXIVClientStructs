@@ -15,6 +15,7 @@ namespace FFXIVClientStructs.SourceGenerator.Model
         public List<Struct> ChildStructs { get; } = new();
         public List<Field> Fields { get; } = new();
         public List<Function> Functions { get; } = new();
+        public List<StaticField> StaticFields { get; } = new();
 
         public Struct(StructDeclarationSyntax structDeclarationSyntax, INamedTypeSymbol typeSymbol, SemanticModel model)
         {
@@ -56,6 +57,10 @@ namespace FFXIVClientStructs.SourceGenerator.Model
                 if (methodSyntax.AttributeLists.SelectMany(x => x.Attributes).Any(attr => 
                     attr.Name.ToString() == "MemberFunction" || attr.Name.ToString() == "VirtualFunction" || attr.Name.ToString() == "StaticFunction"))
                     Functions.Add(new Function(methodSyntax, methodSymbol, model));
+                if (methodSyntax.AttributeLists.SelectMany(x => x.Attributes)
+                    .Any(attr => attr.Name.ToString() == "StaticField"))
+                    StaticFields.Add(new StaticField(methodSyntax, methodSymbol, model));
+
             }
         }
     }
