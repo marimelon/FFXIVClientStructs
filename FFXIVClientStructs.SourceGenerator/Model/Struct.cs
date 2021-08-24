@@ -12,18 +12,16 @@ namespace FFXIVClientStructs.SourceGenerator.Model
         public const string FfxivStructNamespace = "FFXIVClientStructs.FFXIV.";
         public const string StdStructNamespace = "FFXIVClientStructs.STD.";
         
-        public string Name { get; }
-        public Type Namespace { get; }
+        public Type Type { get; }
         public int Size { get; }
-        public List<Struct> ChildStructs { get; } = new();
-        public List<Field> Fields { get; } = new();
-        public List<Function> Functions { get; } = new();
-        public List<StaticField> StaticFields { get; } = new();
+        public List<Struct>? ChildStructs { get; }
+        public List<Field>? Fields { get; }
+        public List<Function>? Functions { get; }
+        public List<StaticField>? StaticFields { get; }
 
         public Struct(StructDeclarationSyntax structDeclarationSyntax, INamedTypeSymbol typeSymbol, SemanticModel model)
         {
-            Name = typeSymbol.Name;
-            Namespace = new Type(typeSymbol);
+            Type = new Type(typeSymbol);
 
             var structLayoutAttr = structDeclarationSyntax.AttributeLists.SelectMany(x => x.Attributes)
                 .FirstOrDefault(attr => attr.Name.ToString() == "StructLayout");
@@ -40,6 +38,7 @@ namespace FFXIVClientStructs.SourceGenerator.Model
             foreach (var childStructSyntax in childStructSyntaxList)
             {
                 if (model.GetDeclaredSymbol(childStructSyntax) is not { } childTypeSymbol) continue;
+                ChildStructs ??= new();
                 ChildStructs.Add(new Struct(childStructSyntax, childTypeSymbol, model));
             }
 
@@ -49,6 +48,7 @@ namespace FFXIVClientStructs.SourceGenerator.Model
                 foreach (var fieldVariableSyntax in fieldSyntax.Declaration.Variables)
                 {
                     if (model.GetDeclaredSymbol(fieldVariableSyntax) is not IFieldSymbol fieldSymbol) continue;
+                    Fields ??= new();
                     Fields.Add(new Field(fieldSyntax, fieldVariableSyntax, fieldSymbol, model));
                 }
             }
@@ -57,13 +57,20 @@ namespace FFXIVClientStructs.SourceGenerator.Model
             foreach (var methodSyntax in methodSyntaxList)
             {
                 if (model.GetDeclaredSymbol(methodSyntax) is not { } methodSymbol) continue;
-                if (methodSyntax.AttributeLists.SelectMany(x => x.Attributes).Any(attr => 
-                    attr.Name.ToString() == "MemberFunction" || attr.Name.ToString() == "VirtualFunction" || attr.Name.ToString() == "StaticFunction"))
+                if (methodSyntax.AttributeLists.SelectMany(x => x.Attributes).Any(attr =>
+                    attr.Name.ToString() == "MemberFunction" || attr.Name.ToString() == "VirtualFunction" ||
+                    attr.Name.ToString() == "StaticFunction"))
+                {
+                    Functions ??= new();
                     Functions.Add(new Function(methodSyntax, methodSymbol, model));
+                }
+
                 if (methodSyntax.AttributeLists.SelectMany(x => x.Attributes)
                     .Any(attr => attr.Name.ToString() == "StaticField"))
+                {
+                    StaticFields ??= new();
                     StaticFields.Add(new StaticField(methodSyntax, methodSymbol, model));
-
+                }
             }
         }
     }

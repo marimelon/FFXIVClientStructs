@@ -6,85 +6,38 @@ namespace FFXIVClientStructs.SourceGenerator.Model
 {
     public class Type
     {
-        public string CsType { get; }
-        public string CppType { get; }
-        public bool IsPointer { get; }
-        public bool IsGeneric { get; }
+        public string? Name { get; }
+        public string? Namespace { get; }
+        public TypeKind TypeKind { get; }
+        public Type? PointedAtType { get; }
         public List<Type>? TypeArguments { get; }
 
         public Type(ITypeSymbol type)
         {
+            var format = new SymbolDisplayFormat(
+                typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypes,
+                miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
             switch (type)
             {
                 case IPointerTypeSymbol pt:
-                    
-            }
-            CsType = typeName.TrimEnd('*');
-            CppType = GetCppTypeString(typeName);
-            IsPointer = type.TypeKind == TypeKind.Pointer;
-            if (type is INamedTypeSymbol namedTypeSymbol && namedTypeSymbol.IsGenericType)
-            {
-                IsGeneric = true;
-                TypeArguments = new();
-                foreach(var typeArgument in namedTypeSymbol.TypeArguments)
-                    TypeArguments.Add(new Type(typeArgument));
-            }
-        }
-        
-        private string GetCppTypeString(string typeString)
-        {
-            string outString = "";
-            
-            switch (typeString.TrimEnd('*'))
-            {
-                case { } s when s.StartsWith(Struct.StdStructNamespace + "PointerVector") || s.StartsWith(Struct.StdStructNamespace + "Vector"):
-                    var containedType = s.Substring(s.IndexOf('\u003C') + 1,
-                        s.IndexOf('\u003E') - s.IndexOf('\u003C') - 1);
-                    var cppContainedType = GetCppTypeString(containedType);
-                    outString = s.StartsWith(Struct.StdStructNamespace + "PointerVector") && cppContainedType != "T" ? $"std::vector<{cppContainedType}*>" : $"std::vector<{cppContainedType}>";
+                    TypeKind = TypeKind.Pointer;
+                    PointedAtType = new Type(pt.PointedAtType);
+                    return;
+                case INamedTypeSymbol { IsGenericType: true } nt:
+                    TypeKind = TypeKind.Generic;
+                    TypeArguments = new();
+                    foreach(var typeArgument in nt.TypeArguments)
+                        TypeArguments.Add(new Type(typeArgument));
                     break;
-                case { } s when s.StartsWith(Struct.StdStructNamespace + "String"):
-                    outString = "std::string";
-                    break;
-                case { } s when s.StartsWith(Struct.FfxivStructNamespace):
-                    outString = s.Substring(Struct.FfxivStructNamespace.Length);
-                    break;
-                case "byte":
-                    outString = "uint8_t";
-                    break;
-                case "sbyte":
-                    outString = "int8_t";
-                    break;
-                case "ushort":
-                    outString = "uint16_t";
-                    break;
-                case "short":
-                    outString = "int16_t";
-                    break;
-                case "uint":
-                    outString = "uint32_t";
-                    break;
-                case "int":
-                    outString = "int32_t";
-                    break;
-                case "ulong":
-                    outString = "uint64_t";
-                    break;
-                case "long":
-                    outString = "int64_t";
-                    break;
-                case "nuint":
-                    outString = "uintptr_t";
-                    break;
-                case "nint":
-                    outString = "intptr_t";
-                    break;
-                case { } s:
-                    outString = s;
+                default:
+                    TypeKind = TypeKind.Simple;
                     break;
             }
-
-            return outString.Replace(".", "::");
+            Name = type.ToDisplayString(format);
+            var containingType = type;
+            while (containingType.ContainingType != null) containingType = containingType.ContainingType;
+            var nsType = containingType.ContainingNamespace;
+            Namespace = nsType.ToDisplayString();
         }
     }
 }

@@ -9,8 +9,8 @@ namespace FFXIVClientStructs.SourceGenerator.Model
     {
         public string Name { get; }
         public Type ReturnType { get; }
-        public List<FunctionArgument> Arguments { get; } = new();
-        public FunctionType FunctionType { get; }
+        public List<FunctionArgument>? Arguments { get; }
+        public FunctionKind FunctionKind { get; }
         
         public Function(MethodDeclarationSyntax methodDeclarationSyntax, IMethodSymbol methodSymbol,
             SemanticModel model)
@@ -19,6 +19,7 @@ namespace FFXIVClientStructs.SourceGenerator.Model
             ReturnType = new Type(methodSymbol.ReturnType);
             foreach (var param in methodSymbol.Parameters)
             {
+                Arguments ??= new();
                 Arguments.Add(new FunctionArgument(new Type(param.Type), param.Name));
             }
 
@@ -26,13 +27,13 @@ namespace FFXIVClientStructs.SourceGenerator.Model
             switch (attributes)
             {
                 case { } attr when attr.Any(a => a.Name.ToString() == "StaticFunction"):
-                    FunctionType = FunctionType.StaticFunction;
+                    FunctionKind = FunctionKind.StaticFunction;
                     break;
                 case { } attr when attr.Any(a => a.Name.ToString() == "MemberFunction"):
-                    FunctionType = FunctionType.MemberFunction;
+                    FunctionKind = FunctionKind.MemberFunction;
                     break;
                 case { } attr when attr.Any(a => a.Name.ToString() == "VirtualFunction"):
-                    FunctionType = FunctionType.VirtualFunction;
+                    FunctionKind = FunctionKind.VirtualFunction;
                     break;
             }
         }
