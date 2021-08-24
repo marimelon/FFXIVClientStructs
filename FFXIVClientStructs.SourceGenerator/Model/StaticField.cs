@@ -6,13 +6,13 @@ namespace FFXIVClientStructs.SourceGenerator.Model
     public struct StaticField
     {
         public string Name { get; }
-        public string Type { get; }
+        public Type Type { get; }
 
         public StaticField(MethodDeclarationSyntax methodDeclarationSyntax, IMethodSymbol methodSymbol,
             SemanticModel model)
         {
             Name = methodSymbol.Name;
-            Type = Helpers.NormalizeTypeString(methodSymbol.ReturnType.ToDisplayString());
+            Type = new Type(methodSymbol.ReturnType.ToDisplayString());
         }
     }
 }

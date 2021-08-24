@@ -7,13 +7,13 @@ namespace FFXIVClientStructs.SourceGenerator.Model
     public class Field
     {
         public string Name { get; }
-        public string Type { get; }
+        public Type Type { get; }
         public int Offset { get; }
         
         public Field(FieldDeclarationSyntax fieldDeclarationSyntax, VariableDeclaratorSyntax variableDeclaratorSyntax, IFieldSymbol fieldSymbol, SemanticModel model)
         {
             Name = fieldSymbol.Name;
-            Type = Helpers.NormalizeTypeString(fieldSymbol.Type.ToDisplayString());
+            Type = new Type(fieldSymbol.Type.ToDisplayString());
             
             var fieldOffsetAttr = fieldDeclarationSyntax.AttributeLists.SelectMany(x => x.Attributes)
                 .FirstOrDefault(attr => attr.Name.ToString() == "FieldOffset");

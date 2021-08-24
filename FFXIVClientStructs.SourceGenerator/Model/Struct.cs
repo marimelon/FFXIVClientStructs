@@ -9,8 +9,11 @@ namespace FFXIVClientStructs.SourceGenerator.Model
 {
     public class Struct
     { 
+        public const string FfxivStructNamespace = "FFXIVClientStructs.FFXIV.";
+        public const string StdStructNamespace = "FFXIVClientStructs.STD.";
+        
         public string Name { get; }
-        public string Namespace { get; }
+        public Type Namespace { get; }
         public int Size { get; }
         public List<Struct> ChildStructs { get; } = new();
         public List<Field> Fields { get; } = new();
@@ -20,7 +23,7 @@ namespace FFXIVClientStructs.SourceGenerator.Model
         public Struct(StructDeclarationSyntax structDeclarationSyntax, INamedTypeSymbol typeSymbol, SemanticModel model)
         {
             Name = typeSymbol.Name;
-            Namespace = Helpers.NormalizeTypeString(typeSymbol.ContainingNamespace.ToDisplayString());
+            Namespace = new Type(typeSymbol.ContainingNamespace.ToDisplayString());
 
             var structLayoutAttr = structDeclarationSyntax.AttributeLists.SelectMany(x => x.Attributes)
                 .FirstOrDefault(attr => attr.Name.ToString() == "StructLayout");

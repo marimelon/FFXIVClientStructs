@@ -8,7 +8,7 @@ namespace FFXIVClientStructs.SourceGenerator.Model
     public class Function
     {
         public string Name { get; }
-        public string ReturnType { get; }
+        public Type ReturnType { get; }
         public List<FunctionArgument> Arguments { get; } = new();
         public FunctionType FunctionType { get; }
         
@@ -16,10 +16,10 @@ namespace FFXIVClientStructs.SourceGenerator.Model
             SemanticModel model)
         {
             Name = methodSymbol.Name;
-            ReturnType = Helpers.NormalizeTypeString(methodSymbol.ReturnType.ToDisplayString());
+            ReturnType = new Type(methodSymbol.ReturnType.ToDisplayString());
             foreach (var param in methodSymbol.Parameters)
             {
-                Arguments.Add(new FunctionArgument(Helpers.NormalizeTypeString(param.Type.ToDisplayString()), param.Name));
+                Arguments.Add(new FunctionArgument(new Type(param.Type.ToDisplayString()), param.Name));
             }
 
             var attributes = methodDeclarationSyntax.AttributeLists.SelectMany(x => x.Attributes);
