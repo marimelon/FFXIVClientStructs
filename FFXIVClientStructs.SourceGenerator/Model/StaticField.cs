@@ -12,7 +12,7 @@ namespace FFXIVClientStructs.SourceGenerator.Model
             SemanticModel model)
         {
             Name = methodSymbol.Name;
-            Type = new Type(methodSymbol.ReturnType.ToDisplayString());
+            Type = new Type(methodSymbol.ReturnType);
         }
     }
 }

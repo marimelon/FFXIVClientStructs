@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using System.Transactions;
 using FFXIVClientStructs.SourceGenerator.Model;
@@ -49,7 +50,10 @@ namespace FFXIVClientStructs.StructExporter
             }
 
             await using FileStream createStream = File.Create(@"DisasmTools\structs.json");
-            await JsonSerializer.SerializeAsync(createStream, structWalker.Structs, new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, WriteIndented = true });
+            await JsonSerializer.SerializeAsync(createStream, structWalker.Structs, 
+                new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                    WriteIndented = true });
             await createStream.DisposeAsync();
         }
 

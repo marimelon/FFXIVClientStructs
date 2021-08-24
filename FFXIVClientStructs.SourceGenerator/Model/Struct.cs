@@ -23,7 +23,7 @@ namespace FFXIVClientStructs.SourceGenerator.Model
         public Struct(StructDeclarationSyntax structDeclarationSyntax, INamedTypeSymbol typeSymbol, SemanticModel model)
         {
             Name = typeSymbol.Name;
-            Namespace = new Type(typeSymbol.ContainingNamespace.ToDisplayString());
+            Namespace = new Type(typeSymbol);
 
             var structLayoutAttr = structDeclarationSyntax.AttributeLists.SelectMany(x => x.Attributes)
                 .FirstOrDefault(attr => attr.Name.ToString() == "StructLayout");

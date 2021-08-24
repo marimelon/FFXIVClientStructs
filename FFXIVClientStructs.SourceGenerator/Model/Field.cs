@@ -13,7 +13,7 @@ namespace FFXIVClientStructs.SourceGenerator.Model
         public Field(FieldDeclarationSyntax fieldDeclarationSyntax, VariableDeclaratorSyntax variableDeclaratorSyntax, IFieldSymbol fieldSymbol, SemanticModel model)
         {
             Name = fieldSymbol.Name;
-            Type = new Type(fieldSymbol.Type.ToDisplayString());
+            Type = new Type(fieldSymbol.Type);
             
             var fieldOffsetAttr = fieldDeclarationSyntax.AttributeLists.SelectMany(x => x.Attributes)
                 .FirstOrDefault(attr => attr.Name.ToString() == "FieldOffset");

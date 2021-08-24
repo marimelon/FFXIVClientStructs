@@ -16,10 +16,10 @@ namespace FFXIVClientStructs.SourceGenerator.Model
             SemanticModel model)
         {
             Name = methodSymbol.Name;
-            ReturnType = new Type(methodSymbol.ReturnType.ToDisplayString());
+            ReturnType = new Type(methodSymbol.ReturnType);
             foreach (var param in methodSymbol.Parameters)
             {
-                Arguments.Add(new FunctionArgument(new Type(param.Type.ToDisplayString()), param.Name));
+                Arguments.Add(new FunctionArgument(new Type(param.Type), param.Name));
             }
 
             var attributes = methodDeclarationSyntax.AttributeLists.SelectMany(x => x.Attributes);
