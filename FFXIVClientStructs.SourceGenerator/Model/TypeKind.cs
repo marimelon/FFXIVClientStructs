@@ -4,6 +4,7 @@
     {
         Simple = 1,
         Pointer = 2,
-        Generic = 3
+        Generic = 3,
+        Array = 4
     }
 }

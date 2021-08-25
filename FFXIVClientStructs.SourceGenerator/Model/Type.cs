@@ -11,12 +11,24 @@ namespace FFXIVClientStructs.SourceGenerator.Model
         public TypeKind TypeKind { get; }
         public Type? PointedAtType { get; }
         public List<Type>? TypeArguments { get; }
+        
+        public Type? ArrayType { get; }
+        public int? ArraySize { get; }
 
-        public Type(ITypeSymbol type)
+        public Type(ITypeSymbol type, bool isFixedArray = false, int fixedArrayLen = -1)
         {
             var format = new SymbolDisplayFormat(
-                typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypes,
+                typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameOnly,
                 miscellaneousOptions: SymbolDisplayMiscellaneousOptions.UseSpecialTypes);
+
+            if (isFixedArray)
+            {
+                ArrayType = new Type(type);
+                ArraySize = fixedArrayLen;
+                TypeKind = TypeKind.Array;
+                return;
+            }
+
             switch (type)
             {
                 case IPointerTypeSymbol pt:

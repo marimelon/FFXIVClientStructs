@@ -421,7 +421,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "BattleChara.CastInfo",
+          "Name": "CastInfo",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.Game.Character",
           "TypeKind": 1
         },
@@ -542,7 +542,7 @@
       {
         "Name": "SpellCastInfo",
         "Type": {
-          "Name": "BattleChara.CastInfo",
+          "Name": "CastInfo",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.Game.Character",
           "TypeKind": 1
         },
@@ -573,7 +573,7 @@
         "ReturnType": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "BattleChara.CastInfo",
+            "Name": "CastInfo",
             "Namespace": "FFXIVClientStructs.FFXIV.Client.Game.Character",
             "TypeKind": 1
           }
@@ -691,14 +691,6 @@
       },
       {
         "Name": "EquipSlotData",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 4160
       },
       {
@@ -727,26 +719,10 @@
       },
       {
         "Name": "CustomizeData",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 6296
       },
       {
         "Name": "FreeCompanyTag",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 6322
       },
       {
@@ -1342,14 +1318,6 @@
       },
       {
         "Name": "Seals",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 13
       }
     ]
@@ -1630,14 +1598,6 @@
       },
       {
         "Name": "DanceSteps",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 10
       },
       {
@@ -1912,26 +1872,10 @@
     "Fields": [
       {
         "Name": "PartyMembers",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 0
       },
       {
         "Name": "AllianceMembers",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 4480
       },
       {
@@ -2295,14 +2239,6 @@
       },
       {
         "Name": "Name",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 452
       },
       {
@@ -2581,7 +2517,7 @@
       {
         "Name": "Flags",
         "Type": {
-          "Name": "InventoryItem.ItemFlags",
+          "Name": "ItemFlags",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.Game",
           "TypeKind": 1
         },
@@ -2598,26 +2534,10 @@
       },
       {
         "Name": "Materia",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "ushort",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 32
       },
       {
         "Name": "MateriaGrade",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 42
       },
       {
@@ -2843,14 +2763,6 @@
     "Fields": [
       {
         "Name": "Name",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 48
       },
       {
@@ -3241,14 +3153,6 @@
       },
       {
         "Name": "Status",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 8
       },
       {
@@ -3299,7 +3203,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "Buddy.BuddyMember",
+          "Name": "BuddyMember",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.Game.UI",
           "TypeKind": 1
         },
@@ -3366,7 +3270,7 @@
       {
         "Name": "Companion",
         "Type": {
-          "Name": "Buddy.BuddyMember",
+          "Name": "BuddyMember",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.Game.UI",
           "TypeKind": 1
         },
@@ -3375,7 +3279,7 @@
       {
         "Name": "Pet",
         "Type": {
-          "Name": "Buddy.BuddyMember",
+          "Name": "BuddyMember",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.Game.UI",
           "TypeKind": 1
         },
@@ -3384,12 +3288,13 @@
       {
         "Name": "BattleBuddies",
         "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
+          "TypeKind": 4,
+          "ArrayType": {
+            "Name": "BuddyMember",
+            "Namespace": "FFXIVClientStructs.FFXIV.Client.Game.UI",
             "TypeKind": 1
-          }
+          },
+          "ArraySize": 3
         },
         "Offset": 816
       },
@@ -3398,7 +3303,7 @@
         "Type": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "Buddy.BuddyMember",
+            "Name": "BuddyMember",
             "Namespace": "FFXIVClientStructs.FFXIV.Client.Game.UI",
             "TypeKind": 1
           }
@@ -3416,14 +3321,6 @@
       },
       {
         "Name": "Name",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 2066
       },
       {
@@ -3530,7 +3427,7 @@
         "Type": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "Buddy.BuddyMember",
+            "Name": "BuddyMember",
             "Namespace": "FFXIVClientStructs.FFXIV.Client.Game.UI",
             "TypeKind": 1
           }
@@ -3542,7 +3439,7 @@
         "Type": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "Buddy.BuddyMember",
+            "Name": "BuddyMember",
             "Namespace": "FFXIVClientStructs.FFXIV.Client.Game.UI",
             "TypeKind": 1
           }
@@ -3579,14 +3476,6 @@
       },
       {
         "Name": "MonsterProgress",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 10
       },
       {
@@ -4119,7 +4008,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "ShaderNode.ShaderPass",
+          "Name": "ShaderPass",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.Graphics.Kernel",
           "TypeKind": 1
         },
@@ -4182,14 +4071,6 @@
       },
       {
         "Name": "PassIndices",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 20
       },
       {
@@ -4197,7 +4078,7 @@
         "Type": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "ShaderNode.ShaderPass",
+            "Name": "ShaderPass",
             "Namespace": "FFXIVClientStructs.FFXIV.Client.Graphics.Kernel",
             "TypeKind": 1
           }
@@ -4228,7 +4109,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "ShaderPackage.MaterialElement",
+          "Name": "MaterialElement",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.Graphics.Kernel",
           "TypeKind": 1
         },
@@ -4265,7 +4146,7 @@
       },
       {
         "Type": {
-          "Name": "ShaderPackage.ConstantSamplerUnknown",
+          "Name": "ConstantSamplerUnknown",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.Graphics.Kernel",
           "TypeKind": 1
         },
@@ -4407,7 +4288,7 @@
         "Type": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "ShaderPackage.MaterialElement",
+            "Name": "MaterialElement",
             "Namespace": "FFXIVClientStructs.FFXIV.Client.Graphics.Kernel",
             "TypeKind": 1
           }
@@ -4419,7 +4300,7 @@
         "Type": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "ShaderPackage.ConstantSamplerUnknown",
+            "Name": "ConstantSamplerUnknown",
             "Namespace": "FFXIVClientStructs.FFXIV.Client.Graphics.Kernel",
             "TypeKind": 1
           }
@@ -4431,7 +4312,7 @@
         "Type": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "ShaderPackage.ConstantSamplerUnknown",
+            "Name": "ConstantSamplerUnknown",
             "Namespace": "FFXIVClientStructs.FFXIV.Client.Graphics.Kernel",
             "TypeKind": 1
           }
@@ -4443,7 +4324,7 @@
         "Type": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "ShaderPackage.ConstantSamplerUnknown",
+            "Name": "ConstantSamplerUnknown",
             "Namespace": "FFXIVClientStructs.FFXIV.Client.Graphics.Kernel",
             "TypeKind": 1
           }
@@ -4772,14 +4653,6 @@
     "Fields": [
       {
         "Name": "Matrix",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "float",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 0
       },
       {
@@ -5312,14 +5185,6 @@
       },
       {
         "Name": "ViewArray",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 8
       }
     ]
@@ -5437,14 +5302,6 @@
       },
       {
         "Name": "RenderTargetArray",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 32
       },
       {
@@ -5638,14 +5495,6 @@
       },
       {
         "Name": "RenderTargetArray2",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 592
       }
     ]
@@ -5911,14 +5760,6 @@
       },
       {
         "Name": "SubViewArray",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 32
       }
     ]
@@ -6145,14 +5986,6 @@
       },
       {
         "Name": "CustomizeData",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 2288
       },
       {
@@ -6211,14 +6044,6 @@
       },
       {
         "Name": "EquipSlotData",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 2320
       },
       {
@@ -6973,14 +6798,6 @@
       },
       {
         "Name": "InlineBuffer",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 34
       }
     ]
@@ -6995,7 +6812,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7110,7 +6927,7 @@
       },
       {
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7177,7 +6994,7 @@
       {
         "Name": "SpellbookBlock01",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7186,7 +7003,7 @@
       {
         "Name": "SpellbookBlock02",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7195,7 +7012,7 @@
       {
         "Name": "SpellbookBlock03",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7204,7 +7021,7 @@
       {
         "Name": "SpellbookBlock04",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7213,7 +7030,7 @@
       {
         "Name": "SpellbookBlock05",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7222,7 +7039,7 @@
       {
         "Name": "SpellbookBlock06",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7231,7 +7048,7 @@
       {
         "Name": "SpellbookBlock07",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7240,7 +7057,7 @@
       {
         "Name": "SpellbookBlock08",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7249,7 +7066,7 @@
       {
         "Name": "SpellbookBlock09",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7258,7 +7075,7 @@
       {
         "Name": "SpellbookBlock10",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7267,7 +7084,7 @@
       {
         "Name": "SpellbookBlock11",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7276,7 +7093,7 @@
       {
         "Name": "SpellbookBlock12",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7285,7 +7102,7 @@
       {
         "Name": "SpellbookBlock13",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7294,7 +7111,7 @@
       {
         "Name": "SpellbookBlock14",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7303,7 +7120,7 @@
       {
         "Name": "SpellbookBlock15",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7312,7 +7129,7 @@
       {
         "Name": "SpellbookBlock16",
         "Type": {
-          "Name": "AddonAOZNotebook.SpellbookBlock",
+          "Name": "SpellbookBlock",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7321,7 +7138,7 @@
       {
         "Name": "ActiveActions01",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7330,7 +7147,7 @@
       {
         "Name": "ActiveActions02",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7339,7 +7156,7 @@
       {
         "Name": "ActiveActions03",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7348,7 +7165,7 @@
       {
         "Name": "ActiveActions04",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7357,7 +7174,7 @@
       {
         "Name": "ActiveActions05",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7366,7 +7183,7 @@
       {
         "Name": "ActiveActions06",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7375,7 +7192,7 @@
       {
         "Name": "ActiveActions07",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7384,7 +7201,7 @@
       {
         "Name": "ActiveActions08",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7393,7 +7210,7 @@
       {
         "Name": "ActiveActions09",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7402,7 +7219,7 @@
       {
         "Name": "ActiveActions10",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7411,7 +7228,7 @@
       {
         "Name": "ActiveActions11",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7420,7 +7237,7 @@
       {
         "Name": "ActiveActions12",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7429,7 +7246,7 @@
       {
         "Name": "ActiveActions13",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7438,7 +7255,7 @@
       {
         "Name": "ActiveActions14",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7447,7 +7264,7 @@
       {
         "Name": "ActiveActions15",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7456,7 +7273,7 @@
       {
         "Name": "ActiveActions16",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7465,7 +7282,7 @@
       {
         "Name": "ActiveActions17",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7474,7 +7291,7 @@
       {
         "Name": "ActiveActions18",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7483,7 +7300,7 @@
       {
         "Name": "ActiveActions19",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7492,7 +7309,7 @@
       {
         "Name": "ActiveActions20",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7501,7 +7318,7 @@
       {
         "Name": "ActiveActions21",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7510,7 +7327,7 @@
       {
         "Name": "ActiveActions22",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7519,7 +7336,7 @@
       {
         "Name": "ActiveActions23",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -7528,7 +7345,7 @@
       {
         "Name": "ActiveActions24",
         "Type": {
-          "Name": "AddonAOZNotebook.ActiveActions",
+          "Name": "ActiveActions",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -9301,7 +9118,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "AddonLotteryDaily.GameTileRow",
+          "Name": "GameTileRow",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -9347,7 +9164,7 @@
       },
       {
         "Type": {
-          "Name": "AddonLotteryDaily.GameTileBoard",
+          "Name": "GameTileBoard",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -9356,7 +9173,7 @@
           {
             "Name": "Row1",
             "Type": {
-              "Name": "AddonLotteryDaily.GameTileRow",
+              "Name": "GameTileRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -9365,7 +9182,7 @@
           {
             "Name": "Row2",
             "Type": {
-              "Name": "AddonLotteryDaily.GameTileRow",
+              "Name": "GameTileRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -9374,7 +9191,7 @@
           {
             "Name": "Row3",
             "Type": {
-              "Name": "AddonLotteryDaily.GameTileRow",
+              "Name": "GameTileRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -9384,7 +9201,7 @@
       },
       {
         "Type": {
-          "Name": "AddonLotteryDaily.LaneTileSelector",
+          "Name": "LaneTileSelector",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -9490,7 +9307,7 @@
       },
       {
         "Type": {
-          "Name": "AddonLotteryDaily.GameNumberRow",
+          "Name": "GameNumberRow",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -9527,7 +9344,7 @@
       },
       {
         "Type": {
-          "Name": "AddonLotteryDaily.GameBoardNumbers",
+          "Name": "GameBoardNumbers",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -9536,7 +9353,7 @@
           {
             "Name": "Row1",
             "Type": {
-              "Name": "AddonLotteryDaily.GameNumberRow",
+              "Name": "GameNumberRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -9545,7 +9362,7 @@
           {
             "Name": "Row2",
             "Type": {
-              "Name": "AddonLotteryDaily.GameNumberRow",
+              "Name": "GameNumberRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -9554,7 +9371,7 @@
           {
             "Name": "Row3",
             "Type": {
-              "Name": "AddonLotteryDaily.GameNumberRow",
+              "Name": "GameNumberRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -9576,7 +9393,7 @@
       {
         "Name": "GameBoard",
         "Type": {
-          "Name": "AddonLotteryDaily.GameTileBoard",
+          "Name": "GameTileBoard",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -9585,7 +9402,7 @@
       {
         "Name": "LaneSelector",
         "Type": {
-          "Name": "AddonLotteryDaily.LaneTileSelector",
+          "Name": "LaneTileSelector",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -10056,7 +9873,7 @@
       {
         "Name": "GameNumbers",
         "Type": {
-          "Name": "AddonLotteryDaily.GameBoardNumbers",
+          "Name": "GameBoardNumbers",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -10180,7 +9997,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "AddonNamePlate.BakePlateRenderer",
+          "Name": "BakePlateRenderer",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -10199,7 +10016,7 @@
       },
       {
         "Type": {
-          "Name": "AddonNamePlate.BakeData",
+          "Name": "BakeData",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -10263,7 +10080,7 @@
       },
       {
         "Type": {
-          "Name": "AddonNamePlate.NamePlateObject",
+          "Name": "NamePlateObject",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -10272,7 +10089,7 @@
           {
             "Name": "BakeData",
             "Type": {
-              "Name": "AddonNamePlate.BakeData",
+              "Name": "BakeData",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -10504,7 +10321,7 @@
       {
         "Name": "BakePlate",
         "Type": {
-          "Name": "AddonNamePlate.BakePlateRenderer",
+          "Name": "BakePlateRenderer",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -10515,7 +10332,7 @@
         "Type": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "AddonNamePlate.NamePlateObject",
+            "Name": "NamePlateObject",
             "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
             "TypeKind": 1
           }
@@ -10552,7 +10369,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "AddonPartyList.PartyMembers",
+          "Name": "PartyMembers",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -10561,7 +10378,7 @@
           {
             "Name": "PartyMember0",
             "Type": {
-              "Name": "AddonPartyList.PartyListMemberStruct",
+              "Name": "PartyListMemberStruct",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -10570,7 +10387,7 @@
           {
             "Name": "PartyMember1",
             "Type": {
-              "Name": "AddonPartyList.PartyListMemberStruct",
+              "Name": "PartyListMemberStruct",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -10579,7 +10396,7 @@
           {
             "Name": "PartyMember2",
             "Type": {
-              "Name": "AddonPartyList.PartyListMemberStruct",
+              "Name": "PartyListMemberStruct",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -10588,7 +10405,7 @@
           {
             "Name": "PartyMember3",
             "Type": {
-              "Name": "AddonPartyList.PartyListMemberStruct",
+              "Name": "PartyListMemberStruct",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -10597,7 +10414,7 @@
           {
             "Name": "PartyMember4",
             "Type": {
-              "Name": "AddonPartyList.PartyListMemberStruct",
+              "Name": "PartyListMemberStruct",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -10606,7 +10423,7 @@
           {
             "Name": "PartyMember5",
             "Type": {
-              "Name": "AddonPartyList.PartyListMemberStruct",
+              "Name": "PartyListMemberStruct",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -10615,7 +10432,7 @@
           {
             "Name": "PartyMember6",
             "Type": {
-              "Name": "AddonPartyList.PartyListMemberStruct",
+              "Name": "PartyListMemberStruct",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -10624,7 +10441,7 @@
           {
             "Name": "PartyMember7",
             "Type": {
-              "Name": "AddonPartyList.PartyListMemberStruct",
+              "Name": "PartyListMemberStruct",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -10634,7 +10451,7 @@
       },
       {
         "Type": {
-          "Name": "AddonPartyList.PartyListMemberStruct",
+          "Name": "PartyListMemberStruct",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -10642,7 +10459,7 @@
         "ChildStructs": [
           {
             "Type": {
-              "Name": "AddonPartyList.PartyListMemberStruct.StatusIcons",
+              "Name": "StatusIcons",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -10784,7 +10601,7 @@
           {
             "Name": "StatusIcon",
             "Type": {
-              "Name": "AddonPartyList.PartyListMemberStruct.StatusIcons",
+              "Name": "StatusIcons",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -11067,7 +10884,7 @@
       {
         "Name": "PartyMember",
         "Type": {
-          "Name": "AddonPartyList.PartyMembers",
+          "Name": "PartyMembers",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -11076,7 +10893,7 @@
       {
         "Name": "Unknown08",
         "Type": {
-          "Name": "AddonPartyList.PartyListMemberStruct",
+          "Name": "PartyListMemberStruct",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -11085,7 +10902,7 @@
       {
         "Name": "Unknown09",
         "Type": {
-          "Name": "AddonPartyList.PartyListMemberStruct",
+          "Name": "PartyListMemberStruct",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -11094,7 +10911,7 @@
       {
         "Name": "Unknown10",
         "Type": {
-          "Name": "AddonPartyList.PartyListMemberStruct",
+          "Name": "PartyListMemberStruct",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -11103,7 +10920,7 @@
       {
         "Name": "Chocobo",
         "Type": {
-          "Name": "AddonPartyList.PartyListMemberStruct",
+          "Name": "PartyListMemberStruct",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -11112,7 +10929,7 @@
       {
         "Name": "Pet",
         "Type": {
-          "Name": "AddonPartyList.PartyListMemberStruct",
+          "Name": "PartyListMemberStruct",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -11120,26 +10937,10 @@
       },
       {
         "Name": "PartyClassJobIconId",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 3872
       },
       {
         "Name": "Edited",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "short",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 3978
       },
       {
@@ -14136,7 +13937,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "AddonSelectIconString.EventThing",
+          "Name": "EventThing",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -14206,7 +14007,7 @@
       {
         "Name": "SelectIconStringThing",
         "Type": {
-          "Name": "AddonSelectIconString.EventThing",
+          "Name": "EventThing",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -14224,7 +14025,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "AddonSelectString.PopupMenuDerive",
+          "Name": "PopupMenuDerive",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -14330,7 +14131,7 @@
       {
         "Name": "PopupMenu",
         "Type": {
-          "Name": "AddonSelectString.PopupMenuDerive",
+          "Name": "PopupMenuDerive",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -14587,7 +14388,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "AddonSynthesize.CraftEffect",
+          "Name": "CraftEffect",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15089,7 +14890,7 @@
       {
         "Name": "CraftEffect1",
         "Type": {
-          "Name": "AddonSynthesize.CraftEffect",
+          "Name": "CraftEffect",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15098,7 +14899,7 @@
       {
         "Name": "CraftEffect2",
         "Type": {
-          "Name": "AddonSynthesize.CraftEffect",
+          "Name": "CraftEffect",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15107,7 +14908,7 @@
       {
         "Name": "CraftEffect3",
         "Type": {
-          "Name": "AddonSynthesize.CraftEffect",
+          "Name": "CraftEffect",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15116,7 +14917,7 @@
       {
         "Name": "CraftEffect4",
         "Type": {
-          "Name": "AddonSynthesize.CraftEffect",
+          "Name": "CraftEffect",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15125,7 +14926,7 @@
       {
         "Name": "CraftEffect5",
         "Type": {
-          "Name": "AddonSynthesize.CraftEffect",
+          "Name": "CraftEffect",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15134,7 +14935,7 @@
       {
         "Name": "CraftEffect6",
         "Type": {
-          "Name": "AddonSynthesize.CraftEffect",
+          "Name": "CraftEffect",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15143,7 +14944,7 @@
       {
         "Name": "CraftEffect7",
         "Type": {
-          "Name": "AddonSynthesize.CraftEffect",
+          "Name": "CraftEffect",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15152,7 +14953,7 @@
       {
         "Name": "CraftEffect8",
         "Type": {
-          "Name": "AddonSynthesize.CraftEffect",
+          "Name": "CraftEffect",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15161,7 +14962,7 @@
       {
         "Name": "CraftEffect9",
         "Type": {
-          "Name": "AddonSynthesize.CraftEffect",
+          "Name": "CraftEffect",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15913,7 +15714,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "AddonWeeklyPuzzle.RewardPanelItem",
+          "Name": "RewardPanelItem",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15980,7 +15781,7 @@
       },
       {
         "Type": {
-          "Name": "AddonWeeklyPuzzle.GameTileBoard",
+          "Name": "GameTileBoard",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -15989,7 +15790,7 @@
           {
             "Name": "Row1",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileRow",
+              "Name": "GameTileRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -15998,7 +15799,7 @@
           {
             "Name": "Row2",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileRow",
+              "Name": "GameTileRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -16007,7 +15808,7 @@
           {
             "Name": "Row3",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileRow",
+              "Name": "GameTileRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -16016,7 +15817,7 @@
           {
             "Name": "Row4",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileRow",
+              "Name": "GameTileRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -16025,7 +15826,7 @@
           {
             "Name": "Row5",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileRow",
+              "Name": "GameTileRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -16034,7 +15835,7 @@
           {
             "Name": "Row6",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileRow",
+              "Name": "GameTileRow",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -16044,7 +15845,7 @@
       },
       {
         "Type": {
-          "Name": "AddonWeeklyPuzzle.GameTileRow",
+          "Name": "GameTileRow",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -16053,7 +15854,7 @@
           {
             "Name": "Col1",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileItem",
+              "Name": "GameTileItem",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -16062,7 +15863,7 @@
           {
             "Name": "Col2",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileItem",
+              "Name": "GameTileItem",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -16071,7 +15872,7 @@
           {
             "Name": "Col3",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileItem",
+              "Name": "GameTileItem",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -16080,7 +15881,7 @@
           {
             "Name": "Col4",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileItem",
+              "Name": "GameTileItem",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -16089,7 +15890,7 @@
           {
             "Name": "Col5",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileItem",
+              "Name": "GameTileItem",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -16098,7 +15899,7 @@
           {
             "Name": "Col6",
             "Type": {
-              "Name": "AddonWeeklyPuzzle.GameTileItem",
+              "Name": "GameTileItem",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -16108,7 +15909,7 @@
       },
       {
         "Type": {
-          "Name": "AddonWeeklyPuzzle.GameTileItem",
+          "Name": "GameTileItem",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -16199,7 +16000,7 @@
       {
         "Name": "RewardPanelCommander",
         "Type": {
-          "Name": "AddonWeeklyPuzzle.RewardPanelItem",
+          "Name": "RewardPanelItem",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -16208,7 +16009,7 @@
       {
         "Name": "RewardPanelCoffer",
         "Type": {
-          "Name": "AddonWeeklyPuzzle.RewardPanelItem",
+          "Name": "RewardPanelItem",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -16217,7 +16018,7 @@
       {
         "Name": "RewardPanelGiftBox",
         "Type": {
-          "Name": "AddonWeeklyPuzzle.RewardPanelItem",
+          "Name": "RewardPanelItem",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -16226,7 +16027,7 @@
       {
         "Name": "RewardPanelDualBlades",
         "Type": {
-          "Name": "AddonWeeklyPuzzle.RewardPanelItem",
+          "Name": "RewardPanelItem",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -16319,7 +16120,7 @@
       {
         "Name": "GameBoard",
         "Type": {
-          "Name": "AddonWeeklyPuzzle.GameTileBoard",
+          "Name": "GameTileBoard",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -16847,7 +16648,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "RaptureAtkModule.NamePlateInfo",
+          "Name": "NamePlateInfo",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -16932,7 +16733,7 @@
       {
         "Name": "NamePlateInfoArray",
         "Type": {
-          "Name": "RaptureAtkModule.NamePlateInfo",
+          "Name": "NamePlateInfo",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17001,7 +16802,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "UI3DModule.MapInfo",
+          "Name": "MapInfo",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17038,7 +16839,7 @@
       },
       {
         "Type": {
-          "Name": "UI3DModule.ObjectInfo",
+          "Name": "ObjectInfo",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17047,7 +16848,7 @@
           {
             "Name": "MapInfo",
             "Type": {
-              "Name": "UI3DModule.MapInfo",
+              "Name": "MapInfo",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -17159,7 +16960,7 @@
       },
       {
         "Type": {
-          "Name": "UI3DModule.MemberInfo",
+          "Name": "MemberInfo",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17168,7 +16969,7 @@
           {
             "Name": "MapInfo",
             "Type": {
-              "Name": "UI3DModule.MapInfo",
+              "Name": "MapInfo",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -17199,7 +17000,7 @@
       },
       {
         "Type": {
-          "Name": "UI3DModule.UnkInfo",
+          "Name": "UnkInfo",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17208,7 +17009,7 @@
           {
             "Name": "MapInfo",
             "Type": {
-              "Name": "UI3DModule.MapInfo",
+              "Name": "MapInfo",
               "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
               "TypeKind": 1
             },
@@ -17218,7 +17019,7 @@
       },
       {
         "Type": {
-          "Name": "UI3DModule.ObjectIdStruct",
+          "Name": "ObjectIdStruct",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17260,26 +17061,10 @@
       },
       {
         "Name": "ObjectInfoArray",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 32
       },
       {
         "Name": "SortedObjectInfoPointerArray",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 40736
       },
       {
@@ -17293,14 +17078,6 @@
       },
       {
         "Name": "NamePlateObjectInfoPointerArray",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 44136
       },
       {
@@ -17314,38 +17091,14 @@
       },
       {
         "Name": "NamePlateObjectIdList",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 44576
       },
       {
         "Name": "NamePlateObjectIdList_2",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 44976
       },
       {
         "Name": "CharacterObjectInfoPointerArray",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 45376
       },
       {
@@ -17359,14 +17112,6 @@
       },
       {
         "Name": "MapObjectInfoPointerArray",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 45784
       },
       {
@@ -17383,7 +17128,7 @@
         "Type": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "UI3DModule.ObjectInfo",
+            "Name": "ObjectInfo",
             "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
             "TypeKind": 1
           }
@@ -17392,26 +17137,10 @@
       },
       {
         "Name": "MemberInfoArray",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 46344
       },
       {
         "Name": "MemberInfoPointerArray",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 48264
       },
       {
@@ -17425,14 +17154,6 @@
       },
       {
         "Name": "UnkInfoArray",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 48656
       },
       {
@@ -17456,7 +17177,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "UIModule.Unk1",
+          "Name": "Unk1",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17493,7 +17214,7 @@
       },
       {
         "Type": {
-          "Name": "UIModule.Unk2",
+          "Name": "Unk2",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17530,7 +17251,7 @@
       },
       {
         "Type": {
-          "Name": "UIModule.Unk3",
+          "Name": "Unk3",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17597,7 +17318,7 @@
       {
         "Name": "UnkObj1",
         "Type": {
-          "Name": "UIModule.Unk1",
+          "Name": "Unk1",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17606,7 +17327,7 @@
       {
         "Name": "UnkObj2",
         "Type": {
-          "Name": "UIModule.Unk2",
+          "Name": "Unk2",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17615,7 +17336,7 @@
       {
         "Name": "UnkObj3",
         "Type": {
-          "Name": "UIModule.Unk3",
+          "Name": "Unk3",
           "Namespace": "FFXIVClientStructs.FFXIV.Client.UI",
           "TypeKind": 1
         },
@@ -17728,7 +17449,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "ConfigProperties.UIntProperties",
+          "Name": "UIntProperties",
           "Namespace": "FFXIVClientStructs.FFXIV.Common.Configuration",
           "TypeKind": 1
         },
@@ -17765,7 +17486,7 @@
       },
       {
         "Type": {
-          "Name": "ConfigProperties.FloatProperties",
+          "Name": "FloatProperties",
           "Namespace": "FFXIVClientStructs.FFXIV.Common.Configuration",
           "TypeKind": 1
         },
@@ -17802,7 +17523,7 @@
       },
       {
         "Type": {
-          "Name": "ConfigProperties.StringProperties",
+          "Name": "StringProperties",
           "Namespace": "FFXIVClientStructs.FFXIV.Common.Configuration",
           "TypeKind": 1
         },
@@ -17827,7 +17548,7 @@
       {
         "Name": "UInt",
         "Type": {
-          "Name": "ConfigProperties.UIntProperties",
+          "Name": "UIntProperties",
           "Namespace": "FFXIVClientStructs.FFXIV.Common.Configuration",
           "TypeKind": 1
         },
@@ -17836,7 +17557,7 @@
       {
         "Name": "Float",
         "Type": {
-          "Name": "ConfigProperties.FloatProperties",
+          "Name": "FloatProperties",
           "Namespace": "FFXIVClientStructs.FFXIV.Common.Configuration",
           "TypeKind": 1
         },
@@ -17845,7 +17566,7 @@
       {
         "Name": "String",
         "Type": {
-          "Name": "ConfigProperties.StringProperties",
+          "Name": "StringProperties",
           "Namespace": "FFXIVClientStructs.FFXIV.Common.Configuration",
           "TypeKind": 1
         },
@@ -19045,7 +18766,7 @@
     "ChildStructs": [
       {
         "Type": {
-          "Name": "AtkComponentList.ListItem",
+          "Name": "ListItem",
           "Namespace": "FFXIVClientStructs.FFXIV.Component.GUI",
           "TypeKind": 1
         },
@@ -19105,7 +18826,7 @@
         "Type": {
           "TypeKind": 2,
           "PointedAtType": {
-            "Name": "AtkComponentList.ListItem",
+            "Name": "ListItem",
             "Namespace": "FFXIVClientStructs.FFXIV.Component.GUI",
             "TypeKind": 1
           }
@@ -19994,14 +19715,6 @@
       },
       {
         "Name": "UnkMatrix",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "float",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 88
       },
       {
@@ -21610,14 +21323,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -21650,14 +21355,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -21690,14 +21387,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       }
     ]
@@ -21721,14 +21410,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       }
     ]
@@ -21752,14 +21433,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -21846,14 +21519,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       }
     ]
@@ -21877,14 +21542,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -21917,14 +21574,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       }
     ]
@@ -21948,14 +21597,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       }
     ]
@@ -22007,14 +21648,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -22074,14 +21707,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -22141,14 +21766,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -22181,14 +21798,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       }
     ]
@@ -22212,14 +21821,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       }
     ]
@@ -22243,14 +21844,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 16
       },
       {
@@ -22328,14 +21921,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       }
     ]
@@ -22359,14 +21944,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -22408,14 +21985,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -22457,14 +22026,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -22542,14 +22103,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -22591,14 +22144,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 16
       },
       {
@@ -22684,14 +22229,6 @@
       },
       {
         "Name": "CharSetExtras",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 108
       }
     ]
@@ -22715,14 +22252,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -22755,14 +22284,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -22822,14 +22343,6 @@
       },
       {
         "Name": "Nodes",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "uint",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 12
       },
       {
@@ -23376,14 +22889,6 @@
       },
       {
         "Name": "Name",
-        "Type": {
-          "TypeKind": 2,
-          "PointedAtType": {
-            "Name": "byte",
-            "Namespace": "System",
-            "TypeKind": 1
-          }
-        },
         "Offset": 8
       },
       {
