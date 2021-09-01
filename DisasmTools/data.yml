@@ -1,3 +1,137 @@
+version: 2021.08.17.0000.0000
+
+globals:
+  0x1416C1998: g_HUDScaleTable
+  0x141D5E560: g_InputManager
+  0x141D5E588: g_InputManager_MouseButtonHoldState
+  0x141D8C3B0: g_IMemorySpace_DefaultSpace
+  0x141D8C3B8: g_IMemorySpace_ApricotSpace
+  0x141D8C3C0: g_IMemorySpace_AnimationSpace
+  0x141D8C3C8: g_IMemorySpace_UISpace
+  0x141D8C3D0: g_IMemorySpace_FileSpace
+  0x141D8C3D8: g_IMemorySpace_SoundSpace
+  0x141D8AFB8: g_Framework
+  0x141D8B180: g_KernelDevice
+  0x141D8CB48: g_GraphicsConfig
+  0x141D8CB58: g_Framework_2 # these both point to framework
+  0x141D8CB98: g_AllocatorManager
+  0x141D8CBA0: g_PrimitiveManager
+  0x141D8CBA8: g_RenderManager
+  0x141D8CBB0: g_ShadowManager
+  0x141D8CBB8: g_LightingManager
+  0x141D8CBC0: g_RenderTargetManager
+  0x141D8CBC8: g_StreamingManager
+  0x141D8CBD0: g_PostEffectManager
+  0x141D8CBD8: g_EnvManager
+  0x141D8CBE0: g_World
+  0x141D8CBE8: g_CameraManager
+  0x141D8CBF0: g_CharacterUtility
+  0x141D8CBF8: g_ResidentResourceManager
+  0x141D8E7A0: g_Client::UI::Info::InfoProxyCrossRealmPtr # pointer
+  0x141D8E810: g_CullingManager
+  0x141D8E830: g_TaskManager
+  0x141D93720: g_EnvRenderController # Client::Graphics::Environment::EnvRenderController not a pointer
+  0x141D93AC0: g_ResourceManager
+  0x141DA5B00: g_RenderSkeletonLinkedListStart
+  0x141DA5B08: g_RenderSkeletonLinkedListEnd
+  0x141DA5B20: g_OcclusionCullingManager
+  0x141DA5B58: g_OffscreenRenderingManager
+  0x141DA5B60: g_RenderModelLinkedListStart
+  0x141DA5B68: g_RenderModelLinkedListEnd
+  0x141DA69A0: g_JobSystem_ApricotEngineCore # not a pointer
+  0x141DA9408: g_InputDeviceManager
+  0x141DA96A0: g_GameMain
+  0x141DAA178: g_JobGaugeManager
+  0x141DAEF70: g_ControlSystem_CameraManager # control system, object actually contains target system global below
+  0x141DAF0C0: g_ControlSystem_TargetSystem
+  0x141DB2E00: g_PlayerMoveController
+  0x141DB3388: g_LocalPlayerObjectID
+  0x141DB3390: g_LocalPlayer
+  0x141DB3400: g_AtkStage
+  0x141DB3A58: g_LayoutWorld
+  0x141DD2550: g_InventoryManager
+  0x141DD6AF0: g_LastTextCommand
+  0x141DD6B60: g_CharacterManager
+  0x141DD6E80: g_CharacterManager_BattleCharaMemoryPtr
+  0x141DD6E88: g_CharacterManager_CompanionMemoryPtr
+  0x141DD6EA0: g_GameObjectManager
+  0x141DD6EB0: g_GameObjectManager_ObjectList
+  0x141DD7BF0: g_GameObjectManager_ObjectListEnd
+  0x141DD9B90: g_Client::Game::UI::UIState # not a pointer. Client::Game::UI::Hotbar is here since its the first member of UIState
+  0x141DDAF48: g_Client::Game::UI::Telepo # not a pointer. Member of UIState
+  0x141DDB4F0: g_Client::Game::UI::Buddy # not a pointer. Member of UIState. Also the Companion Buddy slot.
+  0x141DDB688: g_Client::Game::UI::Buddy.Pet # not a pointer
+  0x141DDB698: g_Client::Game::UI::Buddy.Pet.BuffList # not a pointer
+  0x141DDBCE8: g_Client::Game::UI::Buddy.CompanionStats  # not a pointer. Member of UIState
+  0x141DDBCF0: g_Client::Game::UI::Buddy.CompanionStats.TimeRemaining  # not a pointer
+  0x141DDBD40: g_Client::Game::UI::Buddy.BattleBuddyListPtr # Member of UIState
+  0x141DDBE78: g_Client::Game::UI::RelicNote # not a pointer
+  0x141DE3A28: g_ActiveDirector
+  0x141DE7C90: g_MarkingController
+  0x141DE7F40: g_LimitBreakController
+  0x141DE7F50: g_TitleController
+  0x141DE7F58: g_TitleList
+  0x141DF1828: g_EventFramework
+  0x141DF5640: g_GroupManager # not a pointer
+  0x141DFDE10: g_FateTablePtr
+  0x141DF93B0: g_GroupManager_2 # not a pointer
+  0x141DFDAC0: g_ClientObjectManager
+
+functions:
+  0x140060560: MemoryManager_Alloc
+  0x140061C70: MemoryManager_GetDefaultSpace
+  0x140061D30: MemoryManager_GetApricotSpace
+  0x140061D50: MemoryManager_GetAnimationSpace
+  0x140061D70: MemoryManager_GetUISpace
+  0x140061DF0: MemoryManager_GetFileSpace
+  0x140061D90: MemoryManager_GetSoundSpace_1
+  0x140061DB0: MemoryManager_GetSoundSpace_2
+  0x140064FC0: IsMacClient
+  0x1400A4250: Client::UI::PlaySoundEffect # this is a static function in the UI namespace, arg1 is the SE
+  0x140182550: Client::Graphics::Environment::EnvManager_ctor
+  0x1401974F0: j_SleepEx
+  0x1401BAE40: Client::System::Resource::Handle::ModelResourceHandle_GetMaterialFileNameBySlot
+  0x1402A8F20: CountdownPointer
+  0x1402EB2E0: std::vector_SetSize
+  0x1403672C0: Client::Graphics::Render::RenderManager_ctor
+  0x1403684A0: Client::Graphics::Render::RenderManager_CreateModel
+  0x14042BC20: GetGameObjectByIndex
+  0x140445030: PrepareColorSet
+  0x140445300: ReadStainingTemplate
+  0x140484B80: Client::Game::GameMain_Initialize
+  0x140484E80: Client::Game::GameMain_Terminate
+  0x140485160: Client::Game::GameMain_Update
+  0x140486EC0: Client::Game::GameMain_ctor
+  0x1404969A0: Client::Game::Control::InputManager_GetInputStatus
+  0x1404ADC10: Client::System::Input::InputData_IsInputIDKeyPress
+  0x1404ADD20: Client::System::Input::InputData_IsInputIDClicked
+  0x1404AE660: Client::System::Input::InputData_IsMouseCombinationDragged
+  0x1404B84E0: Component::GUI::AtkCursor_SetCursorType # the cursor's icon I believe
+  0x1404E0380: GetScaleListEntryFromScale
+  0x1404EEAB0: GetScaleForListOption
+  0x14053B640: Component::GUI::TextModuleInterface::GetTextLabelByID
+  0x14061ADD0: ConvertLogMessageIdToCharaLogKind
+  0x1406F66A0: ExecuteCommand
+  0x1408DC200: CreateSelectYesno
+  0x140A91500: EventFramework_GetSingleton
+  0x140A91510: EventFramework_ctor
+  0x140A91CD0: EventFramework_dtor
+  0x140A99D70: EventFramework_ProcessDirectorUpdate
+  0x140A9D3C0: EventFramework_GetInstanceContentDirector
+  0x141041C30: Client::UI::AddonHudLayoutScreen::MoveableAddonInfoStruct_UpdateAddonPosition
+  0x14110F620: Client::Graphics::Kernel::CreateShader # static function
+  0x1411608B0: lua_index2addr
+  0x141161000: lua_gettop
+  0x1411613E0: lua_pcall
+  0x141161CA0: lua_settop
+  0x141161E90: lua_tolstring
+  0x141162040: lua_type
+  0x141164200: luaL_loadbuffer
+  0x14131E440: crc
+  0x141371A84: ThrowException
+  0x141398344: FreeMemory
+  0x1413A02A0: _purecall # Ghidra does not have a notation for pure virtual calls
+  
 classes:
     Client::Game::Control::TargetSystem::ListFeeder:
     Client::Game::InstanceContent::ContentSheetWaiterInterface:
