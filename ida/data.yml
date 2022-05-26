@@ -4464,6 +4464,10 @@ classes:
     vtbls:
       - ea: 0x1418BA2B0
         base: Component::GUI::AtkUnitBase
+  Component::GUI::AddonTripleTriadResult:
+    vtbls:
+      - ea: 0x141937050
+        base: Component::GUI::AtkUnitBase
   Client::UI::AddonRequest:
     vtbls:
       - ea: 0x1418B0570
