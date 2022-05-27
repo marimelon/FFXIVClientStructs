@@ -4403,6 +4403,10 @@ classes:
     vtbls:
       - ea: 0x14188C7B8
         base: Component::GUI::AtkUnitBase
+  Component::GUI::AddonTripleTriadSelDeck:  # UldResourceName: TripleTriadDeckSelect
+    vtbls:
+      - ea: 0x1419099B0
+        base: Component::GUI::AtkUnitBase
   Component::GUI::AddonTripleTriadResult:
     vtbls:
       - ea: 0x141909550
