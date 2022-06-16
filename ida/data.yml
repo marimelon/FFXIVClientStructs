@@ -4468,6 +4468,10 @@ classes:
     vtbls:
       - ea: 0x141937050
         base: Component::GUI::AtkUnitBase
+  Component::GUI::AddonTripleTriadRequest:  # UldResourceName: TripleTriadApplication
+    vtbls:
+      - ea: 0x141936E20
+        base: Component::GUI::AtkUnitBase
   Client::UI::AddonRequest:
     vtbls:
       - ea: 0x1418B0570
