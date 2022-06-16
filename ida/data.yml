@@ -3501,6 +3501,7 @@ classes:
         base: Client::UI::Agent::AgentInterface
     funcs:
       0x14020E4B0: ctor
+      0x14020F210: UseItem
       0x14020FB40: UnblockItemSlot
       0x14020E680: OpenForItemSlot
   Client::UI::Agent::AgentConfigLogColor:
