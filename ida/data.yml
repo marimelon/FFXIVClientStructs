@@ -3458,6 +3458,7 @@ classes:
       0x14020E510: ctor
       0x14020FBA0: UnblockItemSlot
       0x14020E6E0: OpenForItemSlot
+      0x14020F270: UseItem
   Client::UI::Agent::AgentConfigLogColor:
     vtbls:
       - ea: 0x1417FB358
@@ -4463,6 +4464,10 @@ classes:
   Client::UI::AddonSocial:
     vtbls:
       - ea: 0x1418BA2B0
+        base: Component::GUI::AtkUnitBase
+  Component::GUI::AddonTripleTriad:
+    vtbls:
+      - ea: 0x141936BF0
         base: Component::GUI::AtkUnitBase
   Component::GUI::AddonTripleTriadSelDeck:  # UldResourceName: TripleTriadDeckSelect
     vtbls:
