@@ -22,7 +22,7 @@ public struct ScholarGauge {
     [FieldOffset(0x0C)] public byte DismissedFairy;
 }
 
-[StructLayout(LayoutKind.Explicit, Size = 0x10)]
+[StructLayout(LayoutKind.Explicit, Size = 0x30)]
 public struct AstrologianGauge {
     [FieldOffset(0x08)] public short Cards;
     [FieldOffset(0x0A)] public AstrologianDraw CurrentDraw;
@@ -54,11 +54,10 @@ public struct SageGauge {
 [StructLayout(LayoutKind.Explicit, Size = 0x30)]
 public struct BlackMageGauge {
     [FieldOffset(0x08)] public short EnochianTimer;
-    [FieldOffset(0x0A)] public short ElementTimeRemaining;
-    [FieldOffset(0x0C)] public sbyte ElementStance;
-    [FieldOffset(0x0D)] public byte UmbralHearts;
-    [FieldOffset(0x0E)] public byte PolyglotStacks;
-    [FieldOffset(0x0F)] public EnochianFlags EnochianFlags;
+    [FieldOffset(0x0A)] public sbyte ElementStance;
+    [FieldOffset(0x0B)] public byte UmbralHearts;
+    [FieldOffset(0x0C)] public byte PolyglotStacks;
+    [FieldOffset(0x0D)] public EnochianFlags EnochianFlags;
 
     public int UmbralStacks => ElementStance >= 0 ? 0 : ElementStance * -1;
     public int AstralStacks => ElementStance <= 0 ? 0 : ElementStance;
@@ -179,7 +178,7 @@ public struct SamuraiGauge {
     [FieldOffset(0x0D)] public SenFlags SenFlags;
 }
 
-[StructLayout(LayoutKind.Explicit, Size = 0x10)]
+[StructLayout(LayoutKind.Explicit, Size = 0x30)]
 public struct ReaperGauge {
     [FieldOffset(0x08)] public byte Soul;
     [FieldOffset(0x09)] public byte Shroud;
@@ -216,7 +215,7 @@ public struct DarkKnightGauge {
 public struct PaladinGauge {
     [FieldOffset(0x08)] public byte OathGauge;
     [FieldOffset(0x0A)] public ushort ConfiteorComboTimer; //that only updates when you generate/spend oath
-    [FieldOffset(0x0C)] public ushort ConfiteorComboStep;
+    [FieldOffset(0x0C)] public byte ConfiteorComboStep;
 }
 
 [StructLayout(LayoutKind.Explicit, Size = 0x10)]

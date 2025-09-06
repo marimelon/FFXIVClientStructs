@@ -1,23 +1,34 @@
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
-
 namespace FFXIVClientStructs.FFXIV.Client.UI.Agent;
 
 // Client::UI::Agent::AgentModule
-// ctor "E8 ?? ?? ?? ?? 48 8B 85 ?? ?? ?? ?? 49 8B CE 48 89 87"
 [GenerateInterop]
-[StructLayout(LayoutKind.Explicit, Size = 0xE28)]
+[StructLayout(LayoutKind.Explicit, Size = 0xF50)]
 public unsafe partial struct AgentModule {
-    public static AgentModule* Instance() => Framework.Instance()->GetUIModule()->GetAgentModule();
+    public static AgentModule* Instance() {
+        var uiModule = UI.UIModule.Instance();
+        return uiModule == null ? null : uiModule->GetAgentModule();
+    }
 
     [FieldOffset(0x8)] public UIModule* UIModule;
     [FieldOffset(0x10)] public byte Initialized;
     [FieldOffset(0x14)] public uint FrameCounter;
     [FieldOffset(0x18)] public float FrameDelta;
 
-    [FieldOffset(0x20), FixedSizeArray] internal FixedSizeArray447<Pointer<AgentInterface>> _agents;
+    [FieldOffset(0x20), FixedSizeArray] internal FixedSizeArray484<Pointer<AgentInterface>> _agents;
+    [FieldOffset(0xF40)] public AgentHelpers AgentHelpers;
 
-    [MemberFunction("E8 ?? ?? ?? ?? 0F B7 A8")]
+    [MemberFunction("E8 ?? ?? ?? ?? 83 7B 48 00")]
     public partial AgentInterface* GetAgentByInternalId(AgentId agentId);
+}
+
+[GenerateInterop]
+[StructLayout(LayoutKind.Explicit, Size = 0x10)]
+public unsafe partial struct AgentHelpers {
+    [FieldOffset(0x0)] public UIModule* UIModule;
+    [FieldOffset(0x8)] public AgentModule* AgentModule;
+
+    [MemberFunction("E8 ?? ?? ?? ?? 0F 10 45 ?? 48 8D 0D")]
+    public partial void HideBlockingCharaViewAgents(uint clientObjectIndex, AgentId allowedAgent);
 }
 
 public enum AgentId : uint {
@@ -32,7 +43,7 @@ public enum AgentId : uint {
     EventFade = 8,
     Context = 9,
     InventoryContext = 10,
-    // TODO new 7.00 agent = 11,
+    GlassesContext = 11,
     Config = 12, // ConfigSystem
     ConfigLog = 13,
     ConfigLogColor = 14,
@@ -44,8 +55,7 @@ public enum AgentId : uint {
     HudLayout = 20,
     Emote = 21,
     Macro = 22,
-    // TargetCursor,
-    TargetCircle = 23,
+    TargetCircle = 23, // TargetCursor
     GatheringNote = 24,
     RecipeNote = 25,
     RecipeTree = 26,
@@ -54,18 +64,18 @@ public enum AgentId : uint {
     FishingNote = 29,
     FishGuide = 30,
     FishRecord = 31,
-
+    FishRelease = 32,
     QuestJournal = 33,
     ActionMenu = 34,
     Marker = 35,
     Trade = 36,
     ScreenLog = 37,
-    Request = 38, // NPCTrade
+    NpcTrade = 38,
     Status = 39,
     Map = 40,
     Loot = 41, // NeedGreed
     Repair = 42,
-
+    RepairRequest = 43,
     Materialize = 44,
     MateriaAttach = 45,
     MiragePrism = 46,
@@ -80,11 +90,11 @@ public enum AgentId : uint {
     ContentsFinderSetting = 55,
     Social = 56,
     Blacklist = 57,
-    Mutelist = 58, // new in 7.00
+    Mutelist = 58,
     Friendlist = 59,
     Linkshell = 60,
     PartyMember = 61,
-    // PartyInvite,
+    PartyInvite = 62,
     Search = 63,
     Detail = 64,
     LetterList = 65,
@@ -102,22 +112,20 @@ public enum AgentId : uint {
     FateProgress = 77, // Shared FATE
     Catch = 78,
     FreeCompany = 79,
-    // FreeCompanyOrganizeSheet,
+    FreeCompanyOrganizeSheet = 80,
     FreeCompanyProfile = 81,
     FreeCompanyProfileEdit = 82,
-    // FreeCompanyInvite,
+    FreeCompanyInvite = 83,
     FreeCompanyInputString = 84,
     FreeCompanyChest = 85,
     FreeCompanyExchange = 86,
     FreeCompanyCrestEditor = 87,
     FreeCompanyCrestDecal = 88,
-
-    // FreeCompanyPetition = ?,
-
+    FreeCompanyPetition = 89,
     ArmouryBoard = 90,
     HowtoList = 91,
     Cabinet = 92,
-    CabinetWithdraw = 93, // new in 6.50
+    CabinetWithdraw = 93,
     LegacyItemStorage = 94,
     GrandCompanyRank = 95,
     GrandCompanySupply = 96,
@@ -128,7 +136,7 @@ public enum AgentId : uint {
     SupportView = 101,
     SupportEdit = 102,
     Achievement = 103,
-    // CrossEditor,
+    CrossEditor = 104,
     LicenseViewer = 105,
     ContentsTimer = 106,
     MovieSubtitle = 107,
@@ -168,14 +176,15 @@ public enum AgentId : uint {
     RetainerStatus = 141,
     RetainerTask = 142,
     RetainerTaskSupply = 143,
-
+    Unk144 = 144,
     RetainerItemTransfer = 145,
-
+    RelicGlass = 146,
     RelicNotebook = 147,
     RelicSphere = 148,
     TradeMultiple = 149,
     RelicSphereUpgrade = 150,
-
+    AWGrowthFragTrade = 151, // AnimaWeapon5TradeItem
+    AWMakingSpiritGrow = 152, // AnimaWeapon5SpiritTalk
     Relic2Glass = 153,
     Minigame = 154,
     Tryon = 155,
@@ -190,17 +199,17 @@ public enum AgentId : uint {
     PatchMark = 164, // SelectOk?
     HousingWithdrawStorage = 165,
     WeatherReport = 166,
-
+    Wedding = 167,
     LoadingTips = 168,
     Revive = 169,
-
+    Unk170 = 170, // something with RaceChocobo director/todo
     ChocoboRace = 171,
-
+    ChocoboBreed = 172,
     GoldSaucerMiniGame = 173,
     TrippleTriad = 174,
     TripleTriadRuleAnnounce = 175,
     TripleTriadRuleSetting = 176,
-
+    Unk177 = 177,
     TripleTriadSchedule = 178,
     TripleTriadRanking = 179,
     TripleTriadTournamentResult = 180,
@@ -228,7 +237,7 @@ public enum AgentId : uint {
     FreeCompanyCreditShop = 202,
     Currency = 203,
     Purify = 204, // Aetherial Reduction
-
+    SkyIslandExchange = 205,
     LovmParty = 206,
     LovmRanking = 207,
     LovmNamePlate = 208,
@@ -248,7 +257,8 @@ public enum AgentId : uint {
     WebGuidance = 222,
     Orchestrion = 223,
     BeginnerChatList = 224, // Novice Network
-
+    Unk225 = 225, // BeginnerChatKick?
+    BeginnerChatInvite = 226,
     ReturnerDialog = 227,
     OrchestrionInn = 228,
     HousingEditContainer = 229,
@@ -259,189 +269,253 @@ public enum AgentId : uint {
     RaidFinder = 234,
     GcArmyExpedition = 235,
     GcArmyMemberList = 236,
-
+    Unk237 = 237,
     DeepDungeonInspect = 238,
     DeepDungeonMap = 239,
     DeepDungeonStatus = 240,
     DeepDungeonSaveData = 241,
     DeepDungeonScore = 242,
-    GcArmyTraining = 243,
-    GcArmyMenberProfile = 244,
-    GcArmyExpeditionResult = 245,
-    GcArmyCapture = 246,
-    GcArmyOrder = 247,
-    MansionSelectRoom = 248,
-    OrchestrionPlayList = 249,
-    CountDownSettingDialog = 250,
-    WeeklyBingo = 251, // Wondrous Tails
-    WeeklyPuzzle = 252, // Faux Hollows
-    CameraSetting = 253,
-    PvPDuelRequest = 254,
-    PvPHeader = 255,
-    PvPGauge = 256, // PvPFrontlineGauge
+    DeepDungeonHard = 243, // new in 7.3
+    GcArmyTraining = 244,
+    GcArmyMenberProfile = 245,
+    GcArmyExpeditionResult = 246,
+    GcArmyCapture = 247,
+    GcArmyOrder = 248,
+    MansionSelectRoom = 249,
+    OrchestrionPlayList = 250,
+    CountDownSettingDialog = 251,
+    WeeklyBingo = 252, // Wondrous Tails
+    WeeklyPuzzle = 253, // Faux Hollows
+    CameraSetting = 254,
+    PvPDuelRequest = 255,
+    PvPHeader = 256,
+    PvPGauge = 257, // PvPFrontlineGauge
+    Unk257 = 258, // PvPMKSHeaderSpec, PvPSpectatorCameraList, PvPSpectatorList
+    Unk258 = 259,
+    Aquarium = 260,
+    QTE = 261,
+    DeepDungeonMenu = 262,
+    ContextIconMenu = 263,
+    DeepDungeonResult = 264,
+    ItemAppraisal = 265, // DeepDungeon Appraisal
+    ItemInspection = 266, // Lockbox
+    RecipeItemContext = 267, // context menus for RecipeTree and RecipeList, constructor inlined
+    ContactList = 268,
+    PicturePreview = 269, // Preview for Sightseeing Log, Landscapes, Portraits
+    McAggre = 270,
+    SatisfactionSupply = 271,
+    SatisfactionSupplyResult = 272,
+    SatisfactionList = 273,
+    Snipe = 274,
+    MountSpeed = 275,
+    PvpScreenInformationHotBar = 276,
+    PvpWelcome = 277,
+    JobHudNotice = 278,
+    TreasureHighLow = 279, // Gambler's Lure
+    ManeuversArmorBoarding = 280, // Rival Wings
+    ManeuversHud = 281, // Rival Wings
+    UserPolicyPerformance = 282,
+    PvpTeam = 283,
+    PvpTeamInputString = 284,
+    PvpTeamMember = 285,
+    PvPTeamResult = 286,
+    Unk286 = 287,
+    Unk287 = 288,
+    PvpTeamCrestEditor = 289,
+    PvPTeamOrganization = 290,
+    Unk290 = 291,
+    EurekaElementalHud = 292,
+    EurekaElementalEdit = 293,
+    EurekaChainInfo = 294,
+    Unk294 = 295, // EurekaLogos?
+    EurekaMagiaActionNotebook = 296, // unconfirmed
+    EurekaWeaponAdjust = 297,
+    TeleportHousingFriend = 298,
+    ContentMemberList = 299,
+    InventoryBuddy = 300,
+    ContentsReplayPlayer = 301,
+    ContentsReplaySetting = 302,
+    MiragePrismPrismBox = 303, // Glamour Dresser
+    MiragePrismPrismItemDetail = 304,
+    MiragePrismPrismSetConvert = 305,
+    MiragePrismMiragePlate = 306, // Glamour Plates
+    PerformanceMode = 307,
+    PerformanceModeSettings = 308,
+    RecordReadyCheck = 309,
+    Fashion = 310,
+    Unk310 = 311, // PvPTeamOrganization again?
+    SelectYesno = 312,
+    HousingGuestBook = 313,
+    Unk313 = 314, // GridMenu? SelectCustomString?
+    Unk314 = 315, // SelectStringEventGimmick? for some QuestEventHandler
+    ReconstructionBox = 316,
+    ReconstructionBuyback = 317,
+    CrossWorldLinkShell = 318,
+    MiragePrismENpcSatisfaction = 319,
+    Description = 320, // Frontline/Bozja Description
+    Alarm = 321,
+    Unk321 = 322,
+    MerchantSetting = 323, // Mannequins
+    FreeShop = 324,
+    AozNotebook = 325, // Bluemage Spells
+    RhythmAction = 326,
+    WeddingNotification = 327,
+    Emj = 328, // Mahjong
+    Unk328 = 329,
+    Unk329 = 330,
+    EmjIntro = 331,
+    EmjVoiceCharacter = 332,
+    AozContentBriefing = 333, // Masked Carnivale
+    AozContentResult = 334,
+    WorldTravel = 335,
+    RideShooting = 336, // Airforce One
+    RideShootingResult = 337,
+    Credit = 338,
+    EmjSetting = 339, // Mahjong Settings
+    RetainerList = 340,
+    QIBCStatus = 341,
+    HugeCraftworksSupply = 342, // Crystarium Deliveries
+    HugeCraftworksSupplyResult = 343,
+    SharlayanCraftworksSupply = 344, // Studium Deliveries
+    BankaCraftworksSupply = 345, // Wachumeqimeqi Deliveries
+    Dawn = 346, // Trust
+    DawnStory = 347, // Duty Support
+    HousingCatalogPreview = 348,
+    Unk348 = 349,
+    SubmersibleExplorationMapSelect = 350,
+    QuestRedo = 351,
+    QuestRedoHud = 352,
+    CircleInvite = 353, // Fellowships
+    CircleList = 354,
+    CircleBook = 355,
+    CircleBookSetting = 356,
+    CircleBookBlackList = 357,
+    CircleBookQuestion = 358,
+    CircleBookGroupSetting = 359,
+    CircleFinder = 360,
+    CircleFinderSetting = 361,
+    MentorCondition = 362,
+    PerformanceMetronome = 363,
+    PerformanceGamepadGuide = 364,
+    PerformancePlayGuide = 365,
+    PerformanceReadyCheck = 366,
+    HwdInfoBoard = 367,
+    HwdLottery = 368,
+    HwdSupply = 369,
+    HwdAetherGauge = 370,
+    HwdGathererInspection = 371,
+    HwdScore = 372,
+    HwdGathererInspectionItemCount = 373,
+    HwdMonument = 374,
+    McGuffin = 375, // Collection
+    CraftActionSimulator = 376,
+    IKDSchedule = 377, // Ocean Fishing
+    IKDFishingLog = 378,
+    IKDResult = 379,
+    IKDMission = 380,
+    InclusionShop = 381, // Item Exchange
+    CollectablesShop = 382,
+    MycWarResultNotebook = 383,
+    MycInfo = 384, // Bozja Info
+    MycItemBox = 385, // Bozja Lost Finds Cache
+    MycItemBag = 386, // Bozja Lost Finds Holster
+    MycDuelRequest = 387,
+    MycBattleAreaInfo = 388, // Bozja Recruitment
+    MycWeaponAdjust = 389,
+    OrnamentNoteBook = 390, // Accessories
+    TalkSubtitle = 391,
+    TourismMenu = 392,
+    GatheringMasterpiece = 393,
+    StarlightGiftBox = 394,
 
-    AquariumSetting = 259,
+    Unk395 = 395, // new in 7.3
 
-    DeepDungeonMenu = 261,
-
-    DeepDungeonResult = 263,
-    ItemAppraisal = 264, // DeepDungeon Appraisal
-    ItemInspection = 265, // Lockbox
-    RecipeItemContext = 266, // context menus for RecipeTree and RecipeList, constructor inlined
-    ContactList = 267,
-
-    SatisfactionSupply = 270,
-    SatisfactionSupplyResult = 271,
-    Snipe = 272,
-    MountSpeed = 273,
-
-    PvpScreenInformationHotBar = 274,
-    PvpWelcome = 275,
-    JobHudNotice = 276,
-
-    UserPolicyPerformance = 280,
-
-    PvpTeamInputString = 282,
-
-    PvpTeamCrestEditor = 287,
-    PvpTeam = 288,
-
-    EurekaElementalHud = 290,
-    EurekaElementalEdit = 291,
-    EurekaChainInfo = 292,
-
-    TeleportHousingFriend = 296,
-    ContentMemberList = 297,
-    InventoryBuddy = 298,
-    ContentsReplayPlayer = 299,
-    ContentsReplaySetting = 300,
-    MiragePrismPrismBox = 301, // Glamour Dresser
-    MiragePrismPrismItemDetail = 302,
-    MiragePrismMiragePlate = 303, // Glamour Plates
-    PerformanceMode = 304,
-
-    Fashion = 307,
-
-    SelectYesno = 309,
-    HousingGuestBook = 310,
-
-    ReconstructionBox = 313,
-    ReconstructionBuyback = 314,
-    CrossWorldLinkShell = 315,
-    MiragePrismENpcSatisfaction = 316,
-    Description = 317, // Frontline/Bozja Description
-    Alarm = 318,
-
-    FreeShop = 321,
-    AozNotebook = 322, // Bluemage Spells
-    RhythmAction = 323,
-    WeddingNotification = 324,
-    Emj = 325, //Mahjong
-
-    EmjIntro = 328,
-    AozContentBriefing = 329, // Masked Carnivale
-    AozContentResult = 330,
-    WorldTravel = 331,
-    RideShooting = 332, // Airforce One
-    RideShootingResult = 333,
-    Credit = 334,
-    EmjSetting = 335, // Mahjong Settings
-    RetainerList = 336,
-    QIBCStatus = 337,
-
-    Dawn = 342, // Trust
-    DawnStory = 343, // Duty Support
-    HousingCatalogPreview = 344,
-
-    SubmersibleExplorationMapSelect = 346,
-    QuestRedo = 347,
-    QuestRedoHud = 348,
-
-    CircleList = 350, // Fellowships
-    CircleBook = 351,
-
-    CircleFinder = 356,
-
-    MentorCondition = 358,
-    PerformanceMetronome = 359,
-    PerformanceGamepadGuide = 360,
-
-    PerformanceReadyCheck = 362,
-
-    HwdAetherGauge = 366,
-    HwdGathererInspection = 367,
-    HwdScore = 368,
-
-    HwdMonument = 370,
-    McGuffin = 371, // Collection
-    CraftActionSimulator = 372,
-    IKDSchedule = 373, //Ocean Fishing
-    IKDFishingLog = 374,
-    IKDResult = 375,
-    IKDMission = 376,
-    InclusionShop = 377, // Item Exchange
-    CollectablesShop = 378,
-    MycWarResultNotebook = 379,
-    MycInfo = 380, // Bozja Info
-    MycItemBox = 381, // Bozja Lost Finds Cache
-    MycItemBag = 382, // Bozja Lost Finds Holster
-    MycDuelRequest = 383,
-    MycBattleAreaInfo = 384, // Bozja Recruitment
-
-    OrnamentNoteBook = 386, //Accessories
-
-    TourismMenu = 388,
-    GatheringMasterpiece = 389,
-    StarlightGiftBox = 390,
-    SpearFishing = 391,
-    Omikuji = 392,
-    FittingShop = 393,
-    AkatsukiNote = 394, // Unending Codex
-    ExHotbarEditor = 395,
-    BannerList = 396, // Portraits
-    BannerEditor = 397, // Portrait Editor
-    BannerUpdateView = 398,
-
-    PvPMap = 400,
-    CharaCard = 401, // AdventurerPlate
-    CharaCardDesignSetting = 402,
-    CharaCardProfileSetting = 403,
-
-    PvPMKSIntroduction = 405,
-    MJIHud = 406, // Island Sanctuary
-    MJIPouch = 407,
-    MJIRecipeNoteBook = 408,
-    MJICraftSchedule = 409,
-    MJICraftSales = 410,
-    MJIAnimalManagement = 411,
-    MJIFarmManagement = 412,
-    MJIGatheringHouse = 413,
-    MJIBuilding = 414,
-    MJIGatheringNoteBook = 415,
-    MJIDisposeShop = 416,
-    MJIMinionManagement = 417,
-    MJIMinionNoteBook = 418,
-    MJIBuildingMove = 419,
-    MJIEntrance = 420,
-    MJISettings = 421,
-    MJIHousingMenu = 422, // new in 6.40
-
-    MJINekomimiRequest = 424, // favors
-    ArchiveItem = 425,
-
-    VVDNotebook = 427,
-    VVDFinder = 428,
-    TofuList = 429,
-
-    BannerParty = 432,
-    BannerMIP = 433,
-    TurnBreak = 434,
-
-    SXTBattleLog = 436,
-    MoogleCollection = 437,
-    FGSEnterDialog = 438,
-    FGSStageIntro = 439,
-    FGSHud = 440,
-    FGSWinner = 441,
-    FGSResult = 442
+    SpearFishing = 396,
+    Omikuji = 397,
+    FittingShop = 398,
+    AkatsukiNote = 399, // Unending Codex
+    ExHotbarEditor = 400,
+    BannerList = 401, // Portraits
+    BannerEditor = 402, // Portrait Editor
+    BannerUpdateView = 403,
+    Unk404 = 404,
+    BannerPreview = 405,
+    PvPMap = 406,
+    CharaCard = 407, // AdventurerPlate
+    CharaCardDesignSetting = 408,
+    CharaCardProfileSetting = 409,
+    PvPMKSRankRating = 410,
+    PvPMKSIntroduction = 411,
+    MJIHud = 412, // Island Sanctuary
+    MJIPouch = 413,
+    MJIRecipeNoteBook = 414,
+    MJICraftSchedule = 415,
+    MJICraftSales = 416,
+    MJIAnimalManagement = 417,
+    MJIFarmManagement = 418,
+    MJIGatheringHouse = 419,
+    MJIBuilding = 420,
+    MJIGatheringNoteBook = 421,
+    MJIDisposeShop = 422,
+    MJIMinionManagement = 423,
+    MJIMinionNoteBook = 424,
+    MJIBuildingMove = 425,
+    MJIEntrance = 426,
+    MJISettings = 427,
+    MJIHousingMenu = 428,
+    Unk429 = 429,
+    MJINekomimiRequest = 430, // favors
+    ArchiveItem = 431,
+    Class2JobHotbar = 432,
+    VVDNotebook = 433,
+    VVDFinder = 434,
+    TofuList = 435,
+    TofuPreview = 436,
+    TofuPreset = 437,
+    BannerParty = 438,
+    BannerMIP = 439,
+    TurnBreak = 440,
+    MandervilleWeapon = 441,
+    SXTBattleLog = 442,
+    MoogleCollection = 443,
+    FGSEnterDialog = 444,
+    FGSStageIntro = 445,
+    FGSHud = 446,
+    FGSWinner = 447,
+    FGSResult = 448,
+    PointMenu = 449,
+    TradeScreenImage = 450,
+    Glasses = 451,
+    TermFilter = 452,
+    HousingInteriorPattern = 453,
+    WKSHud = 454,
+    WKSAnnounce = 455,
+    WKSPouch = 456,
+    WKSMission = 457,
+    WKSMissionInfomation = 458,
+    WKSRecipeNotebook = 459,
+    WKSMechaOperationEntry = 460,
+    WKSScoreList = 461,
+    WKSAchievement = 462,
+    WKSPraiseBoard = 463,
+    WKSLottery = 464,
+    WKSToolCustomize = 465,
+    WKSHistoryBoard = 466,
+    WKSPlanetSelect = 467, // new in 7.3
+    WKSSetting = 468, // new in 7.3
+    Unk469 = 469, // new in 7.3
+    MKDInfo = 470,
+    MKDContentsInfo = 471,
+    MKDSupportJob = 472,
+    MKDSupportJobList = 473,
+    MKDSettings = 474,
+    MKDTowerEntry = 475,
+    Unk476 = 476, // new in 7.2 - interacts with agents MKDLoreBook, MKDInfo
+    MKDLoreBook = 477,
+    MKDRelicGrowth = 478, // new in 7.3
+    QuickPanel = 479, // new in 7.3
+    Unk480 = 480, // new in 7.3
+    ConfigCharacterChatLogMiniTalk = 481, // new in 7.3
+    ToggleContextMenu = 482, // new in 7.3
+    Unk483 = 483, // new in 7.3
 }

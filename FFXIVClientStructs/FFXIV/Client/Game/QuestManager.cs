@@ -5,29 +5,86 @@ namespace FFXIVClientStructs.FFXIV.Client.Game;
 
 // Client::Game::QuestManager
 [GenerateInterop]
-[StructLayout(LayoutKind.Explicit, Size = 0xFD0)]
+[StructLayout(LayoutKind.Explicit, Size = 0x1092)]
 public unsafe partial struct QuestManager {
-    [MemberFunction("E8 ?? ?? ?? ?? 66 BA 10 0C")]
+    [StaticAddress("48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? C6 84 24", 3)]
     public static partial QuestManager* Instance();
 
+    [FieldOffset(0x00)] private ushort Unk0;
+    [FieldOffset(0x02)] private ushort Unk2;
+    [FieldOffset(0x04)] private ushort Unk4;
+    [FieldOffset(0x06)] private ushort Unk6;
+    [FieldOffset(0x08)] private ushort Unk8;
+    // [FieldOffset(0x0A)] array of 6 bytes?
     [FieldOffset(0x10), FixedSizeArray] internal FixedSizeArray30<QuestWork> _normalQuests;
-    [FieldOffset(0x5D8), FixedSizeArray] internal FixedSizeArray12<DailyQuestWork> _dailyQuests;
-    [FieldOffset(0x6C8), FixedSizeArray] internal FixedSizeArray5<TrackingWork> _trackedQuests;
-    [FieldOffset(0xC48), FixedSizeArray] internal FixedSizeArray17<BeastReputationWork> _beastReputation;
-    [FieldOffset(0xD58), FixedSizeArray] internal FixedSizeArray16<LeveWork> _leveQuests;
-    [FieldOffset(0xED8)] public byte NumLeveAllowances;
+    [FieldOffset(0x2E0), FixedSizeArray] internal FixedSizeArray751<byte> _completedQuestsBitmask;
+    [FieldOffset(0x5CF), FixedSizeArray] internal FixedSizeArray64<byte> _unlockedMapMarkersBitmask;
+    [FieldOffset(0x60F), FixedSizeArray] internal FixedSizeArray2<byte> _questRepeatFlagsBitmask; // TODO: check
 
-    /// <remarks>
-    /// This behaves weirdly in that it does not reset but add on top when logging onto different characters,
-    /// but does correspond to the number of accepted quests + prior accepted quests of other characters.
-    /// </remarks>>
-    [FieldOffset(0xFC8)] public byte NumAcceptedQuests;
+    [FieldOffset(0x618), FixedSizeArray] internal FixedSizeArray12<DailyQuestWork> _dailyQuests;
+    [FieldOffset(0x6D8)] public byte DailyQuestSeed;
 
-    // Could not find this in 7.0
-    //[FieldOffset(0xF50)] public byte NumAcceptedLeveQuests;
+    [FieldOffset(0x6DC), FixedSizeArray] internal FixedSizeArray40<byte> _unkBitmask1;
 
+    [FieldOffset(0x708), FixedSizeArray] internal FixedSizeArray10<TrackingWork> _trackedQuests;
+    [FieldOffset(0x7A8)] private byte UnkJournalByte;
+    [FieldOffset(0x7A9)] private byte UnkJournalWord; // QuestId?!
 
-    [MemberFunction("E8 ?? ?? ?? ?? 43 88 84 3E ?? ?? ?? ??")]
+    [FieldOffset(0x7AC), FixedSizeArray] internal FixedSizeArray158<byte> _unkBitmask2;
+
+    [FieldOffset(0x84C), FixedSizeArray] internal FixedSizeArray94<byte> _unkBitmask3;
+
+    [FieldOffset(0x8AC), FixedSizeArray] internal FixedSizeArray40<byte> _seenGatheringNotebookDivisionLevelRangesBitmask;
+    [FieldOffset(0x8D4), FixedSizeArray] internal FixedSizeArray102<byte> _gatheredGatheringItemsBitmask;
+    /// <remarks>Used for Actions with SecondaryCostType 9 (Brunt Force and Deep Vigor).</remarks>
+    [FieldOffset(0x93A)] public byte SuccessfulGatheringChainCount;
+
+    [FieldOffset(0x93C), FixedSizeArray] internal FixedSizeArray72<byte> _seenCraftingNotebookDivisionLevelRangesBitmask;
+    [FieldOffset(0x98C), FixedSizeArray] internal FixedSizeArray800<byte> _completedRecipesBitmask;
+
+    [FieldOffset(0xCB0)] private uint UnkCB0;
+    [FieldOffset(0xCB4)] private uint UnkCB4;
+    [FieldOffset(0xCB8)] private uint UnkCB8;
+
+    [FieldOffset(0xCE8), FixedSizeArray] internal FixedSizeArray20<BeastReputationWork> _beastReputation;
+    [FieldOffset(0xE28), FixedSizeArray] internal FixedSizeArray16<LeveWork> _leveQuests;
+
+    [FieldOffset(0xFA8)] public byte NumLeveAllowances;
+    [FieldOffset(0xFA9)] private ushort UnkFA9;
+    [FieldOffset(0xFAB)] private uint UnkFAB;
+    [FieldOffset(0xFB0), FixedSizeArray] internal FixedSizeArray226<byte> _completedLeveQuestsBitmask;
+
+    public byte NumAcceptedQuests {
+        get {
+            byte count = 0;
+            foreach (ref var entry in NormalQuests)
+                if (entry.QuestId != 0)
+                    count++;
+            return count;
+        }
+    }
+
+    public byte NumAcceptedDailyQuests {
+        get {
+            byte count = 0;
+            foreach (ref var entry in DailyQuests)
+                if (entry.QuestId != 0)
+                    count++;
+            return count;
+        }
+    }
+
+    public byte NumAcceptedLeveQuests {
+        get {
+            byte count = 0;
+            foreach (ref var entry in LeveQuests)
+                if (entry.LeveId != 0)
+                    count++;
+            return count;
+        }
+    }
+
+    [MemberFunction("E8 ?? ?? ?? ?? 41 88 84 2E")]
     public static partial bool IsQuestComplete(ushort questId);
     public static bool IsQuestComplete(uint questId) => IsQuestComplete((ushort)(questId & 0xFFFF));
 
@@ -61,6 +118,10 @@ public unsafe partial struct QuestManager {
      */
     public bool IsQuestAccepted(uint questId) => IsQuestAccepted((ushort)(questId & 0xFFFF));
 
+    /// <param name="questRepeatFlag">QuestRepeatFlag RowId / field from Quest sheet.</param>
+    [MemberFunction("0F B6 C2 4C 8B C9")]
+    public partial bool IsQuestRepeatFlagSet(byte questRepeatFlag);
+
     /// <summary>
     /// Check if a recipe has been crafted (= completed) before.
     /// </summary>
@@ -68,6 +129,14 @@ public unsafe partial struct QuestManager {
     /// <returns>Returns <c>true</c> if the recipe has been completed, <c>false</c> otherwise.</returns>
     [MemberFunction("40 53 48 83 EC 20 8B D9 81 F9")]
     public static partial bool IsRecipeComplete(uint recipeId);
+
+    /// <summary>
+    /// Check if a GatheringItem has been gathered before.
+    /// </summary>
+    /// <param name="gatheringItemId">The RowId of the GatheringItem sheet.</param>
+    /// <returns>Returns <c>true</c> if the item has been gathered before, <c>false</c> otherwise.</returns>
+    [MemberFunction("E8 ?? ?? ?? ?? 88 85 ?? ?? ?? ?? 41 BC ?? ?? ?? ?? B8")]
+    public static partial bool IsGatheringItemGathered(ushort gatheringItemId);
 
     /// <summary>
     /// Check if a specific levequest has been completed.
@@ -84,7 +153,7 @@ public unsafe partial struct QuestManager {
     /// Has to be multiplied by 60 for a unix timestamp.<br/>
     /// Use <see cref="GetNextLeveAllowancesUnixTimestamp"/> or <see cref="GetNextLeveAllowancesDateTime"/> instead.
     /// </remarks>
-    [MemberFunction("E8 ?? ?? ?? ?? 41 8D 74 24 ?? 8B D8")]
+    [MemberFunction("E8 ?? ?? ?? ?? 8B D8 41 8D 44 24")]
     private static partial int GetNextLeveAllowancesTimestamp();
 
     /// <summary>

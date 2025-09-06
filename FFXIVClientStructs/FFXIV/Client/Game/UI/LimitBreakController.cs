@@ -4,7 +4,7 @@ namespace FFXIVClientStructs.FFXIV.Client.Game.UI;
 [GenerateInterop]
 [StructLayout(LayoutKind.Explicit, Size = 0x10)]
 public unsafe partial struct LimitBreakController {
-    [StaticAddress("48 8D 0D ?? ?? ?? ?? E8 ?? ?? ?? ?? 3B C7", 3)]
+    [StaticAddress("44 8B C7 48 8D 0D ?? ?? ?? ?? 48 8B D3", 6)]
     public static partial LimitBreakController* Instance();
 
     [FieldOffset(0x08)] public byte BarCount;
@@ -17,6 +17,6 @@ public unsafe partial struct LimitBreakController {
     /// </summary>
     /// <param name="character">Character whose class to check</param>
     /// <param name="level">LB level (0 for LB1, 1 for LB2, 2 for LB3).</param>
-    [MemberFunction("E8 ?? ?? ?? ?? 33 FF 85 C0 75 48")]
+    [MemberFunction("E8 ?? ?? ?? ?? 8B F8 85 C0 75 ?? 45 33 C0")]
     public partial uint GetActionId(Character.Character* character, byte level);
 }

@@ -3,9 +3,9 @@ namespace FFXIVClientStructs.FFXIV.Client.Game;
 // Client::Game::HousingManager
 // ctor inlined at "48 83 EC ?? 48 83 3D ?? ?? ?? ?? ?? 0F 85 ?? ?? ?? ?? 48 89 5C 24 ?? 45 33 C0 33 D2 48 89 7C 24 ?? B9 ?? ?? ?? ?? E8 ?? ?? ?? ?? 33 FF 48 8B D8 48 85 C0 0F 84 ?? ?? ?? ?? 48 89 38 48 8D 88 ?? ?? ?? ?? 48 89 78 ?? 48 89 78"
 [GenerateInterop]
-[StructLayout(LayoutKind.Explicit, Size = 0xE0)]
+[StructLayout(LayoutKind.Explicit, Size = 0xE8)]
 public unsafe partial struct HousingManager {
-    [MemberFunction("E8 ?? ?? ?? ?? 0F B6 55 94")]
+    [StaticAddress("48 89 1D ?? ?? ?? ?? EB 07", 3, isPointer: true)]
     public static partial HousingManager* Instance();
 
     [FieldOffset(0x00)] public HousingTerritory* CurrentTerritory;
@@ -13,15 +13,21 @@ public unsafe partial struct HousingManager {
     [FieldOffset(0x10)] public IndoorTerritory* IndoorTerritory;
     [FieldOffset(0x18)] public WorkshopTerritory* WorkshopTerritory;
 
-    [MemberFunction("E8 ?? ?? ?? ?? 41 BC ?? ?? ?? ?? 48 8D 4D A0")]
+    [MemberFunction("E8 ?? ?? ?? ?? 0F B6 C0 BB")]
     private partial byte GetInvertedBrightness();
     public byte GetBrightness() => (byte)(5 - GetInvertedBrightness());
 
-    [MemberFunction("E8 ?? ?? ?? ?? 84 C0 41 8B ED")]
+    [MemberFunction("E8 ?? ?? ?? ?? 84 C0 41 8B F5")]
     public partial bool HasHousePermissions();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 84 C0 41 8B D6")]
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8B CB 84 C0 74 ?? 8B 95")]
+    public partial bool IsOutside();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 49 8B CE BA")]
     public partial bool IsInside();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 84 C0 74 0E 48 8B CB")]
+    public partial bool IsInWorkshop();
 
     [MemberFunction("E8 ?? ?? ?? ?? 0F B6 C0 3B 46 3C")]
     public partial sbyte GetCurrentWard();
@@ -38,9 +44,24 @@ public unsafe partial struct HousingManager {
     [MemberFunction("E8 ?? ?? ?? ?? 0F B6 D8 3C FF")]
     public partial sbyte GetCurrentPlot();
 
-    // Unique Identifier
     [MemberFunction("E8 ?? ?? ?? ?? BA ?? ?? ?? ?? 48 8B F8 8D 4A 02")]
-    public partial long GetCurrentHouseId();
+    public partial HouseId GetCurrentIndoorHouseId();
+
+    /// <summary>
+    /// Gets the TerritoryTypeId of the house the player is currently standing at.<br/>
+    /// For indoor territories that were renovated, this returns the original location.
+    /// </summary>
+    /// <returns></returns>
+    [MemberFunction("E8 ?? ?? ?? ?? 0F B7 C8 E8 ?? ?? ?? ?? 4C 89 74 24")]
+    public static partial uint GetOriginalHouseTerritoryTypeId();
+
+    /// <summary>
+    /// Gets the player owned house ids.
+    /// </summary>
+    /// <param name="type">The type of the estate.</param>
+    /// <param name="sharedEstateIndex">For type <see cref="EstateType.SharedEstate"/> an index must be specified (currently either 0 or 1).</param>
+    [MemberFunction("83 F9 06 77 64")]
+    public static partial HouseId GetOwnedHouseId(EstateType type, int sharedEstateIndex = -1);
 
     /// <summary>
     /// Gets the airship voyage distance and time in pointers
@@ -80,7 +101,7 @@ public unsafe partial struct HousingManager {
     /// <param name="pointB">The point to calculate to</param>
     /// <param name="speed">Speed of the submarine to use</param>
     /// <returns>Voyage time</returns>
-    [MemberFunction("E8 ?? ?? ?? ?? 49 8B 8C 24 ?? ?? ?? ?? 03 F8")]
+    [MemberFunction("E8 ?? ?? ?? ?? 03 F8 48 8D 55")]
     public static partial uint GetSubmarineVoyageTime(byte pointA, byte pointB, short speed);
 
     /// <summary>
@@ -106,7 +127,7 @@ public unsafe partial struct HousingManager {
     /// </summary>
     /// <param name="point">The point to check is unlocked or not</param>
     /// <returns>True or False</returns>
-    [MemberFunction("E8 ?? ?? ?? ?? 84 C0 74 4F 49 8B 57 38")]
+    [MemberFunction("E8 ?? ?? ?? ?? 84 C0 74 ?? 49 8B 56")]
     public static partial bool IsSubmarineExplorationUnlocked(byte point);
 
     /// <summary>
@@ -116,4 +137,56 @@ public unsafe partial struct HousingManager {
     /// <returns>True or False</returns>
     [MemberFunction("E8 ?? ?? ?? ?? 88 45 38")]
     public static partial bool IsSubmarineExplorationExplored(byte point);
+
+    public HousingTerritoryType GetCurrentHousingTerritoryType()
+        => CurrentTerritory != null ? CurrentTerritory->GetTerritoryType() : HousingTerritoryType.None;
+}
+
+[StructLayout(LayoutKind.Explicit, Size = 0x8)]
+public struct HouseId : IEquatable<HouseId>, IComparable<HouseId> {
+    [FieldOffset(0x0), CExporterIgnore] public ulong Id;
+    /// <remarks>
+    /// Masked data:<br/>
+    /// - <c>0b1000_0000</c> (<c>0x80</c>) = Apartment Flag<br/>
+    /// - <c>0b0111_1111</c> (<c>0x7F</c>) = Apartment Division (only if Apartment Flag is <c>true</c>)<br/>
+    /// - <c>0b0111_1111</c> (<c>0x7F</c>) = PlotIndex (only if Apartment Flag is <c>false</c>)
+    /// </remarks>
+    [FieldOffset(0x0)] public byte Data0;
+    [FieldOffset(0x1)] public byte Unk1;
+    /// <remarks>
+    /// Masked data:<br/>
+    /// - <c>0b0000_0000_0011_1111</c> (<c>0x0003F</c>) = WardIndex<br/>
+    /// - <c>0b1111_1111_1100_0000</c> (<c>0xFFC06</c>) = Room
+    /// </remarks>
+    [FieldOffset(0x2)] public ushort Data2;
+    [FieldOffset(0x4)] public ushort TerritoryTypeId;
+    [FieldOffset(0x6)] public ushort WorldId;
+
+    public bool IsApartment => (Data0 & 0x80) != 0 && (byte)(Data0 & 0x7F) < 2;
+    public byte ApartmentDivision => (byte)(Data0 & 0x7F);
+
+    public byte PlotIndex => (byte)(Data0 & 0x7F);
+    public byte WardIndex => (byte)(Data2 & 0x3F);
+    public short RoomNumber => (short)(Data2 >> 6);
+    public bool IsWorkshop => RoomNumber == 0x3FF;
+
+    public static implicit operator ulong(HouseId id) => id.Id;
+    public static unsafe implicit operator HouseId(ulong id) => *(HouseId*)&id;
+
+    public bool Equals(HouseId other) => Id == other.Id;
+    public override bool Equals(object? obj) => obj is HouseId other && Equals(other);
+    public override int GetHashCode() => Id.GetHashCode();
+    public static bool operator ==(HouseId left, HouseId right) => left.Id == right.Id;
+    public static bool operator !=(HouseId left, HouseId right) => left.Id != right.Id;
+    public int CompareTo(HouseId other) => Id.CompareTo(other);
+}
+
+public enum EstateType {
+    FreeCompanyEstate = 0,
+    PersonalChambers = 1,
+    PersonalEstate = 2,
+    Unknown3 = 3,
+    SharedEstate = 4,
+    ApartmentBuilding = 5,
+    ApartmentRoom = 6
 }

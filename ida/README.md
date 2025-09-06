@@ -12,7 +12,7 @@ Additionally, you will need to place "idauser.cfg" from this repository in "%App
 #### Ghidra dependency installation:
 This is slightly more complicated as Ghidra uses an embedded version of Jython. 
 - Install a copy of Python2 from https://www.python.org/downloads/
-- Execute the following `python.exe -m pip install -t \<YourGhidraFolder\>\Ghidra\Features\Python\data\jython-2.7.3\Lib\site-packages pyyaml==5.4.1 anytree==2.8.0`
+- Execute the following `python.exe -m pip install -t \<YourGhidraFolder\>\Ghidra\Features\Jython\lib\Lib\site-packages pyyaml==5.4.1 anytree==2.8.0`
 - Add `FFXIVClientStructs\ida` as a script directory.
 
 ## ffxiv_sigmaker.py
@@ -28,10 +28,22 @@ This support **Python3** and **IDA** only.
 If you are familiar with Poetry, the `sigmaker` extras package will do the same.
 
 ## ffxiv_exdgetters.py
+> [!WARNING]
+> Does not work with IDA 9 due to changes made on the application
+
 This script ingests the `exh` files from the base game and renames various functions, including setting the return type of the functions to the propper sheet struct.
 
 ## ffxiv_structimporter.py
+> [!WARNING]
+> Does not work with IDA 9 due to changes made on the application
+
 This script ingests the `ffxiv_structs.yml` file and forms the proper structs and assigns the member function return and param types correctly
+
+## ffxiv_fullrun_ida.py
+> [!WARNING]
+> Does not work with IDA 9 due to changes made on the application
+
+This script runs `ffxiv_idarename.py`,  `ffxiv_exdgetters.py`,  `ffxiv_structimporter.py` in sequence
 
 ## classinformer.csv
 Once upon a time, someone did a bad thing and released FFXIV with the RTTI data intact.

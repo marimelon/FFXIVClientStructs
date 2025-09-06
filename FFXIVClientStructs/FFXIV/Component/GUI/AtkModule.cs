@@ -1,17 +1,21 @@
 using FFXIVClientStructs.FFXIV.Client.System.Input;
 using FFXIVClientStructs.FFXIV.Client.System.Input.SoftKeyboards;
 using FFXIVClientStructs.FFXIV.Client.System.String;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Common.Component.Excel;
+using TextServiceEvent = FFXIVClientStructs.FFXIV.Client.System.Input.TextServiceInterface.TextServiceEvent;
 
 namespace FFXIVClientStructs.FFXIV.Component.GUI;
 
 // Component::GUI::AtkModule
 //   Component::GUI::AtkModuleInterface
+//   Component::GUI::AtkExternalInterface
+//   Client::System::Input::TextServiceInterface::TextServiceEvent
 [GenerateInterop(isInherited: true)]
-[Inherits<AtkModuleInterface>]
+[Inherits<AtkModuleInterface>, Inherits<AtkExternalInterface>, Inherits<TextServiceEvent>]
 [StructLayout(LayoutKind.Explicit, Size = 0x82A0)]
 public unsafe partial struct AtkModule {
-    [FieldOffset(0x8)] public AtkExternalInterface AtkExternalInterface;
+    public delegate AtkValue* CallbackHandlerDelegate(AtkModule* thisPtr, AtkValue* returnValue, AtkValue* values, uint valueCount);
 
     [FieldOffset(0x20)] public ExcelSheet* AddonSheet;
 
@@ -29,9 +33,10 @@ public unsafe partial struct AtkModule {
     [FieldOffset(0x5C50)] public AtkUIColorHolder AtkUIColorHolder;
 
     [FieldOffset(0x5D00)] public AtkFontCodeModule AtkFontCodeModule;
-    [FieldOffset(0x7280)] internal StdVector<nint> CallbackHandlerFunctions;
-    //[FieldOffset(0x72A0)] internal StdMap<?,?> AgentAddonMapping; // maybe?
-
+    [FieldOffset(0x7280)] public StdVector<nint> CallbackHandlerFunctions; // see CallbackHandlerDelegate
+    [FieldOffset(0x7298)] public AtkModuleEvent* UIModuleEvent;
+    [FieldOffset(0x72A0)] public StdMap<uint, AddonCallbackEntry> AddonCallbackMapping; // Key is UnitBase->Id
+    [FieldOffset(0x72B0)] public AtkMessageBoxManager* AtkMessageBoxManager;
     [FieldOffset(0x72B8)] public TextService TextService;
     [FieldOffset(0x72E8)] public AtkTextInput TextInput;
     [FieldOffset(0x7FA8)] internal Utf8String Unk7FA8;
@@ -54,4 +59,15 @@ public unsafe partial struct AtkModule {
 
     [MemberFunction("E8 ?? ?? ?? ?? 44 0F B6 44 24 ?? 8B D3")]
     public partial bool IsTextInputActive();
+
+    // CallbackHandlerFunctions[2]
+    [MemberFunction("40 56 48 83 EC ?? 48 8B F2 48 8B D1")]
+    public partial AtkValue* HandleAddonAgentCallback(AtkValue* returnValue, AtkValue* values, uint valueCount);
+
+    [StructLayout(LayoutKind.Explicit, Size = 0x10)]
+    public struct AddonCallbackEntry {
+        [FieldOffset(0x00), CExporterUnion("Interface")] public AtkModuleInterface.AtkEventInterface* EventInterface;
+        [FieldOffset(0x00), CExporterUnion("Interface")] public AgentInterface* AgentInterface;
+        [FieldOffset(0x08)] public ulong EventKind;
+    }
 }

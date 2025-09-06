@@ -5,15 +5,13 @@ using FFXIVClientStructs.FFXIV.Client.Graphics.Render;
 namespace FFXIVClientStructs.FFXIV.Client.System.Resource.Handle;
 
 // Client::System::Resource::Handle::MaterialResourceHandle
-//   Client::System::Resource::Handle::ResourceHandle
-//     Client::System::Common::NonCopyable
-// ctor "40 53 48 83 EC ?? 48 8B 44 24 ?? 48 8B D9 48 89 44 24 ?? 48 8B 44 24 ?? 48 89 44 24 ?? E8 ?? ?? ?? ?? 33 C9"
+//   Client::System::Resource::Handle::DefaultResourceHandle
+//     Client::System::Resource::Handle::ResourceHandle
+//       Client::System::Common::NonCopyable
 [GenerateInterop]
-[Inherits<ResourceHandle>]
+[Inherits<DefaultResourceHandle>]
 [StructLayout(LayoutKind.Explicit, Size = 0x108)]
 public unsafe partial struct MaterialResourceHandle {
-    public const int TableRows = 16;
-
     [StructLayout(LayoutKind.Explicit, Size = 0x10)]
     public struct TextureEntry {
         [FieldOffset(0x0)]
@@ -52,83 +50,7 @@ public unsafe partial struct MaterialResourceHandle {
         public ushort Index;
     }
 
-    /// <remarks>
-    /// All RGB values in this structure are pre-squared.
-    /// </remarks>
-    [StructLayout(LayoutKind.Explicit, Size = 0x20)]
-    public struct ColorTableRow {
-        [FieldOffset(0x0)] public Half DiffuseRed;
-        [FieldOffset(0x2)] public Half DiffuseGreen;
-        [FieldOffset(0x4)] public Half DiffuseBlue;
-        [FieldOffset(0x6)] public Half SpecularStrength;
-        [FieldOffset(0x8)] public Half SpecularRed;
-        [FieldOffset(0xA)] public Half SpecularGreen;
-        [FieldOffset(0xC)] public Half SpecularBlue;
-        [FieldOffset(0xE)] public Half GlossStrength;
-        [FieldOffset(0x10)] public Half EmissiveRed;
-        [FieldOffset(0x12)] public Half EmissiveGreen;
-        [FieldOffset(0x14)] public Half EmissiveBlue;
-        [FieldOffset(0x16)] public Half TileIndexW;
-        [FieldOffset(0x18)] public Half TileScaleUU;
-        [FieldOffset(0x1A)] public Half TileScaleUV;
-        [FieldOffset(0x1C)] public Half TileScaleVU;
-        [FieldOffset(0x1E)] public Half TileScaleVV;
-
-        public ushort TileIndex {
-            get => (ushort)((float)TileIndexW * 64.0f);
-            set => TileIndexW = (Half)((value + 0.5f) / 64.0f);
-        }
-
-        public Span<Half> AsSpan() {
-            fixed (Half* ptr = &DiffuseRed) {
-                return new(ptr, 16);
-            }
-        }
-
-        public ReadOnlySpan<Half> AsReadOnlySpan() {
-            fixed (Half* ptr = &DiffuseRed) {
-                return new(ptr, 16);
-            }
-        }
-    }
-
-    [StructLayout(LayoutKind.Explicit, Size = 0x2)]
-    public struct StainTableRow {
-        [FieldOffset(0x0)]
-        public ushort RawData;
-
-        public ushort Template {
-            get => (ushort)(RawData >> 5);
-            set => RawData = (ushort)((RawData & 0x1F) | (value << 5));
-        }
-
-        public bool Diffuse {
-            get => (RawData & 0x01) != 0;
-            set => RawData = (ushort)(value ? RawData | 0x01 : RawData & 0xFFFE);
-        }
-
-        public bool Specular {
-            get => (RawData & 0x02) != 0;
-            set => RawData = (ushort)(value ? RawData | 0x02 : RawData & 0xFFFD);
-        }
-
-        public bool Emissive {
-            get => (RawData & 0x04) != 0;
-            set => RawData = (ushort)(value ? RawData | 0x04 : RawData & 0xFFFB);
-        }
-
-        public bool Gloss {
-            get => (RawData & 0x08) != 0;
-            set => RawData = (ushort)(value ? RawData | 0x08 : RawData & 0xFFF7);
-        }
-
-        public bool SpecularStrength {
-            get => (RawData & 0x10) != 0;
-            set => RawData = (ushort)(value ? RawData | 0x10 : RawData & 0xFFEF);
-        }
-    }
-
-    [FieldOffset(0xB8)] public ulong Length;
+    // [FieldOffset(0xB8)] public ulong Length;
     /// <summary>
     /// The instantiated material. Its <see cref="Material.MaterialResourceHandle"/> will be the current structure.
     /// </summary>
@@ -165,54 +87,59 @@ public unsafe partial struct MaterialResourceHandle {
     public bool HasStainTable
         => (DataFlags & 0x8) != 0;
 
-    public ColorTableRow* ColorTable
-        => DataSetSize >= TableRows * sizeof(ColorTableRow) && HasColorTable ? (ColorTableRow*)DataSet : null;
+    public byte ColorTableWidthLog
+        => (byte)((DataFlags >> 4) & 0xF);
 
-    public Span<ColorTableRow> ColorTableSpan
-        => ColorTable switch { null => default, var ptr => new(ptr, TableRows) };
+    public byte ColorTableHeightLog
+        => (byte)((DataFlags >> 8) & 0xF);
 
-    public StainTableRow* StainTable {
+    /// <summary>Width of the color table, in vectors of 4 <see cref="Half"/>.</summary>
+    public int ColorTableWidth
+        => HasColorTable ? ((DataFlags & 0xFF0) == 0 ? 4 : 1 << ColorTableWidthLog) : 0;
+
+    public int ColorTableHeight
+        => HasColorTable ? ((DataFlags & 0xFF0) == 0 ? 16 : 1 << ColorTableHeightLog) : 0;
+
+    /// <summary>Total length of the color table, in <see cref="Half"/>. This will be the length of <see cref="ColorTableSpan"/>.</summary>
+    public int ColorTableLength
+        => ColorTableHeight * ColorTableWidth * 4;
+
+    public Half* ColorTable
+        => DataSetSize >= ColorTableLength * sizeof(Half) && HasColorTable ? (Half*)DataSet : null;
+
+    public Span<Half> ColorTableSpan
+        => ColorTable switch { null => default, var ptr => new(ptr, ColorTableLength) };
+
+    public int StainTableRowByteLength
+        => (DataFlags & 0xFF0) == 0 ? 2 : 4;
+
+    public int StainTableByteLength
+        => ColorTableHeight * StainTableRowByteLength;
+
+    public byte* StainTable {
         get {
-            var offset = HasColorTable ? TableRows * sizeof(ColorTableRow) : 0;
-            return DataSetSize >= offset + TableRows * sizeof(StainTableRow) && HasStainTable ? (StainTableRow*)(DataSet + offset) : null;
+            var offset = HasColorTable ? ColorTableLength * sizeof(Half) : 0;
+            return DataSetSize >= offset + StainTableByteLength && HasStainTable ? DataSet + offset : null;
         }
     }
 
-    public Span<StainTableRow> StainTableSpan
-        => StainTable switch { null => default, var ptr => new(ptr, TableRows) };
+    public Span<byte> StainTableSpan
+        => StainTable switch { null => default, var ptr => new(ptr, StainTableByteLength) };
 
-    public byte* ShpkName
+    public CStringPointer ShpkName
         => Strings + ShpkNameOffset;
 
-    public ReadOnlySpan<byte> ShpkNameSpan
-        => MemoryMarshal.CreateReadOnlySpanFromNullTerminated(ShpkName);
-
-    public string ShpkNameString
-        => Encoding.UTF8.GetString(ShpkNameSpan);
-
-    public byte* TexturePath(int index) {
+    public CStringPointer TexturePath(int index) {
         if (index < 0 || index >= TextureCount)
             throw new ArgumentOutOfRangeException(nameof(index));
         return Strings + Textures[index].PathOffset;
     }
 
-    public ReadOnlySpan<byte> TexturePathSpan(int index)
-        => MemoryMarshal.CreateReadOnlySpanFromNullTerminated(TexturePath(index));
-
-    public string TexturePathString(int index)
-        => Encoding.UTF8.GetString(TexturePathSpan(index));
-
-    public byte* AttributeSetName(int index) {
+    public CStringPointer AttributeSetName(int index) {
         if (index < 0 || index >= UvSetCount + ColorSetCount)
             throw new ArgumentOutOfRangeException(nameof(index));
         return Strings + AttributeSets[index].NameOffset;
     }
-
-    public ReadOnlySpan<byte> AttributeSetNameSpan(int index)
-        => MemoryMarshal.CreateReadOnlySpanFromNullTerminated(AttributeSetName(index));
-
-    public string AttributeSetNameString(int index)
-        => Encoding.UTF8.GetString(AttributeSetNameSpan(index));
 
     [MemberFunction("E8 ?? ?? ?? ?? 84 C0 74 4A 0F B7 46 02")]
     public partial byte LoadTexFiles();
@@ -223,6 +150,7 @@ public unsafe partial struct MaterialResourceHandle {
     [MemberFunction("E8 ?? ?? ?? ?? 49 89 04 3E")]
     public partial Texture* PrepareColorTable(byte stain0Id, byte stain1Id); // aka PrepareColorSet
 
+    /// <remarks><paramref name="stainChannel" /> 0 or 1. With the current MTRL file format, values from 0 to 3 make sense.</remarks>
     [MemberFunction("E8 ?? ?? ?? ?? 48 8B FB EB 07")]
-    public partial void ReadStainingTemplate(byte stainId, Half* colorTable); // TODO: update arguments
+    public partial void ReadStainingTemplate(ushort* stainTable, byte stainId, Half* colorTable, uint stainChannel);
 }

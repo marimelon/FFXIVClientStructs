@@ -5,9 +5,10 @@ namespace FFXIVClientStructs.FFXIV.Client.UI.Agent;
 // Client::UI::Agent::AgentHousingPlant
 //   Client::UI::Agent::AgentInterface
 //     Component::GUI::AtkModuleInterface::AtkEventInterface
+//   Client::UI::Agent::AgentInventoryContext::InventoryContextEvent
 [Agent(AgentId.HousingPlant)]
 [GenerateInterop]
-[Inherits<AgentInterface>]
+[Inherits<AgentInterface>, Inherits<AgentInventoryContext.InventoryContextEvent>]
 [StructLayout(LayoutKind.Explicit, Size = 0x950)]
 public unsafe partial struct AgentHousingPlant {
     [FieldOffset(0x40)] public uint ContextAddonId;
@@ -18,6 +19,9 @@ public unsafe partial struct AgentHousingPlant {
     [FieldOffset(0x88), FixedSizeArray] internal FixedSizeArray140<SelectableItem> _selectableItems;
     [FieldOffset(0x948)] public byte SelectableItemCount;
     //[FieldOffset(0x949)] public bool IsPlantPot_IsNotGardening; ?
+
+    [MemberFunction("48 89 5C 24 ?? 48 89 74 24 ?? 57 41 56 41 57 48 81 EC ?? ?? ?? ?? 45 33 FF")]
+    public partial void ConfirmSeedAndSoilSelection();
 
     [StructLayout(LayoutKind.Explicit, Size = 0x10)]
     public struct SelectedItem {

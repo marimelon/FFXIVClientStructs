@@ -1,6 +1,5 @@
 using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
-using FFXIVClientStructs.FFXIV.Component.GUI;
 
 namespace FFXIVClientStructs.FFXIV.Client.UI.Agent;
 
@@ -16,12 +15,11 @@ public unsafe partial struct AgentBannerInterface {
     // Client::UI::Agent::AgentBannerInterface::Storage
     // Destroyed in Client::UI::Agent::AgentBannerInterface::dtor
     [GenerateInterop]
-    [StructLayout(LayoutKind.Explicit, Size = 0x3E30)]
+    [StructLayout(LayoutKind.Explicit, Size = 0x3EB0)]
     public partial struct Storage {
-        public const int CharacterDataSize = 0x7C0;
+        public const int CharacterDataSize = 0x7D0;
 
         // vtable: "48 8D 05 ?? ?? ?? ?? C6 41 08 00 48 89 01 48 8B D9 C6 41 10 00"
-        // dtor: "48 89 5C 24 ?? 57 48 83 EC 20 83 B9 ?? ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 01 48 8B F9"
         [StructLayout(LayoutKind.Explicit, Size = CharacterDataSize)]
         public struct CharacterData {
             [FieldOffset(0x018)] public Utf8String Name1;
@@ -34,8 +32,8 @@ public unsafe partial struct AgentBannerInterface {
 
             [FieldOffset(0x2B0)] public CharaViewPortrait CharaView;
 
-            [FieldOffset(0x740)] public Utf8String Title;
-            [FieldOffset(0x7B0)] public void* SomePointer;
+            [FieldOffset(0x750)] public Utf8String Title;
+            [FieldOffset(0x7C0)] public void* SomePointer;
         }
 
         [FieldOffset(0x0000)] public AgentInterface* Agent; // AgentBannerParty, maybe other Banner agents
@@ -46,8 +44,5 @@ public unsafe partial struct AgentBannerInterface {
         public const int NumCharacters = 8;
 
         [FieldOffset(0x20), FixedSizeArray] internal FixedSizeArray8<CharacterData> _characters;
-
-        [FieldOffset(0x3B20), Obsolete("Do not use maps to numbers inside of Characters array")] public long Unk3;
-        [FieldOffset(0x3B28), Obsolete("Do not use maps to numbers inside of Characters array")] public long Unk4;
     }
 }

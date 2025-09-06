@@ -12,7 +12,7 @@ public unsafe partial struct SceneManager {
     [FieldOffset(0x28)] public Vector4 StreamingSphere; // updated every frame by the module
 
     [VirtualFunction(0)]
-    public partial void Dtor(byte freeFlags);
+    public partial SceneManager* Dtor(byte freeFlags);
 
     /// <summary>
     /// Iterate over loaded scenes. Currently there's always one scene when module is initialized, but game has some unused functions that create or remove more scenes.
@@ -102,7 +102,7 @@ public unsafe partial struct SceneWrapper {
 
 [StructLayout(LayoutKind.Explicit, Size = 0xC0)]
 public unsafe partial struct Scene {
-    [FieldOffset(0x00)] public Object Object; // base class
+    [FieldOffset(0x00), CExporterBaseType] public Object Object; // TODO: actual add as inheritance
     [FieldOffset(0x08)] public SceneManager* Manager;
     [FieldOffset(0x10)] public Collider* FirstCollider;
     [FieldOffset(0x18)] public int NumColliders;

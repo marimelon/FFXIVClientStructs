@@ -1,6 +1,7 @@
 # current exe version: 2020.12.29.0000.0000
 # @category __UserScripts
 # @menupath Tools.Scripts.ffxiv_idarename
+# @runtime Jython
 
 from __future__ import print_function
 import os
@@ -199,6 +200,7 @@ if api is None:
         import idaapi  # noqa
         import idc  # noqa
         import idautils  # noqa
+        import ida_funcs  # noqa
     except ImportError:
         print("Warning: Unable to load IDA")
     else:
@@ -222,7 +224,16 @@ if api is None:
                 return idc.get_qword(ea)
 
             def get_addr_name(self, ea):
-                return idc.get_name(ea)
+                name = idc.get_name(ea)
+                # if name is None or '' and segment name is .text then create the function and get the name of it.
+                # this is done for parts of the code that has no xrefs to it due to how IDA detects function boundaries
+                if (name is None or name == '') and idc.get_segm_name(ea) == '.text':
+                    finf = ida_funcs.func_t()
+                    finf.start_ea = ea
+                    finf.end_ea = idc.BADADDR
+                    ida_funcs.add_func_ex(finf)
+                    name = idc.get_name(ea)
+                return name
 
             def set_addr_name(self, ea, name):
                 # print("{0} {1}".format(ea, name))
@@ -294,7 +305,7 @@ if api is None:
                 if current_func_name == proposed_qualified_func_name:
                     return ""
 
-                if any(current_func_name.startswith(prefix) for prefix in ("sub_", "nullsub_", "loc_", "qword_", "unknown_libname_")):
+                if any(current_func_name.startswith(prefix) for prefix in ("sub_", "nullsub_", "loc_", "qword_", "unknown_libname_", "?", "_")):
                     return proposed_qualified_func_name
 
                 return None
@@ -338,6 +349,10 @@ if api is None:
 
             def get_addr_name(self, ea):
                 sym = getSymbolAt(toAddr(ea))
+                if not sym and getByte(toAddr(ea).subtract(1)) & 0xFF == 0xCC:
+                    disassemble(toAddr(ea))
+                    createFunction(toAddr(ea), None)
+                    sym = getSymbolAt(toAddr(ea))
                 if not sym:
                     return ""
                 return sym.getName(True)
@@ -377,8 +392,10 @@ if api is None:
                 return None
 
             def format_func_name(self, ea, current_func_name, proposed_func_name, class_name):
-                if current_func_name.startswith("thunk_"):  # jump
-                    current_func_name = current_func_name.lstrip("thunk_")
+                # override default thunk names and thunks of already named funcs with the default
+                func = getFunctionAt(toAddr(ea))
+                if func and func.isThunk():
+                    current_func_name = "FUN_{0:x}".format(ea)
 
                 proposed_qualified_func_name = "{0}.{1}".format(class_name, proposed_func_name)
                 if current_func_name == proposed_qualified_func_name:
@@ -536,7 +553,7 @@ def load_data():
             vfuncs = class_data.pop("vfuncs", {})
             funcs = class_data.pop("funcs", {})
             instances_raw = class_data.pop("instances", [])
-            instances = [(instance["ea"], instance["name"] if "name" in instance else "Instance") for instance in instances_raw]
+            instances = [(instance["ea"], instance["name"] if "name" in instance else "Instance") for instance in instances_raw] if instances_raw is not None else []
             for leftover in class_data:
                 print("Warning: Extra key \"{0}\" present in {1}".format(leftover, class_name))
 

@@ -2,7 +2,6 @@ namespace FFXIVClientStructs.FFXIV.Client.System.Resource.Handle;
 
 // Client::System::Resource::Handle::ResourceHandle
 //   Client::System::Common::NonCopyable
-// ctor "E8 ?? ?? ?? ?? 81 A3 ?? ?? ?? ?? ?? ?? ?? ?? 48 8D 05"
 [GenerateInterop(isInherited: true)]
 [StructLayout(LayoutKind.Explicit, Size = 0xB0)]
 public unsafe partial struct ResourceHandle {
@@ -57,7 +56,7 @@ public unsafe partial struct ResourceHandle {
 
 [StructLayout(LayoutKind.Explicit, Size = 4)]
 public struct ResourceHandleType {
-    [FieldOffset(0x0), CExportIgnore] public uint Value;
+    [FieldOffset(0x0), CExporterIgnore] public uint Value;
     [FieldOffset(0x0)] public HandleCategory Category;
     [FieldOffset(0x2)] public byte Unknown0A;
     [FieldOffset(0x3)] public byte Expansion;

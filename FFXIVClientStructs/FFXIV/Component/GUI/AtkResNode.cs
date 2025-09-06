@@ -6,7 +6,6 @@ namespace FFXIVClientStructs.FFXIV.Component.GUI;
 
 // Component::GUI::AtkResNode
 //   Component::GUI::AtkEventTarget
-// ctor "E8 ?? ?? ?? ?? 48 8B D8 48 83 C4 20"
 // base class for all UI "nodes" which represent elements of the UI
 [GenerateInterop(isInherited: true)]
 [Inherits<AtkEventTarget>]
@@ -64,19 +63,36 @@ public unsafe partial struct AtkResNode : ICreatable {
     /// <term>Bit 1 [0x1]</term> Is dirty (has updates to be drawn)<br/>
     /// <term>Bit 2 [0x2]</term> Is undergoing timeline animation (?)<br/>
     /// <term>Bit 3 [0x4]</term> Calculate transformation<br/>
+    /// <term>Bit 4 [0x10]</term> Stops rapid cursor navigation Up<br/>
+    /// <term>Bit 5 [0x20]</term> Stops rapid cursor navigation Down<br/>
+    /// <term>Bit 6 [0x40]</term> Stops rapid cursor navigation Left<br/>
+    /// <term>Bit 7 [0x80]</term> Stops rapid cursor navigation Right<br/>
     /// <term>Bit 9 [0x100]</term> Don't make visible on new timeline label<br/>
     /// <term>Bits 10-17</term> ClipCount<br/>
+    /// <term>Bit 21 [0x100000]</term> Change CursorType to Clickable on hover<br/>
+    /// <term>Bit 23 [0x400000]</term> Change CursorType to TextInput on hover<br/>
     /// <term>Bit 24 [0x800000]</term> Use elliptical collision instead of rectangular
     /// </summary>
     [FieldOffset(0xA0)] public uint DrawFlags;
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B D8 48 83 C4 20")]
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8B D8 48 83 C4 ?? 5B C3 33 DB")]
     public partial void Ctor();
+
+    [MemberFunction("48 85 C9 74 14 0F B7 41 40")]
+    public partial NodeType GetNodeType();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 45 39 B7")]
+    public partial uint GetBaseNodeId();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 84 C0 74 ?? 8B 4E ?? 81 F9")]
+    public partial bool IsDuplicatedNode();
+
+    #region Node getters
 
     [MemberFunction("E8 ?? ?? ?? ?? 8B 54 FB 04")]
     public partial AtkImageNode* GetAsAtkImageNode();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 44 8B 97")]
+    [MemberFunction("E8 ?? ?? ?? ?? 45 6B E7")]
     public partial AtkTextNode* GetAsAtkTextNode();
 
     [MemberFunction("E8 ?? ?? ?? ?? B2 01 48 89 47 08")]
@@ -85,8 +101,15 @@ public unsafe partial struct AtkResNode : ICreatable {
     [MemberFunction("E8 ?? ?? ?? ?? 8D 0C BF 03 C9")]
     public partial AtkCounterNode* GetAsAtkCounterNode();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8D 1C 76")]
+    [MemberFunction("E8 ?? ?? ?? ?? 48 6B CE 68")]
     public partial AtkCollisionNode* GetAsAtkCollisionNode();
+
+    [MemberFunction("48 85 C9 74 0B 66 83 79 ?? 0A 75 04 48 8B C1 C3 33 C0 C3")]
+    public partial AtkClippingMaskNode* GetAsAtkClippingMaskNode();
+
+    #endregion
+
+    #region Component getters
 
     [MemberFunction("E8 ?? ?? ?? ?? 44 8D 4F 30")]
     public partial AtkComponentNode* GetAsAtkComponentNode();
@@ -94,49 +117,106 @@ public unsafe partial struct AtkResNode : ICreatable {
     [MemberFunction("E8 ?? ?? ?? ?? 49 63 DF")]
     public partial AtkComponentBase* GetComponent();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 44 0F B7 FE")]
+    [MemberFunction("E8 ?? ?? ?? ?? 48 89 43 D0")]
+    public partial AtkComponentButton* GetAsAtkComponentButton();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8B B4 24 ?? ?? ?? ?? 48 8B FD")]
+    public partial AtkComponentWindow* GetAsAtkComponentWindow();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 41 0F A3 DD")]
+    public partial AtkComponentCheckBox* GetAsAtkComponentCheckBox();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 45 0F B6 EF")]
+    public partial AtkComponentRadioButton* GetAsAtkComponentRadioButton();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 8B D5 48 89 87")]
+    public partial AtkComponentGaugeBar* GetAsAtkComponentGaugeBar();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 8B 4C 3D 80")]
+    public partial AtkComponentSlider* GetAsAtkComponentSlider();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 8D 55 0D 48 89 83")]
+    public partial AtkComponentTextInput* GetAsAtkComponentTextInput();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 4C 8B E8 33 C0")]
+    public partial AtkComponentNumericInput* GetAsAtkComponentNumericInput();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 44 0F B7 FF")]
     public partial AtkComponentList* GetAsAtkComponentList();
 
     [MemberFunction("E8 ?? ?? ?? ?? 8B 4C 35 97")]
     public partial AtkComponentDropDownList* GetAsAtkComponentDropdownList();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 8D 55 48")]
-    public partial AtkComponentRadioButton* GetAsAtkComponentRadioButton();
+    [MemberFunction("E8 ?? ?? ?? ?? 49 89 07 48 8B F8")]
+    public partial AtkComponentTab* GetAsAtkComponentTab();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 8D 56 33")]
+    [MemberFunction("E8 ?? ?? ?? ?? 49 89 86 ?? ?? ?? ?? 45 33 C9")]
+    public partial AtkComponentTreeList* GetAsAtkComponentTreeList();
+
+    [MemberFunction("E8 ?? ?? ?? ?? BA FB 01 00 00 48 89 83")]
     public partial AtkComponentScrollBar* GetAsAtkComponentScrollBar();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 0B 41 B8 ?? ?? ?? ?? 48 89 83")]
-    public partial AtkComponentJournalCanvas* GetAsAtkJournalCanvas();
+    [MemberFunction("E8 ?? ?? ?? ?? 0F B7 CF 49 89 44 CE")]
+    public partial AtkComponentListItemRenderer* GetAsAtkComponentListItemRenderer();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 89 43 D0")]
-    public partial AtkComponentButton* GetAsAtkComponentButton();
+    [MemberFunction("E8 ?? ?? ?? ?? 44 8D 7E")]
+    public partial AtkComponentIcon* GetAsAtkComponentIcon();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 8D 55 42")]
-    public partial AtkComponentCheckBox* GetAsAtkComponentCheckBox();
+    [MemberFunction("E8 ?? ?? ?? ?? FF C3 48 89 07 48 8D 7F 08 83 FB 10")]
+    public partial AtkComponentIconText* GetAsAtkComponentIconText();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 8B 54 34 20")]
+    public partial AtkComponentDragDrop* GetAsAtkComponentDragDrop();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 85 DB 7E 1E 49 8B 4F 28")]
+    public partial AtkComponentGuildLeveCard* GetAsAtkComponentGuildLeveCard();
 
     [MemberFunction("E8 ?? ?? ?? ?? 41 8D 57 1B")]
-    public partial AtkComponentTextNineGrid* GetAsAtkTextNineGrid();
+    public partial AtkComponentTextNineGrid* GetAsAtkComponentTextNineGrid();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 0B 41 B8 ?? ?? ?? ?? 48 89 83")]
+    public partial AtkComponentJournalCanvas* GetAsAtkComponentJournalCanvas();
+
+    [MemberFunction("48 85 C9 74 3D B8 ?? ?? ?? ?? 66 39 41 40 72 2C 48 8B 89 ?? ?? ?? ?? 48 85 C9 74 20 0F B6 81 ?? ?? ?? ?? 24 05 3C 05 75 13 80 B9 ?? ?? ?? ?? ?? 75 0A 48 8B 41 18 80 78 10 15")]
+    public partial AtkComponentMultipurpose* GetAsAtkComponentMultipurpose();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 48 89 43 20 48 8D BB")]
+    public partial AtkComponentMap* GetAsAtkComponentMap();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 41 8D 56 03 4A 89 84 2E")]
+    public partial AtkComponentPreview* GetAsAtkComponentPreview();
 
     [MemberFunction("E8 ?? ?? ?? ?? 48 8B 8E ?? ?? ?? ?? BA ?? ?? ?? ?? 48 89 86 ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8B 86")]
-    public partial AtkComponentHoldButton* GetAsAtkHoldButton();
+    public partial AtkComponentHoldButton* GetAsAtkComponentHoldButton();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 0E BA ?? ?? ?? ?? 48 89 46 60")]
+    public partial AtkComponentPortrait* GetAsAtkComponentPortrait();
+
+    #endregion
+
+    [MemberFunction("E8 ?? ?? ?? ?? 84 C0 75 48 32 DB")]
+    public partial bool CheckCollisionAtCoords(short x, short y, bool inclusive);
 
     [MemberFunction("E8 ?? ?? ?? ?? C1 E7 0C")]
-    public partial void AddEvent(ushort eventType, uint eventParam, AtkEventListener* listener,
-        AtkResNode* nodeParam, bool isSystemEvent);
+    public partial void AddEvent(AtkEventType eventType, uint eventParam, AtkEventListener* listener, AtkResNode* nodeParam, bool isGlobalEvent);
 
-    public void AddEvent(AtkEventType eventType, uint eventParam, AtkEventListener* listener, AtkResNode* nodeParam,
-        bool isSystemEvent) {
-        AddEvent((ushort)eventType, eventParam, listener, nodeParam, isSystemEvent);
-    }
+    [MemberFunction("E8 ?? ?? ?? ?? 44 38 7D 67")]
+    public partial void RemoveEvent(AtkEventType eventType, uint eventParam, AtkEventListener* listener, bool isGlobalEvent);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 40 38 75 67")]
-    public partial void RemoveEvent(ushort eventType, uint eventParam, AtkEventListener* listener,
-        bool isSystemEvent);
+    [MemberFunction("48 85 C9 0F 84 ?? ?? ?? ?? 48 89 74 24 ?? 41 56")]
+    public partial void RemoveAllEventsFromListener(AtkEventListener* listener);
 
-    public void RemoveEvent(AtkEventType eventType, uint eventParam, AtkEventListener* listener, bool isSystemEvent) {
-        RemoveEvent((ushort)eventType, eventParam, listener, isSystemEvent);
-    }
+    [MemberFunction("48 85 C9 74 09 48 83 C1 18")]
+    public partial void ClearEvents();
+
+    [MemberFunction("E8 ?? ?? ?? ?? EB 96 CC")]
+    public partial bool DispatchEvent(AtkEventDispatcher.Event* evt);
+
+    [MemberFunction("E8 ?? ?? ?? ?? 84 C0 75 ?? 44 0F BF 83")]
+    public partial bool IsEventRegistered(AtkEventType eventType);
+
+    [MemberFunction("E8 ?? ?? ?? ?? 8B D8 3B C5")]
+    public partial uint GetEventParam(AtkEventType eventType);
 
     [MemberFunction("E8 ?? ?? ?? ?? 8B 5C 24 2C")]
     public partial void GetBounds(Bounds* outBounds);
@@ -150,19 +230,19 @@ public unsafe partial struct AtkResNode : ICreatable {
     [MemberFunction("E8 ?? ?? ?? ?? 41 8B FC 4C 8D B5")]
     public partial void GetPositionShort(short* outX, short* outY);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 8D 56 B5")]
+    [MemberFunction("E8 ?? ?? ?? ?? 8B 4C BD ?? B8")]
     public partial void SetPositionShort(short X, short Y);
 
     [MemberFunction("48 85 C9 74 0B 8B 41 4C")]
     public partial void GetScale(float* outX, float* outY);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B CB F3 0F 59 C6")]
+    [MemberFunction("E8 ?? ?? ?? ?? 0F 57 C9 8B C7")]
     public partial float GetScaleX();
 
     [MemberFunction("E8 ?? ?? ?? ?? 49 8D 7E 1E")]
     public partial float GetScaleY();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 83 BC 2E ?? ?? ?? ?? ??")]
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 44 1E")]
     public partial void SetScale(float X, float Y);
 
     [MemberFunction("E9 ?? ?? ?? ?? F3 0F 5E CA")]
@@ -177,35 +257,56 @@ public unsafe partial struct AtkResNode : ICreatable {
     [MemberFunction("E8 ?? ?? ?? ?? 0F BE 43 10")]
     public partial float GetYFloat();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 0F BF 07")]
+    [MemberFunction("E8 ?? ?? ?? ?? 66 29 46")]
+    public partial short GetXShort();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 41 2A C4")]
+    public partial short GetYShort();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 41 0F B7 FF")]
     public partial void SetXFloat(float x);
 
     [MemberFunction("E8 ?? ?? ?? ?? 41 83 FE 1C")]
     public partial void SetYFloat(float y);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 0F B7 55 3C")]
-    public partial short GetXShort();
-
-    [MemberFunction("E8 ?? ?? ?? ?? 0F B7 75 3E")]
-    public partial short GetYShort();
-
-    [MemberFunction("E8 ?? ?? ?? ?? 41 8D 55 1C")]
+    [MemberFunction("E8 ?? ?? ?? ?? 4A 8B 9C E5")]
     public partial void SetXShort(short x);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 4C 8B 7D 6F")]
+    [MemberFunction("E8 ?? ?? ?? ?? 41 8B 54 9C")]
     public partial void SetYShort(short y);
 
     [MemberFunction("E8 ?? ?? ?? ?? 66 03 C0")]
     public partial ushort GetWidth();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8D 4F 60 0F B7 F0")]
+    [MemberFunction("E8 ?? ?? ?? ?? 66 03 85")]
     public partial ushort GetHeight();
 
     [MemberFunction("E8 ?? ?? ?? ?? 48 8B 8D ?? ?? ?? ?? 0F BF C6")]
     public partial void SetWidth(ushort width);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 5D 87")]
+    [MemberFunction("E8 ?? ?? ?? ?? 41 8B 17 48 8B CD")]
     public partial void SetHeight(ushort height);
+
+    [MemberFunction("E8 ?? ?? ?? ?? 44 0F 28 8C 24 ?? ?? ?? ?? 48 8D 9F")]
+    public partial float GetRotation();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 49 8B 45 ?? 44 0F 28 44 24")]
+    public partial void SetRotation(float rotation);
+
+    [MemberFunction("E8 ?? ?? ?? ?? EB ?? 0F 57 C0 F3 0F 59 C6")]
+    public partial float GetRotationDegrees();
+
+    [MemberFunction("E8 ?? ?? ?? ?? EB ?? 8B 41")]
+    public partial void SetRotationDegrees(float rotation);
+
+    [MemberFunction("E8 ?? ?? ?? ?? 48 63 46 30")]
+    public partial void SetAlpha(byte alpha);
+
+    [MemberFunction("E8 ?? ?? ?? ?? 8B 4D ?? 0F B7 C0")]
+    public partial ushort GetPriority();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 33 D2 48 8B 8C 24")]
+    public partial void SetPriority(ushort priority);
 
     [MemberFunction("E8 ?? ?? ?? ?? 3C 01 75 7F")]
     public partial bool IsVisible();
@@ -213,44 +314,29 @@ public unsafe partial struct AtkResNode : ICreatable {
     [MemberFunction("E8 ?? ?? ?? ?? 48 83 C7 08 48 83 EE 01 75 D5 48 8B 4C 24 ??")]
     public partial void ToggleVisibility(bool enable);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 63 46 30")]
-    public partial void SetAlpha(byte alpha);
-
-    [MemberFunction("E8 ?? ?? ?? ?? 66 85 C0 75 55")]
-    public partial ushort GetPriority();
-
-    [MemberFunction("E8 ?? ?? ?? ?? 8D 56 02 49 8B CD")]
-    public partial void SetPriority(ushort priority);
-
     [MemberFunction("E8 ?? ?? ?? ?? FF C3 3B DE 72 E6")]
     public partial void SetUseDepthBasedPriority(bool enable);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 66 83 F8 66 EB 99")]
+    [MemberFunction("E8 ?? ?? ?? ?? 41 0F 28 C9 8B 87")]
+    public partial void SetOrigin(float originX, float originY);
+
+    [MemberFunction("E8 ?? ?? ?? ?? 66 41 3B C4 75")]
     public partial ushort GetTimelineLabel();
 
     [MemberFunction("48 85 C9 74 12 48 8B 41 10")]
     public partial void EnableTimeline();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 8F ?? ?? ?? ?? E8 ?? ?? ?? ?? 41 3A C7")]
+    [MemberFunction("E8 ?? ?? ?? ?? 33 FF 39 BD")]
     public partial void DisableTimeline();
+
+    [MemberFunction("E8 ?? ?? ?? ?? 41 3A C6 74 22")]
+    public partial bool IsAnimated();
 
     [VirtualFunction(1)]
     public partial void Destroy(bool free);
 
     [VirtualFunction(2)]
     public partial void UpdateFromTimeline();
-}
-
-public enum NodeType : ushort {
-    Res = 1,
-    Image = 2,
-    Text = 3,
-    NineGrid = 4,
-    Counter = 5,
-
-    Collision = 8,
-    ClippingMask = 10
-    // Component: >=1000
 }
 
 // 'visible' will change visibility immediately, the rest rely on other stuff to happen so they dont do anything

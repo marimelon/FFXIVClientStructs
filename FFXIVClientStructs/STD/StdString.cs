@@ -13,7 +13,7 @@ namespace FFXIVClientStructs.STD;
 public unsafe struct StdString
     : IStdBasicString<byte>
         , IStaticNativeObjectOperation<StdString> {
-    [FieldOffset(0x0), CExportIgnore] public StdBasicString<byte, IStaticEncoding.System, IStaticMemorySpace.Default> BasicString;
+    [FieldOffset(0x0), CExporterIgnore] public StdBasicString<byte, IStaticEncoding.System, IStaticMemorySpace.Default> BasicString;
     [FieldOffset(0x0), CExporterUnion("Buffer")] public byte* BufferPtr;
     [FieldOffset(0x0), CExporterUnion("Buffer")] public fixed byte Buffer[16];
     /// <summary>
@@ -184,13 +184,4 @@ public unsafe struct StdString
     public void Resize(long newSize) => BasicString.Resize(newSize);
     public void Resize(long newSize, in byte defaultValue) => BasicString.Resize(newSize, in defaultValue);
     public long SetCapacity(long newCapacity) => BasicString.SetCapacity(newCapacity);
-
-    [Obsolete($"Use {nameof(AsSpan)} instead.")]
-    public readonly ReadOnlySpan<byte> Slice(int start) => AsSpan(start);
-
-    [Obsolete($"Use {nameof(AsSpan)} instead.")]
-    public readonly ReadOnlySpan<byte> Slice(int start, int length) => AsSpan(start, length);
-
-    [Obsolete($"Use {nameof(ToArray)} or {nameof(AsSpan)} instead.")]
-    public readonly byte[] GetBytes() => ToArray();
 }

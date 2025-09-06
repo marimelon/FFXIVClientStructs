@@ -1,123 +1,25 @@
 // Suppress Inconsistent Naming due to VirtualKeyCode Names
 // ReSharper disable InconsistentNaming
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
+using FFXIVClientStructs.FFXIV.Client.System.Input;
 using FFXIVClientStructs.FFXIV.Client.System.String;
-using FFXIVClientStructs.FFXIV.Client.UI.Misc.UserFileManager;
+using UserFileEvent = FFXIVClientStructs.FFXIV.Client.UI.Misc.UserFileManager.UserFileEvent;
 
 namespace FFXIVClientStructs.FFXIV.Client.UI;
 
 // Client::UI::UIInputData
 //   Component::GUI::AtkInputData
+//     Client::System::Input::InputData
 //   Client::UI::Misc::UserFileManager::UserFileEvent
 [GenerateInterop]
-[Inherits<UserFileEvent>(0x9D0)]
-[StructLayout(LayoutKind.Explicit, Size = 0xA28)]
+[Inherits<InputData>, Inherits<UserFileEvent>]
+[StructLayout(LayoutKind.Explicit, Size = 0xA30)]
 public unsafe partial struct UIInputData {
-    public static UIInputData* Instance() => Framework.Instance()->UIModule->GetUIInputData();
-    // TODO: check gamepad things
-    [FieldOffset(0x8)] public int GamepadLeftStickX; // from -99 (Right) to 99 (Left)
-    [FieldOffset(0xC)] public int GamepadLeftStickY; // from -99 (Down) to 99 (Up)
-    [FieldOffset(0x10)] public int GamepadRightStickX; // from -99 (Right) to 99 (Left)
-    [FieldOffset(0x14)] public int GamepadRightStickY; // from -99 (Down) to 99 (Up)
-    [FieldOffset(0x18)] public GamepadButtonsFlags GamepadButtons; // Not always set if UI is focused
+    public static UIInputData* Instance() {
+        var uiModule = UIModule.Instance();
+        return uiModule == null ? null : uiModule->GetUIInputData();
+    }
 
-    // These fields are only correct for actual physical Playstation Controllers
-    // Tested with Sony DualSense Controller Model: CFI-ZCT1W
-    [FieldOffset(0x2C)] public float Square;
-    [FieldOffset(0x30)] public float Cross;
-    [FieldOffset(0x34)] public float Circle;
-    [FieldOffset(0x38)] public float Triangle;
-    [FieldOffset(0x3C)] public float L1;
-    [FieldOffset(0x40)] public float R1;
-    [FieldOffset(0x44)] public float L2;
-    [FieldOffset(0x48)] public float R2;
-    [FieldOffset(0x50)] public float Start;
-    [FieldOffset(0x54)] public float L3;
-    [FieldOffset(0x58)] public float R3;
-    [FieldOffset(0x5C)] public float PSButton;
-    [FieldOffset(0x60)] public float Select;
-    [FieldOffset(0x64)] public float MuteButton;
-
-    [FieldOffset(0xAC)] public float GamepadLeftStickLeft;
-    [FieldOffset(0xB0)] public float GamepadLeftStickRight;
-
-    [FieldOffset(0xCC)] public float GamepadLeftStickUp;
-    [FieldOffset(0xD0)] public float GamepadLeftStickDown;
-
-    [FieldOffset(0xEC)] public float GamepadRightStickLeft;
-    [FieldOffset(0xF0)] public float GamepadRightStickRight;
-
-    [FieldOffset(0x14C)] public float GamepadRightStickUp;
-    [FieldOffset(0x150)] public float GamepadRightStickDown;
-
-    // These values are weird... When DPadLeft is pressed it'll have value 1.0f, but DPadUp will have value 8.74278E-08
-    [FieldOffset(0x18C)] public float DPadLeft;
-    [FieldOffset(0x190)] public float DPadRight;
-    [FieldOffset(0x194)] public float DPadUp;
-    [FieldOffset(0x198)] public float DPadDown;
-
-    /*
-     * UIFiltered means those are not set if
-     * - the game window is focused and
-     * - the cursor is hovering any interactable UI elements or windows
-     *
-     * For mouse buttons, only Left and Right buttons are filtered out, extra buttons are not
-     */
-    // TODO: these 2 are structs
-    [FieldOffset(0x4A0)] public int UIFilteredCursorXPosition;
-    [FieldOffset(0x4A4)] public int UIFilteredCursorYPosition;
-    [FieldOffset(0x4A8)] public int UIFilteredMouseWheel; // -1 for scroll down, 1 for scroll up
-    [FieldOffset(0x4AC)] public MouseButtonFlags UIFilteredMouseButtonHeldFlags;
-    [FieldOffset(0x4B0)] public MouseButtonFlags UIFilteredMouseButtonPressedFlags;
-    [FieldOffset(0x4B4)] public MouseButtonFlags UIFilteredMouseButtonReleasedFlags;
-    [FieldOffset(0x4B8)] public MouseButtonFlags UIFilteredMouseButtonHeldThrottledFlags;
-
-    [FieldOffset(0x4C0)] public int UIFilteredCursorXDelta; // Delta since last frame
-    [FieldOffset(0x4C4)] public int UIFilteredCursorYDelta; // Delta since last frame
-
-    // Same as 0x4FC
-    // [FieldOffset(0x4CC)] public byte IsGameWindowFocused;
-
-    [FieldOffset(0x4D0)] public int CursorXPosition;
-    [FieldOffset(0x4D4)] public int CursorYPosition;
-    [FieldOffset(0x4D8)] public int MouseWheel; // -1 for scroll down, 1 for scroll up
-    [FieldOffset(0x4DC)] public MouseButtonFlags MouseButtonHeldFlags;
-    [FieldOffset(0x4E0)] public MouseButtonFlags MouseButtonPressedFlags;
-    [FieldOffset(0x4E4)] public MouseButtonFlags MouseButtonReleasedFlags;
-    [FieldOffset(0x4E8)] public MouseButtonFlags MouseButtonHeldThrottledFlags;
-
-    [FieldOffset(0x4F0)] public int CursorXDelta; // Delta since last frame
-    [FieldOffset(0x4F4)] public int CursorYDelta; // Delta since last frame
-
-    // At least this is what it seems to be
-    [FieldOffset(0x4FC)] public bool IsGameWindowFocused;
-
-    /*
-     * All the following keyboard keys states are not triggered if the chat input is active
-     */
-
-    /*
-     * This one is weird. Seems to fire as long as the last key pressed is still held
-     * Except modifiers (ctrl, shift, alt) where it only fires once
-     * If fires less often than the "Down" flag in the array below but more often than the "Held" one
-     * So Im not sure what to make of this or if this is even useful
-     */
-    //[FieldOffset(0x500)] public int IsLastKeyboardKeyDownThrottled;
-
-    [FieldOffset(0x504), FixedSizeArray] internal FixedSizeArray159<KeyStateFlags> _keyState;
-
-    //[FieldOffset(0x784)] public byte UnkFlag;
-    [FieldOffset(0x785)] public byte KeyHeldKeycode;
-
-    /*
-     * Those two seem unreliable in how they're set. They work well on keypress
-     * but one or the other will get nulled after a few ms when the key is held
-     * or won't have their value changed on release.
-     */
-    [FieldOffset(0x788)] public byte LastKeyCharKeyCode; // (key code of the character just below, ie `97` for a lowercase `a`)
-    [FieldOffset(0x790)] public char LastKeyChar; // (actual character made by key combination, ie `a` or `A`)
-
-    public KeyStateFlags GetKeyState(int key) => KeyState[key];
+    public KeyStateFlags GetKeyState(int key) => KeyboardInputs.KeyState[key];
     public KeyStateFlags GetKeyState(SeVirtualKey key) => GetKeyState((int)key);
 
     public bool IsKeyPressed(SeVirtualKey key) => IsKeyPressed((int)key);
@@ -129,9 +31,13 @@ public unsafe partial struct UIInputData {
     public bool IsKeyReleased(int key) => GetKeyState(key).HasFlag(KeyStateFlags.Released);
     public bool IsKeyHeld(int key) => GetKeyState(key).HasFlag(KeyStateFlags.Held);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8D 4D A0 8B F8")]
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8D 4D A0 8B F8"), Obsolete("Use GetKeybindByName, or GetKeybind(InputId)", true)]
     public partial uint GetKeybind(Utf8String* name, Keybind* keybind);
 
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8D 4D A0 8B F8")]
+    public partial InputId GetKeybindByName(Utf8String* name, System.Input.Keybind* outKeybind);
+
+    // TODO: remove with GetKeybind
     [StructLayout(LayoutKind.Explicit, Size = 0xB)]
     public struct Keybind {
         [FieldOffset(0x0)] public SeVirtualKey Key;
@@ -142,55 +48,16 @@ public unsafe partial struct UIInputData {
     }
 }
 
-[Flags]
-public enum GamepadButtonsFlags : ushort {
-    None = 0,
-    DPadUp = 1,
-    DPadDown = 2,
-    DPadLeft = 4,
-    DPadRight = 8,
-    Triangle = 16,
-    Cross = 32,
-    Square = 64,
-    Circle = 128,
-    L1 = 256,
-    L2 = 512,
-    L3 = 1024,
-    R1 = 2048,
-    R2 = 4096,
-    R3 = 8192,
-    Select = 16384,
-    Start = 32768,
-}
-
-[Flags]
-public enum MouseButtonFlags {
-    LBUTTON = 1,
-    MBUTTON = 2,
-    RBUTTON = 4,
-    XBUTTON1 = 8,
-    XBUTTON2 = 16,
-}
-
-/*
- * Pressed and Held will always be accompanied by Down,
- * so actual possible values returned by GetKeyState will be 1, 3, 4 or 9
- */
-[Flags]
-public enum KeyStateFlags {
-    Down = 1,
-    Pressed = 2,
-    Released = 4,
-    Held = 8, // like Down but fires first after about 250ms and then only about every 50 ms
-}
-
+// TODO: remove with GetKeybind. replaced with KeyModifierFlag
 [Flags]
 public enum ModifierFlag : byte {
+    None = 0,
     Shift = 1 << 0,
     Ctrl = 1 << 1,
     Alt = 1 << 2,
 }
 
+// TODO: move below InputData
 public enum SeVirtualKey : byte {
     /// <summary>
     /// This is an addendum to use on functions in which you have to pass a zero value to represent no key code.
@@ -821,5 +688,29 @@ public enum SeVirtualKey : byte {
     /// <summary>
     /// F24 Key.
     /// </summary>
-    F24 = 135
+    F24 = 135,
+
+    PAD_LMB = 160,
+    PAD_MMB = 161,
+    PAD_RMB = 162,
+    PAD_MB4 = 163,
+    PAD_MB5 = 164,
+    PAD_MB6 = 165,
+    PAD_MB7 = 166,
+    PAD_UP = 167,
+    PAD_DOWN = 168,
+    PAD_LEFT = 169,
+    PAD_RIGHT = 170,
+    PAD_Y = 171,
+    PAD_A = 172,
+    PAD_X = 173,
+    PAD_B = 174,
+    PAD_LB = 175,
+    PAD_LT = 176,
+    PAD_LS = 177,
+    PAD_RB = 178,
+    PAD_RT = 179,
+    PAD_RS = 180,
+    PAD_Select = 181,
+    PAD_Start = 182,
 }

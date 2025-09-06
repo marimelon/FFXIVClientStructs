@@ -19,7 +19,7 @@ public sealed class GenerateInteropAttributeIsValidAnalyzer : DiagnosticAnalyzer
 
         context.RegisterCompilationStartAction(static context => {
             // get the attribute symbol
-            if (context.Compilation.GetTypeByMetadataName(AttributeNames.GenerateInteropAttribute) is not { } generateAttribute ||
+            if (context.Compilation.GetTypeByMetadataName(InteropTypeNames.GenerateInteropAttribute) is not { } generateAttribute ||
                 context.Compilation.GetTypeByMetadataName("System.Runtime.InteropServices.StructLayoutAttribute") is not { } structLayoutAttribute)
                 return;
 
@@ -36,7 +36,7 @@ public sealed class GenerateInteropAttributeIsValidAnalyzer : DiagnosticAnalyzer
 
                 // check for StructLayoutAttribute if type has fields or is inherited
                 if (typeSymbol.GetMembers().OfType<IFieldSymbol>().Any() ||
-                    (generateAttributeData.TryGetConstructorArgument(0, out bool? isInherited) && isInherited.Value == true)) {
+                    (generateAttributeData.TryGetConstructorArgument(0, out bool? isInherited) && isInherited.Value)) {
                     if (!typeSymbol.TryGetAttributeWithType(structLayoutAttribute, out AttributeData? structLayoutAttributeData)) {
                         context.ReportDiagnostic(Diagnostic.Create(
                             GenerationTargetMustUseStructLayoutAttribute,

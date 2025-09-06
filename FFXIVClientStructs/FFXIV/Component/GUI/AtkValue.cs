@@ -1,10 +1,8 @@
 using System.Runtime.CompilerServices;
-using FFXIVClientStructs.FFXIV.Client.Graphics.Kernel;
 using FFXIVClientStructs.FFXIV.Client.System.Memory;
 
 namespace FFXIVClientStructs.FFXIV.Component.GUI;
 
-[Flags]
 public enum ValueType {
     Undefined = 0,
     Null = 0x1,
@@ -18,7 +16,7 @@ public enum ValueType {
     WideString = 0x9, // 2 bytes per character (UTF-16)
     String8 = 0xA, // assumed to be a const char*
     Vector = 0xB,
-    Texture = 0xC,
+    Pointer = 0xC,
     AtkValues = 0xD,
 
     TypeMask = 0xF,
@@ -41,10 +39,10 @@ public unsafe partial struct AtkValue : ICreatable, IDisposable {
     [FieldOffset(0x8), CExporterUnion("Value")] public uint UInt;
     [FieldOffset(0x8), CExporterUnion("Value")] public ulong UInt64;
     [FieldOffset(0x8), CExporterUnion("Value")] public float Float;
-    [FieldOffset(0x8), CExporterUnion("Value")] public byte* String;
+    [FieldOffset(0x8), CExporterUnion("Value")] public CStringPointer String;
     [FieldOffset(0x8), CExporterUnion("Value")] public char* WideString; // C# uses UTF-16 for char, which makes it easy for us to use it here
     [FieldOffset(0x8), CExporterUnion("Value")] public StdVector<AtkValue>* Vector;
-    [FieldOffset(0x8), CExporterUnion("Value")] public Texture* Texture;
+    [FieldOffset(0x8), CExporterUnion("Value")] public void* Pointer;
     [FieldOffset(0x8), CExporterUnion("Value")] public AtkValue* AtkValues;
 
     public AtkValue() => Ctor();
@@ -52,7 +50,7 @@ public unsafe partial struct AtkValue : ICreatable, IDisposable {
 
     public void Ctor() {
         Type = ValueType.Undefined;
-        String = null;
+        String.Value = null;
     }
 
     public void Dtor(bool free) => Dispose(free);
@@ -64,7 +62,7 @@ public unsafe partial struct AtkValue : ICreatable, IDisposable {
         if (free) IMemorySpace.Free((AtkValue*)Unsafe.AsPointer(ref this));
     }
 
-    [MemberFunction("E8 ?? ?? ?? ?? 0F BA E6 11")]
+    [MemberFunction("E8 ?? ?? ?? ?? EB ?? 83 CB ?? C7 45")]
     public partial void Ctor(AtkValue* other);
 
     [MemberFunction("E8 ?? ?? ?? ?? 83 FF FE")]
@@ -76,7 +74,7 @@ public unsafe partial struct AtkValue : ICreatable, IDisposable {
     [MemberFunction("E8 ?? ?? ?? ?? 41 8D 55 2A")]
     public partial void Copy(AtkValue* other);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 42 88 B4")]
+    [MemberFunction("E8 ?? ?? ?? ?? 41 80 F6")]
     public partial void ChangeType(ValueType type);
 
     /// <summary>
@@ -93,7 +91,7 @@ public unsafe partial struct AtkValue : ICreatable, IDisposable {
     /// Type is set to ValueType.ManagedString.
     /// </summary>
     [MemberFunction("E8 ?? ?? ?? ?? 41 03 ED"), GenerateStringOverloads]
-    public partial void SetManagedString(byte* value);
+    public partial void SetManagedString(CStringPointer value);
 
     [MemberFunction("E8 ?? ?? ?? ?? 33 FF 89 7C 24")]
     public partial void CreateVector(uint size);
@@ -111,9 +109,9 @@ public unsafe partial struct AtkValue : ICreatable, IDisposable {
     public partial bool SetVectorValue(uint index, AtkValue* value);
 
     [MemberFunction("E8 ?? ?? ?? ?? 83 C6 02 FF C7"), GenerateStringOverloads]
-    public partial bool SetVectorString(uint index, byte* value);
+    public partial bool SetVectorString(uint index, CStringPointer value);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 8B 44 24 60 4E 8D 24 3E")]
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8D 4C 24 ?? E8 ?? ?? ?? ?? 8B 8E")]
     public partial bool CopyVectorValue(uint index, AtkValue* outValue);
 
     [MemberFunction("E8 ?? ?? ?? ?? 8B 55 9C ?? ?? ?? ?? ?? ?? ?? ??")]
@@ -161,13 +159,13 @@ public unsafe partial struct AtkValue : ICreatable, IDisposable {
             ValueType.Int => Int.ToString(),
             ValueType.UInt => UInt.ToString(),
             ValueType.Float => Float.ToString(),
-            ValueType.String or ValueType.ManagedString => Marshal.PtrToStringUTF8((nint)String) ?? string.Empty,
+            ValueType.String or ValueType.ManagedString => String.ToString(),
             ValueType.WideString => Marshal.PtrToStringUni((nint)WideString) ?? string.Empty,
-            ValueType.String8 => Marshal.PtrToStringUTF8((nint)String) ?? string.Empty,
+            ValueType.String8 => String.ToString(),
             ValueType.Vector or ValueType.ManagedVector => Vector != null ? Vector->ToString() : "null",
-            ValueType.Texture => $"0x{(nint)Texture:X}",
+            ValueType.Pointer => $"0x{(nint)Pointer:X}",
             ValueType.AtkValues => $"0x{(nint)AtkValues:X}",
-            _ => BitConverter.ToString(BitConverter.GetBytes((ulong)String)).Replace("-", " ")
+            _ => BitConverter.ToString(BitConverter.GetBytes((ulong)String.Value)).Replace("-", " ")
         };
     }
 }

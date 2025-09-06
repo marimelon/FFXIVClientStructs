@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using InteropGenerator.Extensions;
 using InteropGenerator.Helpers;
 using InteropGenerator.Models;
 
@@ -24,6 +23,10 @@ public sealed partial class InteropGenerator {
             writer.WriteLine("{");
             writer.IncreaseIndent();
         }
+
+        // write struct size constant if available
+        if (structInfo.Size.HasValue)
+            writer.WriteLine($"public const int StructSize = {structInfo.Size};");
 
         // write addresses for resolver
         if (structInfo.HasSignatures()) {
@@ -124,11 +127,17 @@ public sealed partial class InteropGenerator {
     }
 
     private static void RenderVirtualTable(StructInfo structInfo, IndentedTextWriter writer) {
-        writer.WriteLine("[global::System.Runtime.InteropServices.StructLayoutAttribute(global::System.Runtime.InteropServices.LayoutKind.Explicit)]");
+        if (structInfo.VirtualTableFunctionCount is not null) {
+            writer.WriteLine($"[global::System.Runtime.InteropServices.StructLayoutAttribute(global::System.Runtime.InteropServices.LayoutKind.Explicit, Size = {structInfo.VirtualTableFunctionCount * 8})]");
+        } else {
+            writer.WriteLine("[global::System.Runtime.InteropServices.StructLayoutAttribute(global::System.Runtime.InteropServices.LayoutKind.Explicit)]");
+        }
         writer.WriteLine($"public unsafe partial struct {structInfo.Name}VirtualTable");
         using (writer.WriteBlock()) {
             foreach (VirtualFunctionInfo vfi in structInfo.VirtualFunctions) {
                 var functionPointerType = $"delegate* unmanaged <{structInfo.Name}*, {vfi.MethodInfo.GetParameterTypeStringWithTrailingType()}{vfi.MethodInfo.ReturnType}>";
+                foreach (string attr in vfi.MethodInfo.InheritableAttributes)
+                    writer.WriteLine(attr);
                 writer.WriteLine($"[global::System.Runtime.InteropServices.FieldOffsetAttribute({vfi.Index * 8})] public {functionPointerType} {vfi.MethodInfo.Name};");
             }
         }
@@ -139,7 +148,7 @@ public sealed partial class InteropGenerator {
     }
 
     private static void RenderDelegateTypes(StructInfo structInfo, IndentedTextWriter writer) {
-        writer.WriteLine($"public static partial class Delegates");
+        writer.WriteLine("public static partial class Delegates");
         using (writer.WriteBlock()) {
             foreach (MemberFunctionInfo memberFunctionInfo in structInfo.MemberFunctions) {
                 RenderDelegateTypeForMethod(structInfo.Name, memberFunctionInfo.MethodInfo, writer);
@@ -164,6 +173,8 @@ public sealed partial class InteropGenerator {
                 paramTypesAndNames += $", {methodInfo.GetParameterTypesAndNamesString()}";
         }
         string methodModifiers = methodInfo.Modifiers.Replace(" partial", string.Empty).Replace(" static", string.Empty);
+        foreach (string attr in methodInfo.InheritableAttributes)
+            writer.WriteLine(attr);
         writer.WriteLine($"{methodModifiers} delegate {methodInfo.ReturnType} {methodInfo.Name}({paramTypesAndNames});");
     }
 
@@ -236,14 +247,14 @@ public sealed partial class InteropGenerator {
         foreach (StringOverloadInfo stringOverloadInfo in structInfo.StringOverloads) {
             MethodInfo methodInfo = stringOverloadInfo.MethodInfo;
             // collect valid replacement targets
-            ImmutableArray<string> paramsToOverload = [.. methodInfo.Parameters.Where(p => p.Type == "byte*" && !stringOverloadInfo.IgnoredParameters.Contains(p.Name)).Select(p => p.Name)];
+            ImmutableArray<string> paramsToOverload = [.. methodInfo.Parameters.Where(p => p.Type == "global::" + InteropTypeNames.CStringPointer && !stringOverloadInfo.IgnoredParameters.Contains(p.Name)).Select(p => p.Name)];
 
             // when calling the original function we need the param names, but use "Ptr" for the arguments that have been converted
             string paramNames = methodInfo.GetParameterNamesStringForStringOverload(paramsToOverload);
 
             // "string" overload
-            if (methodInfo.ObsoleteInfo is not null) {
-                writer.WriteLine($"""[global::System.ObsoleteAttribute("{methodInfo.ObsoleteInfo.Message}", {methodInfo.ObsoleteInfo.IsError.ToLowercaseString()})]""");
+            foreach (string inheritedAttribute in stringOverloadInfo.InheritableAttributes) {
+                writer.WriteLine(inheritedAttribute);
             }
             writer.WriteLine(methodInfo.GetDeclarationStringForStringOverload("string", paramsToOverload));
             using (writer.WriteBlock()) {
@@ -252,7 +263,7 @@ public sealed partial class InteropGenerator {
                     var strLenName = $"{overloadParamName}UTF8StrLen";
 
                     writer.WriteLine($"int {strLenName} = global::System.Text.Encoding.UTF8.GetByteCount({overloadParamName});");
-                    writer.WriteLine($"Span<byte> {overloadParamName}Bytes = {strLenName} <= 512 ? stackalloc byte[{strLenName} + 1] : new byte[{strLenName} + 1];");
+                    writer.WriteLine($"Span<byte> {overloadParamName}Bytes = {strLenName} <= 511 ? stackalloc byte[512] : new byte[{strLenName} + 1];");
                     writer.WriteLine($"global::System.Text.Encoding.UTF8.GetBytes({overloadParamName}, {overloadParamName}Bytes);");
                     writer.WriteLine($"{overloadParamName}Bytes[{strLenName}] = 0;");
                 }
@@ -271,8 +282,8 @@ public sealed partial class InteropGenerator {
                 }
             }
             // "ReadOnlySpan<byte>" overload
-            if (methodInfo.ObsoleteInfo is not null) {
-                writer.WriteLine($"""[global::System.ObsoleteAttribute("{methodInfo.ObsoleteInfo.Message}", {methodInfo.ObsoleteInfo.IsError.ToLowercaseString()})]""");
+            foreach (string inheritedAttribute in stringOverloadInfo.InheritableAttributes) {
+                writer.WriteLine(inheritedAttribute);
             }
             writer.WriteLine(methodInfo.GetDeclarationStringForStringOverload("ReadOnlySpan<byte>", paramsToOverload));
             using (writer.WriteBlock()) {
@@ -295,15 +306,15 @@ public sealed partial class InteropGenerator {
     private static void RenderFixedSizeArrayAccessors(StructInfo structInfo, IndentedTextWriter writer) {
         foreach (FixedSizeArrayInfo fixedSizeArrayInfo in structInfo.FixedSizeArrays) {
             writer.WriteLine($"""/// <inheritdoc cref="{fixedSizeArrayInfo.FieldName}" />""");
-            if (fixedSizeArrayInfo.ObsoleteInfo is not null) {
-                writer.WriteLine($"""[global::System.ObsoleteAttribute("{fixedSizeArrayInfo.ObsoleteInfo.Message}", {fixedSizeArrayInfo.ObsoleteInfo.IsError.ToLowercaseString()})]""");
+            foreach (string inheritedAttribute in fixedSizeArrayInfo.InheritableAttributes) {
+                writer.WriteLine(inheritedAttribute);
             }
             // [UnscopedRef] public Span<T> FieldName => _fieldName;
             writer.WriteLine($"[global::System.Diagnostics.CodeAnalysis.UnscopedRefAttribute] public Span<{fixedSizeArrayInfo.Type}> {fixedSizeArrayInfo.GetPublicFieldName()} => {fixedSizeArrayInfo.FieldName};");
             if (fixedSizeArrayInfo.IsString) {
                 writer.WriteLine($"""/// <inheritdoc cref="{fixedSizeArrayInfo.FieldName}" />""");
-                if (fixedSizeArrayInfo.ObsoleteInfo is not null) {
-                    writer.WriteLine($"""[global::System.ObsoleteAttribute("{fixedSizeArrayInfo.ObsoleteInfo.Message}", {fixedSizeArrayInfo.ObsoleteInfo.IsError.ToLowercaseString()})]""");
+                foreach (string inheritedAttribute in fixedSizeArrayInfo.InheritableAttributes) {
+                    writer.WriteLine(inheritedAttribute);
                 }
                 writer.WriteLine($"public string {fixedSizeArrayInfo.GetPublicFieldName()}String");
                 using (writer.WriteBlock()) {
@@ -342,6 +353,7 @@ public sealed partial class InteropGenerator {
         // write file header
         writer.WriteLine("// <auto-generated/>");
         writer.WriteLine($"namespace {generatorNamespace};");
+        writer.WriteLine("#pragma warning disable 612, 618");
         writer.WriteLine("public static class Addresses");
         using (writer.WriteBlock()) {
             writer.WriteLine("public static void Register()");
@@ -379,6 +391,7 @@ public sealed partial class InteropGenerator {
                 }
             }
         }
+        writer.WriteLine("#pragma warning restore 612, 618");
 
         return writer.ToString();
     }

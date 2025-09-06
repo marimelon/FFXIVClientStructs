@@ -7,17 +7,16 @@ namespace FFXIVClientStructs.FFXIV.Client.System.Resource.Handle;
 //     Client::System::Common::NonCopyable
 [GenerateInterop]
 [Inherits<ResourceHandle>]
-[StructLayout(LayoutKind.Explicit, Size = 0x260)]
-public partial struct ModelResourceHandle {
-    [FieldOffset(0x208)] public StdMap<Pointer<byte>, short> Attributes;
-    [FieldOffset(0x228)] public StdMap<Pointer<byte>, short> Shapes;
+[StructLayout(LayoutKind.Explicit, Size = 0x2A0)]
+public unsafe partial struct ModelResourceHandle {
 
-    [MemberFunction("E8 ?? ?? ?? ?? 44 8B CD 48 89 44 24 ?? 41 B8 ?? ?? ?? ??")]
-    public unsafe partial byte* GetMaterialFileNameBySlot(uint slot);
+    [FieldOffset(0xC8)] public byte* ModelData; // StringTable, ModelHeader ...
 
-    public unsafe ReadOnlySpan<byte> GetMaterialFileNameBySlotAsSpan(uint slot)
-        => MemoryMarshal.CreateReadOnlySpanFromNullTerminated(GetMaterialFileNameBySlot(slot));
+    [FieldOffset(0x228)] public MaterialResourceHandle** MaterialResourceHandles;
 
-    public string GetMaterialFileNameBySlotAsString(uint slot)
-        => Encoding.UTF8.GetString(GetMaterialFileNameBySlotAsSpan(slot));
+    [FieldOffset(0x248)] public StdMap<CStringPointer, short> Attributes;
+    [FieldOffset(0x268)] public StdMap<CStringPointer, short> Shapes;
+
+    [MemberFunction("E8 ?? ?? ?? ?? 45 8B CE 48 89 44 24 ?? 41 B8 ?? ?? ?? ?? 48 8D 54 24")]
+    public unsafe partial CStringPointer GetMaterialFileNameBySlot(uint slot);
 }

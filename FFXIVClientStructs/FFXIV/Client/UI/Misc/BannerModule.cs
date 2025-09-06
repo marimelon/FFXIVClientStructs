@@ -1,25 +1,26 @@
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using FFXIVClientStructs.FFXIV.Client.UI.Misc.UserFileManager;
 using FFXIVClientStructs.FFXIV.Common.Math;
+using UserFileEvent = FFXIVClientStructs.FFXIV.Client.UI.Misc.UserFileManager.UserFileEvent;
 
 namespace FFXIVClientStructs.FFXIV.Client.UI.Misc;
 
 // Client::UI::Misc::BannerModule
 //   Client::UI::Misc::UserFileManager::UserFileEvent
-// ctor "E8 ?? ?? ?? ?? 49 8D 8E ?? ?? ?? ?? 49 8B D5 E8 ?? ?? ?? ?? 49 8D 8E ?? ?? ?? ?? 49 8B D5 E8 ?? ?? ?? ?? 49 8D 8E ?? ?? ?? ?? 49 8B D5 E8 ?? ?? ?? ?? 49 8D 8E ?? ?? ?? ?? 49 8B D5 E8 ?? ?? ?? ?? 49 8D 8E ?? ?? ?? ?? 49 8B D5 E8 ?? ?? ?? ?? 49 8D 8E ?? ?? ?? ?? 49 8B D5 E8 ?? ?? ?? ?? 49 8D 8E ?? ?? ?? ?? 49 8B D5 E8 ?? ?? ?? ?? 49 8D 8E ?? ?? ?? ?? 49 8B D5 E8 ?? ?? ?? ?? 49 8D 8E ?? ?? ?? ?? 49 8B D6"
 [GenerateInterop]
 [Inherits<UserFileEvent>]
-[StructLayout(LayoutKind.Explicit, Size = 0x48)]
+[StructLayout(LayoutKind.Explicit, Size = 0x50)]
 public unsafe partial struct BannerModule {
-    public static BannerModule* Instance() => Framework.Instance()->GetUIModule()->GetBannerModule();
+    public static BannerModule* Instance() {
+        var uiModule = UIModule.Instance();
+        return uiModule == null ? null : uiModule->GetBannerModule();
+    }
 
-    [FieldOffset(0x40)] public BannerModuleData* Data;
+    [FieldOffset(0x48)] public BannerModuleData* Data;
 
     /// <summary>
     /// Create a new Banner entry.
     /// </summary>
     /// <returns>BannerModuleEntry* of the newly created Banner, or null if out of Ids.</returns>
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B D8 48 85 C0 74 8F")]
+    [MemberFunction("48 89 6C 24 ?? 56 48 83 EC 20 48 8B 71 48")]
     public partial BannerModuleEntry* CreateBanner();
 
     /// <summary>
@@ -34,15 +35,15 @@ public unsafe partial struct BannerModule {
     /// Get the next free BannerId.
     /// </summary>
     /// <returns>Data->NextId</returns>
-    [MemberFunction("E8 ?? ?? ?? ?? 83 F8 6E 7C 15")]
-    public partial byte GetNextId();
+    [MemberFunction("E8 ?? ?? ?? ?? 83 F8 6E 7D 58")]
+    public partial int GetNextId();
 
     /// <summary>
     /// Get the Banner entry by Id.
     /// </summary>
     /// <param name="bannerId">The BannerId.</param>
     /// <returns>BannerModuleEntry*, or null if not found.</returns>
-    [MemberFunction("E8 ?? ?? ?? ?? 0F B7 40 7E")]
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8B F8 0F B6 80")]
     public partial BannerModuleEntry* GetBannerById(int bannerId);
 
     /// <summary>
@@ -103,9 +104,9 @@ public unsafe partial struct BannerModuleEntry {
     [FieldOffset(0x8A)] public byte CameraZoom;
     [FieldOffset(0x8B)] public byte DirectionalLightingBrightness;
     [FieldOffset(0x8C)] public byte AmbientLightingBrightness;
-    [FieldOffset(0x8D)] public byte HasBannerTimelineCustomName;
+    [FieldOffset(0x8D)] public bool HasBannerTimelineCustomName;
 
-    [MemberFunction("0F B7 42 7C 66 39 41 7C")]
+    [MemberFunction("0F B7 42 7C 4C 8B C1")]
     public partial bool EqualTo(BannerModuleEntry* other);
 
     /// <param name="itemIds">A pointer to 14 Item Ids</param>
@@ -114,12 +115,4 @@ public unsafe partial struct BannerModuleEntry {
     /// <param name="gearVisibilityFlag">Gear Visibility Flags</param>
     [MemberFunction("E8 ?? ?? ?? ?? 89 43 58 48 8B 4D F0")]
     public static partial uint GenerateChecksum(uint* itemIds, byte* stainIds, ushort* glassesIds, BannerGearVisibilityFlag gearVisibilityFlag);
-}
-
-[Flags]
-public enum BannerGearVisibilityFlag : uint {
-    None = 0,
-    HeadgearHidden = 1 << 0,
-    WeaponHidden = 1 << 1,
-    VisorClosed = 1 << 2,
 }

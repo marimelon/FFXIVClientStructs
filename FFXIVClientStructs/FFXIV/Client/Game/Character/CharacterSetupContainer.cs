@@ -2,12 +2,11 @@ namespace FFXIVClientStructs.FFXIV.Client.Game.Character;
 
 // Client::Game::Character::CharacterSetupContainer
 //   Client::Game::Character::ContainerInterface
-// ctor "80 61 10 FC 48 8D 05"
 [GenerateInterop]
 [Inherits<ContainerInterface>]
 [StructLayout(LayoutKind.Explicit, Size = 0x18)]
 public unsafe partial struct CharacterSetupContainer {
-    [MemberFunction("E8 ?? ?? ?? ?? 0F B6 9E ?? ?? ?? ?? 48 8D 8E ?? ?? ?? ??")]
+    [MemberFunction("E8 ?? ?? ?? ?? 8B 87 ?? ?? ?? ?? 85 C0 74 ?? 83 F8")]
     public partial ulong CopyFromCharacter(Character* source, CopyFlags flags);
 
     [MemberFunction("E8 ?? ?? ?? ?? 45 0F B6 86 ?? ?? ?? ?? 48 8D 8F")]

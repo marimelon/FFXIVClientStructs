@@ -11,8 +11,10 @@ internal sealed record StructInfo(
     EquatableArray<StaticAddressInfo> StaticAddresses,
     EquatableArray<StringOverloadInfo> StringOverloads,
     SignatureInfo? StaticVirtualTableSignature,
+    uint? VirtualTableFunctionCount,
     EquatableArray<FixedSizeArrayInfo> FixedSizeArrays,
     EquatableArray<InheritanceInfo> InheritedStructs,
+    int? Size,
     ExtraInheritedStructInfo? ExtraInheritedStructInfo) {
     public string Name => Hierarchy[0];
     public bool HasSignatures() => !MemberFunctions.IsEmpty || !StaticAddresses.IsEmpty || StaticVirtualTableSignature is not null;

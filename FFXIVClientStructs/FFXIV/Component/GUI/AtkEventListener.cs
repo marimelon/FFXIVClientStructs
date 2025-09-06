@@ -6,8 +6,9 @@ namespace FFXIVClientStructs.FFXIV.Component.GUI;
 [StructLayout(LayoutKind.Explicit, Size = 0x8)]
 public unsafe partial struct AtkEventListener {
     [VirtualFunction(0)]
-    public partial void Dtor(byte flags);
+    public partial AtkEventListener* Dtor(byte freeFlags);
 
+    // the "base class event handler"?! seems like it's never overwritten for any AtkUnitBase
     [VirtualFunction(1)]
     public partial void ReceiveGlobalEvent(AtkEventType eventType, int eventParam, AtkEvent* atkEvent, AtkEventData* atkEventData = null);
 

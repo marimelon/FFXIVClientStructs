@@ -1,4 +1,4 @@
-using FFXIVClientStructs.FFXIV.Client.System.Memory;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 
@@ -6,11 +6,10 @@ namespace FFXIVClientStructs.FFXIV.Client.UI.Misc;
 
 // Client::UI::Misc::CharaViewPortrait
 //   Client::UI::Misc::CharaView
-// ctor "E8 ?? ?? ?? ?? 48 8B F8 45 33 C0"
 [GenerateInterop]
 [Inherits<CharaView>]
-[StructLayout(LayoutKind.Explicit, Size = 0x420)]
-public unsafe partial struct CharaViewPortrait : ICreatable {
+[StructLayout(LayoutKind.Explicit, Size = 0x430)]
+public unsafe partial struct CharaViewPortrait {
     // Spherical Camera?
     [FieldOffset(0x320)] public Vector4 CameraPosition;
     [FieldOffset(0x330)] public Vector4 CameraTarget;
@@ -39,75 +38,74 @@ public unsafe partial struct CharaViewPortrait : ICreatable {
     [FieldOffset(0x370)] public AtkTexture BackgroundTexture;
 
     [FieldOffset(0x388)] public CharaViewCharacterData PortraitCharacterData;
-    [FieldOffset(0x400)] public bool CharacterVisible;
-    [FieldOffset(0x401)] public bool CharaViewPortraitCharacterDataCopied;
-    [FieldOffset(0x402)] public bool CharaViewPortraitCharacterLoaded;
+    [FieldOffset(0x404)] public bool CharacterVisible;
+    [FieldOffset(0x405)] public bool CharaViewPortraitCharacterDataCopied;
+    [FieldOffset(0x406)] public bool CharaViewPortraitCharacterLoaded;
+    [FieldOffset(0x407)] public bool IsAnimationPauseStatePending;
+    [FieldOffset(0x408)] public bool PendingAnimationPauseState;
 
-    public static CharaViewPortrait* Create()
-        => IMemorySpace.GetUISpace()->Create<CharaViewPortrait>();
+    [FieldOffset(0x410)] public AgentInterface* EventAgent;
+    [FieldOffset(0x418)] public int AgentEventId;
+    [FieldOffset(0x420)] public ulong AgentEventKind;
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B F8 45 33 C0")]
-    public partial void Ctor();
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 7C 24 ?? EB ?? 33 F6")]
+    public partial CharaViewPortrait* Ctor();
 
+    /// <summary>
+    /// Sets up the CharaViewPortrait.
+    /// </summary>
+    /// <param name="clientObjectId">The ClientObjectId to use.</param>
+    /// <param name="characterData">The character data.</param>
+    /// <param name="agent">An optional agent pointer.<br/>If set, vf8 will send an event with the given <paramref name="agentEventId"/> (as int in AtkValue[0]) containing a pointer to the CharaViewTexture (as int64 in AtkValue[1]).</param>
+    /// <param name="agentEventId">An id passed as int in AtkValue[0] of the event.</param>
+    /// <param name="agentEventKind">The eventKind parameter passed to agent->ReceiveEvent.</param>
     [MemberFunction("E8 ?? ?? ?? ?? 48 8B 43 10 C6 80 ?? ?? ?? ?? ?? 48 8B 4B 10")]
-    public partial void Setup(uint clientObjectId, CharaViewCharacterData* characterData, long a4, int a5, long a6); // a4 is set to +0x3A8, a5 is set to +0x3B0, a6 is set to +0x3B8
+    public partial void Setup(uint clientObjectId, CharaViewCharacterData* characterData, AgentInterface* agent, int agentEventId, ulong agentEventKind);
 
-    [VirtualFunction(4)]
-    public partial void SetCameraDistance(float deltaDistance);
-
-    [VirtualFunction(5)]
-    public partial void SetCameraYawAndPitch(float deltaRotation, float deltaPitch);
-
-    [VirtualFunction(6)]
-    public partial void SetCameraXAndY(float deltaX, float deltaY);
-
-    [VirtualFunction(10)]
-    public partial void Update();
-
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 4D 18 48 8B 01")]
+    [MemberFunction("E8 ?? ?? ?? ?? EB ?? 48 89 B3 ?? ?? ?? ?? 48 8B 8C 24")]
     public partial void ResetCamera(); // sets position, target, zoom etc.
 
-    [MemberFunction("E8 ?? ?? ?? ?? 0F B7 47 10")]
+    [MemberFunction("E8 ?? ?? ?? ?? 0F B7 47 10 41 B9")]
     public partial void SetCameraPosition(HalfVector4* cam, HalfVector4* target);
 
     [MemberFunction("E8 ?? ?? ?? ?? 0F B7 97 ?? ?? ?? ?? 0F 28 D0")]
     public partial float GetAnimationTime();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 0F B6 97 ?? ?? ?? ?? 48 8B 8F ?? ?? ?? ?? E8 ?? ?? ?? ?? 33 C0")]
+    [MemberFunction("E8 ?? ?? ?? ?? 0F B6 96 ?? ?? ?? ?? 48 8B 8E ?? ?? ?? ?? E8 ?? ?? ?? ?? BB")]
     public partial void SetAmbientLightingColor(uint red, uint green, uint blue);
 
-    [MemberFunction("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 8D 4F 20 E8 ?? ?? ?? ?? 44 0F B6 8B ?? ?? ?? ?? 0F B6 D0")]
+    [MemberFunction("E8 ?? ?? ?? ?? BB ?? ?? ?? ?? 48 8D 45 ?? 8B D3 33 C9 0F 1F 44 00")]
     public partial void SetAmbientLightingBrightness(byte brightness);
 
     [MemberFunction("E8 ?? ?? ?? ?? 48 8B 4B 18 0F B6 47 29 F3 0F 10 35 ?? ?? ?? ?? 48 8B 74 24 ??")]
     public partial void SetDirectionalLightingColor(uint red, uint green, uint blue);
 
-    [MemberFunction("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 8D 4F 20 E8 ?? ?? ?? ?? 44 0F B7 83")]
+    [MemberFunction("E8 ?? ?? ?? ?? 44 0F B7 86 ?? ?? ?? ?? 0F B7 96 ?? ?? ?? ?? 48 8B 8E")]
     public partial void SetDirectionalLightingBrightness(byte brightness);
 
-    [MemberFunction("E8 ?? ?? ?? ?? EB 5A 48 8D 4F 20")]
+    [MemberFunction("E8 ?? ?? ?? ?? EB ?? 48 8D 4E ?? E8 ?? ?? ?? ?? 0F B7 97")]
     public partial void SetDirectionalLightingAngle(short vertical, short horizontal);
 
-    [MemberFunction("E8 ?? ?? ?? ?? EB 17 48 8D 4F 20")]
+    [MemberFunction("E8 ?? ?? ?? ?? EB ?? 48 89 5C 24 ?? 48 8D 4E")]
     public partial void SetCameraZoom(byte zoom);
 
     [MemberFunction("E8 ?? ?? ?? ?? 41 B7 01 48 63 47 48")]
     public partial void SetBackground(ushort id);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 40 84 FF 74 53")]
+    [MemberFunction("E8 ?? ?? ?? ?? 40 84 FF 74 ?? 48 63 83")]
     public partial void SetPose(ushort id);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 40 84 ED 74 56")]
+    [MemberFunction("E8 ?? ?? ?? ?? 40 84 ED 74 ?? 48 63 83")]
     public partial void SetPoseTimed(ushort id, float time);
 
     [MemberFunction("E8 ?? ?? ?? ?? 40 84 F6 74 4F 48 63 83 ?? ?? ?? ??")]
     public partial void SetExpression(byte id);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 0F B7 44 24 ?? 66 89 43 7C")]
-    public partial nint ExportPortraitData(ExportedPortraitData* output);
+    [MemberFunction("E8 ?? ?? ?? ?? 0F B7 45 ?? F3 0F 10 45")]
+    public partial void ExportPortraitData(ExportedPortraitData* output);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 83 BE ?? ?? ?? ?? ?? 4C 8B B4 24 ?? ?? ?? ?? 74 2D")]
-    public partial nint ImportPortraitData(ExportedPortraitData* input);
+    [MemberFunction("E8 ?? ?? ?? ?? 49 8B DE BA")]
+    public partial void ImportPortraitData(ExportedPortraitData* input);
 
     [MemberFunction("E8 ?? ?? ?? ?? F3 0F 10 57 ?? 48 8B CB")]
     public partial void ApplyCameraPositions(); // use this after manually setting camera positions
@@ -118,39 +116,21 @@ public unsafe partial struct CharaViewPortrait : ICreatable {
     [MemberFunction("E8 ?? ?? ?? ?? 44 0F B6 4F ?? 48 8B CB 44 0F B6 47 ?? 0F B6 57 26 E8 ?? ?? ?? ?? 48 8B 4B 18 0F B6 47 29 F3 0F 10 35 ?? ?? ?? ?? 48 8B 74 24 ??")]
     public partial void SetEyeDirection(float a2, float a3);
 
-    [MemberFunction("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 8B 8F ?? ?? ?? ?? 48 8B 01 FF 90 ?? ?? ?? ?? 48 8B 48 08")]
+    [MemberFunction("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 8B 8E ?? ?? ?? ?? ?? ?? ?? FF 90 ?? ?? ?? ?? 48 8B 48")]
     public partial void ResetEyeDirection();
 
-    [MemberFunction("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 8B 8F ?? ?? ?? ?? E8 ?? ?? ?? ?? E9 ?? ?? ?? ??")]
+    [MemberFunction("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 8B 8E ?? ?? ?? ?? E8 ?? ?? ?? ?? E9")]
     public partial void ResetHeadDirection();
 
     [MemberFunction("E8 ?? ?? ?? ?? 48 8B DF BA ?? ?? ?? ??")]
     public partial void ToggleCharacterVisibility(bool visible);
 
     [MemberFunction("E8 ?? ?? ?? ?? 0F B6 45 A4")]
-    public partial void ToggleGearVisibility(bool hideVisor, bool hideWeapon, bool closeVisor);
-}
+    public partial void ToggleGearVisibility(bool hideVisor, bool hideWeapon, bool closeVisor, bool hideVieraEars);
 
-[StructLayout(LayoutKind.Explicit, Size = 0x34)]
-public unsafe struct ExportedPortraitData {
-    [FieldOffset(0x0)] public HalfVector4 CameraPosition;
-    [FieldOffset(0x8)] public HalfVector4 CameraTarget;
-    [FieldOffset(0x10)] public short ImageRotation;
-    [FieldOffset(0x12)] public byte CameraZoom;
-    [FieldOffset(0x14)] public ushort BannerTimeline;
-    [FieldOffset(0x18)] public float AnimationProgress;
-    [FieldOffset(0x1C)] public byte Expression;
-    [FieldOffset(0x1E)] public HalfVector2 HeadDirection;
-    [FieldOffset(0x22)] public HalfVector2 EyeDirection;
-    [FieldOffset(0x26)] public byte DirectionalLightingColorRed;
-    [FieldOffset(0x27)] public byte DirectionalLightingColorGreen;
-    [FieldOffset(0x28)] public byte DirectionalLightingColorBlue;
-    [FieldOffset(0x29)] public byte DirectionalLightingBrightness;
-    [FieldOffset(0x2A)] public short DirectionalLightingVerticalAngle;
-    [FieldOffset(0x2C)] public short DirectionalLightingHorizontalAngle;
-    [FieldOffset(0x2E)] public byte AmbientLightingColorRed;
-    [FieldOffset(0x2F)] public byte AmbientLightingColorGreen;
-    [FieldOffset(0x30)] public byte AmbientLightingColorBlue;
-    [FieldOffset(0x31)] public byte AmbientLightingBrightness;
-    [FieldOffset(0x32)] public ushort BannerBg;
+    [MemberFunction("E8 ?? ?? ?? ?? 49 8D 4F 10 88 85")]
+    public partial bool IsAnimationPaused();
+
+    [MemberFunction("E8 ?? ?? ?? ?? B2 ?? 48 8B CE E8 ?? ?? ?? ?? 32 C0")]
+    public partial void ToggleAnimationPlayback(bool paused);
 }

@@ -5,7 +5,6 @@ namespace FFXIVClientStructs.FFXIV.Client.UI.Agent;
 // Client::UI::Agent::AgentBannerEditor
 //   Client::UI::Agent::AgentInterface
 //     Component::GUI::AtkModuleInterface::AtkEventInterface
-// ctor "40 53 48 83 EC 20 48 8B D9 E8 ?? ?? ?? ?? 48 8D 05 ?? ?? ?? ?? 48 89 03 48 8D 53 30"
 [Agent(AgentId.BannerEditor)]
 [GenerateInterop]
 [Inherits<AgentInterface>]
@@ -16,7 +15,7 @@ public unsafe partial struct AgentBannerEditor {
     /// <param name="enabledGearsetIndex">
     /// The index of the gearset in a filtered <see cref="RaptureGearsetModule.Entries"/> list of only enabled gearsets.
     /// </param>
-    [MemberFunction("48 89 5C 24 ?? 57 48 83 EC 30 48 83 3D ?? ?? ?? ?? ?? 8B FA 48 8B D9 0F 84")]
+    [MemberFunction("E8 ?? ?? ?? ?? EB ?? 48 8B 4B ?? ?? ?? ?? FF 90 ?? ?? ?? ?? 48 8B C8 BA ?? ?? ?? ?? E8 ?? ?? ?? ?? 40 32 FF")]
     public partial void OpenForGearset(int enabledGearsetIndex);
 }
 
@@ -75,23 +74,12 @@ public unsafe partial struct AgentBannerEditorState {
     [FieldOffset(0x90)] public Dataset Accents;
     [FieldOffset(0xC0)] public Dataset Poses;
     [FieldOffset(0xF0)] public Dataset Expressions;
-
-    // 7.0: new filters here
-
+    [FieldOffset(0x120)] internal FixedSizeArray11<CharaCardDesignCategoryEntry> _charaCardDesignCategoryEntries;
+    [FieldOffset(0x1D0)] internal FixedSizeArray11<Pointer<CharaCardDesignCategoryEntry>> _charaCardDesignCategoryEntryPointers;
+    [FieldOffset(0x228)] public int NumCharaCardDesignCategoryEntries;
     [FieldOffset(0x230)] public BannerModuleEntry BannerEntry;
-
-    // presumably a struct of size 0x64
-    [FieldOffset(0x350), FixedSizeArray] internal FixedSizeArray14<uint> _itemIds;
-    [FieldOffset(0x388), FixedSizeArray] internal FixedSizeArray14<byte> _stain0Ids;
-    [FieldOffset(0x396), FixedSizeArray] internal FixedSizeArray14<byte> _stain1Ids;
-    [FieldOffset(0x3A4), FixedSizeArray] internal FixedSizeArray2<ushort> _glassesIds;
-    [FieldOffset(0x3A8)] public uint Checksum;
-    [FieldOffset(0x3AC)] public BannerGearVisibilityFlag GearVisibilityFlag;
-    [FieldOffset(0x3B0), Obsolete("Renamed to EnabledGearsetIndex. This is the index of a RaptureGearsetModule.Entries list, which only contains enabled entries.")] public byte GearsetIndex;
-    [FieldOffset(0x3B0)] public byte EnabledGearsetIndex;
-    [FieldOffset(0x3B1)] public byte ClassJobId;
-    //[FieldOffset(0x3B2)] public byte UnkByteOrBool;
-    //[FieldOffset(0x3B3)] public byte UnkByteOrBool;
+    [FieldOffset(0x2C0)] public BannerModuleEntry BannerEntryBackup; // BannerEntry is saved here when opening one of those Lists (e.g. "Display Backgrounds List"), and is restored when cancelling out.
+    [FieldOffset(0x350)] public BannerGearData GearData;
     [FieldOffset(0x3B8)] public AgentBannerEditor* AgentBannerEditor;
     [FieldOffset(0x3C0)] public UIModule* UIModule;
     [FieldOffset(0x3C8)] public CharaViewPortrait* CharaView;
@@ -99,24 +87,29 @@ public unsafe partial struct AgentBannerEditorState {
     [FieldOffset(0x3D8)] public EditorOpenType OpenType;
 
     [FieldOffset(0x3E4)] public float FrameCountdown; // starting at 0.5s on open
-    [FieldOffset(0x3E8), Obsolete("Renamed to OpenerEnabledGearsetIndex")] public int GearsetId;
     [FieldOffset(0x3E8)] public int OpenerEnabledGearsetIndex; // not exactly sure why there is a second field for this
 
     [FieldOffset(0x3F0)] public int CloseDialogAddonId;
     [FieldOffset(0x3F4)] public bool HasDataChanged;
 
-    [MemberFunction("E8 ?? ?? ?? ?? 33 D2 48 8B CF E8 ?? ?? ?? ?? 48 8B 8F ?? ?? ?? ?? 48 8B 01 FF 50 58")]
+    [MemberFunction("E8 ?? ?? ?? ?? 33 D2 48 8B CE E8 ?? ?? ?? ?? 48 8B 8E ?? ?? ?? ?? ?? ?? ?? FF 50")]
     public partial void Save();
 
     [MemberFunction("48 89 5C 24 ?? 48 89 7C 24 ?? 80 79 2C 00")]
     public partial int GetPresetIndex(ushort backgroundIndex, ushort frameIndex, ushort accentIndex);
 
     [MemberFunction("E8 ?? ?? ?? ?? 48 8B 74 24 ?? 44 0A F8")]
-    public partial void SetFrame(int frameId);
+    public partial bool SetFrame(int frameId);
 
     [MemberFunction("E8 ?? ?? ?? ?? 48 8B 6C 24 ?? 44 0A F8")]
-    public partial void SetAccent(int accentId);
+    public partial bool SetAccent(int accentId);
 
     [MemberFunction("E8 ?? ?? ?? ?? 32 C0 EB 3F")]
     public partial void SetHasChanged(bool hasDataChanged);
+
+    [StructLayout(LayoutKind.Explicit, Size = 0x10)]
+    public struct CharaCardDesignCategoryEntry {
+        [FieldOffset(0x00), CExporterExcel("CharaCardDesignCategory")] public void* Row;
+        [FieldOffset(0x08)] public byte RowId;
+    }
 }

@@ -6,7 +6,7 @@ namespace FFXIVClientStructs.FFXIV.Client.Game.Character;
 [GenerateInterop]
 [StructLayout(LayoutKind.Explicit, Size = 0xF00)]
 public unsafe partial struct ActionEffectHandler {
-    [FieldOffset(0)] internal FixedSizeArray32<EffectEntry> _incomingEffects;
+    [FieldOffset(0), FixedSizeArray] internal FixedSizeArray32<EffectEntry> _incomingEffects;
 
     [GenerateInterop]
     [StructLayout(LayoutKind.Explicit, Size = 0x78)]
@@ -55,7 +55,7 @@ public unsafe partial struct ActionEffectHandler {
         [FieldOffset(0x08)] public uint ActionId;
         [FieldOffset(0x0C)] public uint GlobalSequence; // unique id of the action, monotonously increasing as the server is running
         [FieldOffset(0x10)] public float AnimationLock; // caster's animation lock is set to this value, unless this action was not caster-initiated and force-set flag is not set
-        // 0x14: some entity id, related to ActionCategory 17 (Artillery) and used for some animations
+        [FieldOffset(0x14)] public uint BallistaEntityId; // for Artillery actions - id of the cannon that was used for the action
         [FieldOffset(0x18)] public ushort SourceSequence; // 0 if action was not initiated by a client, otherwise monotonously increasing as the client initiates actions
         [FieldOffset(0x1A)] public ushort RotationInt; // quantized rotation: 0 -> -pi, 65535 -> pi
         [FieldOffset(0x1C)] public ushort SpellId;
@@ -77,6 +77,6 @@ public unsafe partial struct ActionEffectHandler {
     /// <param name="header">Details of the action.</param>
     /// <param name="effects">Per-target effect list array. Contains header->NumTargets elements.</param>
     /// <param name="targetEntityIds">Per-target effect id array. Contains header->NumTargets elements.</param>
-    [MemberFunction("40 55 56 57 41 54 41 55 41 56 48 8D AC 24")]
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 8D ?? ?? ?? ?? 48 33 CC E8 ?? ?? ?? ?? 48 81 C4 00 05 00 00")]
     public static partial void Receive(uint casterEntityId, Character* casterPtr, Vector3* targetPos, Header* header, TargetEffects* effects, GameObjectId* targetEntityIds);
 }

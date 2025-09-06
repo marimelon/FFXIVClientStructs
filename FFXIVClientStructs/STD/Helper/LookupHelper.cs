@@ -1,6 +1,5 @@
 using System.Runtime.CompilerServices;
 using FFXIVClientStructs.STD.ContainerInterface;
-using JetBrains.Annotations;
 
 namespace FFXIVClientStructs.STD.Helper;
 
@@ -63,10 +62,10 @@ internal static class LookupHelper<T, TOwner>
                 throw new ArgumentOutOfRangeException(nameof(startIndex), startIndex, null);
         }
 
-        if (count < 0 || startIndex > owner.LongCount - count)
+        if (count < 0 || startIndex + 1 < count || count > owner.LongCount)
             throw new ArgumentOutOfRangeException(nameof(count), count, null);
 
-        var end = startIndex - count;
+        var end = startIndex - count + 1;
         for (var i = startIndex; i >= end; i--, startIndex--) {
             if (match(owner[i]))
                 return startIndex;
@@ -196,7 +195,6 @@ internal static class LookupHelper<T, TOwner>
         return -1;
     }
 
-    [AssertionMethod]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private static void CheckRangeArguments(ref readonly TOwner owner, long index, long count) {
         if (index < 0 || index > owner.LongCount)

@@ -8,12 +8,22 @@ namespace FFXIVClientStructs.FFXIV.Client.Game.MJI;
 [GenerateInterop]
 [StructLayout(LayoutKind.Explicit, Size = 0x440)]
 public unsafe partial struct MJIManager {
+    [StaticAddress("48 8B 05 ?? ?? ?? ?? 0F B6 44 01", 3, isPointer: true)]
+    public static partial MJIManager* Instance();
+
+    [FieldOffset(0x0)] public ushort TerritoryId;
+
+    // these control some form of loading state but not sure what exactly check Load and Update to figure these out
+    [FieldOffset(0x2)] internal bool Unk2;
+    [FieldOffset(0x3)] internal bool Unk3;
+    [FieldOffset(0x4)] internal bool Unk4;
+    [FieldOffset(0x5)] internal bool Unk5;
     /// <summary>
     /// Reports if the player is currently on the Island Sanctuary.
     /// </summary>
     // Not actually sure about the accuracy of this name. It's a guess based on the fact that the map system and target
     // system appear to change their behavior when this is set to 1, plus verification with how it looks in game.
-    [FieldOffset(0x06)] public byte IsPlayerInSanctuary;
+    [FieldOffset(0x06)] public bool IsPlayerInSanctuary;
 
     /// <summary>
     /// Represents the currently allowed visitors to the Island Sanctuary.
@@ -138,13 +148,6 @@ public unsafe partial struct MJIManager {
     [FieldOffset(0x3F6)] public uint CurrentGroove; // unverified for 6.5!
 
     /// <summary>
-    /// Retrieve an instance of IslandSanctuaryManager for consumption.
-    /// </summary>
-    /// <returns>Returns a pointer to the game's IslandSanctuaryManager instance.</returns>
-    [MemberFunction("E8 ?? ?? ?? ?? 44 38 78")]
-    public static partial MJIManager* Instance();
-
-    /// <summary>
     /// Check if a specific MJIRecipe is *unlocked*. Does not care if the item has been crafted.
     /// </summary>
     /// <param name="recipeId">The recipe ID to check for.</param>
@@ -208,7 +211,7 @@ public unsafe partial struct MJIManager {
     /// <summary>
     /// Request updated popularity and demand data.
     /// </summary>
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B CD E8 ?? ?? ?? ?? 32 C0")]
+    [MemberFunction("48 83 EC 38 80 B9 ?? ?? ?? ?? ?? C7 81 ?? ?? ?? ?? ?? ?? ?? ?? 74 1F")]
     public partial void RequestDemandFull();
 
     /// <summary>
@@ -218,7 +221,7 @@ public unsafe partial struct MJIManager {
     /// <param name="startingHour">(slot + 17) % 24, where slot 0 is first hour of the cycle.</param>
     /// <param name="cycle">0-13 range, this/next week in order.</param>
     /// <param name="workshop">0-3 range.</param>
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 46 28 41 8D 4E FF")]
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 47 ?? 8D 4B ?? 48 69 D1")]
     public partial void ScheduleCraft(ushort craftObjectId, byte startingHour, byte cycle, byte workshop);
 
     /// <summary>

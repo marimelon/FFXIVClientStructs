@@ -6,11 +6,10 @@ namespace FFXIVClientStructs.FFXIV.Client.UI.Agent;
 // Client::UI::Agent::AgentQuestJournal
 //   Client::UI::Agent::AgentInterface
 //     Component::GUI::AtkModuleInterface::AtkEventInterface
-// ctor "48 89 5C 24 ?? 57 48 83 EC 30 48 8B FA 48 8B D9 E8 ?? ?? ?? ?? 33 D2"
 [Agent(AgentId.QuestJournal)]
 [GenerateInterop]
 [Inherits<AgentInterface>]
-[StructLayout(LayoutKind.Explicit, Size = 0x280)]
+[StructLayout(LayoutKind.Explicit, Size = 0x270)]
 public unsafe partial struct AgentQuestJournal {
 
     [FieldOffset(0x56), FixedSizeArray] internal FixedSizeArray52<byte> _journalCategoryIds;
@@ -23,6 +22,8 @@ public unsafe partial struct AgentQuestJournal {
     [FieldOffset(0xA0)] public uint SelectedQuestId;
     [FieldOffset(0xA4)] public uint SelectedQuestType; // 0 = Completed Quest, 1 = Quest, 2 = LeveQuest
     [FieldOffset(0xA8)] public uint SelectedCompletedQuestId;
+
+    [FieldOffset(0xD0)] public uint ContextMenuSelectedItemId;
 
     [FieldOffset(0xF4)] public uint SearchFlag; // bit 2 is set when "Title Only" checkbox is unticked
     [FieldOffset(0xF8)] public Utf8String SearchTerm;
@@ -46,6 +47,6 @@ public unsafe partial struct AgentQuestJournal {
     /// <summary>
     /// Opens the map for the currently selected quest.
     /// </summary>
-    [MemberFunction("E8 ?? ?? ?? ?? EB 24 8B 56 20")]
+    [MemberFunction("E8 ?? ?? ?? ?? EB ?? 8B 55 ?? 41 B0")]
     public partial void ShowOnMap(int a2 = 0);
 }

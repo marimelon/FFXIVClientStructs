@@ -17,28 +17,28 @@ using FFXIVClientStructs.FFXIV.Component.SteamApi;
 namespace FFXIVClientStructs.FFXIV.Client.System.Framework;
 
 // Client::System::Framework::Framework
-// ctor "E8 ?? ?? ?? ?? 48 8B C8 48 89 05 ?? ?? ?? ?? EB 0A 48 8B CE"
 [GenerateInterop]
-[StructLayout(LayoutKind.Explicit, Size = 0x35D0)]
+[VirtualTable("48 8D 05 ?? ?? ?? ?? 66 C7 41 ?? ?? ?? 48 89 01 48 8B F1", 3)]
+[StructLayout(LayoutKind.Explicit, Size = 0x35F0)]
 public unsafe partial struct Framework {
-    [StaticAddress("49 8B DC 48 89 1D ?? ?? ?? ??", 6, true)]
+    [StaticAddress("49 8B DC 48 89 1D ?? ?? ?? ??", 6, isPointer: true)]
     public static partial Framework* Instance();
 
     [FieldOffset(0x0010)] public SystemConfig SystemConfig;
     [FieldOffset(0x0460)] public DevConfig DevConfig;
-    [FieldOffset(0x0570)] public SavedAppearanceManager* SavedAppearanceData;
+    [FieldOffset(0x0570)] public CharamakeAvatarSaveDataContainer* CharamakeAvatarSaveData;
     [FieldOffset(0x0580)] public byte ClientLanguage;
     [FieldOffset(0x0581)] public byte Region;
     [FieldOffset(0x0588)] public Cursor* Cursor;
     [FieldOffset(0x0590)] public nint CallerWindow;
     [FieldOffset(0x0598)] public FileAccessPath ConfigPath;
     [FieldOffset(0x07A8)] public GameWindow* GameWindow;
-    //584 byte
-    [FieldOffset(0x09FC)] public int CursorPosX;
-    [FieldOffset(0x0A00)] public int CursorPosY;
-
-    [FieldOffset(0x110C)] public int CursorPosX2;
-    [FieldOffset(0x1110)] public int CursorPosY2;
+    [FieldOffset(0x07B0)] public GamepadInputData GamepadInputs;
+    [FieldOffset(0x09FC)] public CursorInputData CursorInputs;
+    [FieldOffset(0x0A2C)] public KeyboardInputData KeyboardInputs;
+    [FieldOffset(0x0EC0)] public GamepadInputData GamepadInputs2;
+    [FieldOffset(0x110C)] public CursorInputData CursorInputs2;
+    [FieldOffset(0x113C)] public KeyboardInputData KeyboardInputs2;
 
     [FieldOffset(0x1678)] public NetworkModuleProxy* NetworkModuleProxy;
     [FieldOffset(0x1680)] public bool IsNetworkModuleInitialized;
@@ -72,10 +72,7 @@ public unsafe partial struct Framework {
     [FieldOffset(0x1770)] public ClientTime ClientTime;
     [FieldOffset(0x17B8)] public float GameSpeedMultiplier; // usually 1, but during recording replay could be different
     [FieldOffset(0x17CC)] public float FrameRate;
-    /// <summary>
-    /// If true <see cref="FrameDeltaTime"/> is set to 0.
-    /// </summary>
-    [FieldOffset(0x17D0)] public bool DiscardFrame;
+    [FieldOffset(0x17D0)] public int PauseFrameTicksCounter; // if non-zero, FrameDeltaTime is forced to 0 during ticks; used while displaying message boxes
     /// <summary>
     /// If set to anything non-zero, overrides <see cref="FrameDeltaTime"/>. If negative <see cref="FrameDeltaTimeOverride"/> is used and 60fps as a fallback.
     /// Unlike <see cref="FrameDeltaTimeOverride"/>, this applies only to the next frame, and is reset to zero on next tick.
@@ -99,12 +96,12 @@ public unsafe partial struct Framework {
     [FieldOffset(0x2BD0)] public LuaState LuaState;
 
     [FieldOffset(0x2BF8), FixedSizeArray(isString: true)] internal FixedSizeArray256<byte> _gameVersion;
-    // TODO: convert to array of 64 strings each 32 bytes long if possible
-    [FieldOffset(0x2CF8 + 0 * 0x20), FixedSizeArray(isString: true)] internal FixedSizeArray32<byte> _ex1Version; // Heavensward
-    [FieldOffset(0x2CF8 + 1 * 0x20), FixedSizeArray(isString: true)] internal FixedSizeArray32<byte> _ex2Version; // Stormblood
-    [FieldOffset(0x2CF8 + 2 * 0x20), FixedSizeArray(isString: true)] internal FixedSizeArray32<byte> _ex3Version; // Shadowbringers
-    [FieldOffset(0x2CF8 + 3 * 0x20), FixedSizeArray(isString: true)] internal FixedSizeArray32<byte> _ex4Version; // Endwalker
-    [FieldOffset(0x2CF8 + 4 * 0x20), FixedSizeArray(isString: true)] internal FixedSizeArray32<byte> _ex5Version; // Dawntrail
+    // 0: Heavensward
+    // 1: Stormblood
+    // 2: Shadowbringers
+    // 3: Endwalker
+    // 4: Dawntrail
+    [FieldOffset(0x2CF8), FixedSizeArray] internal FixedSizeArray64<ExVersionString> _exVersions;
 
     [FieldOffset(0x3508)] public bool UseWatchDogThread;
 
@@ -128,10 +125,22 @@ public unsafe partial struct Framework {
     /// </summary>
     [FieldOffset(0x35C8)] public nint SteamApiLibraryHandle;
 
+    [VirtualFunction(1)]
+    public partial bool Setup();
+
+    [VirtualFunction(2)]
+    public partial bool Destroy();
+
+    [VirtualFunction(3)]
+    public partial void Free();
+
+    [VirtualFunction(4)]
+    public partial bool Tick();
+
     [MemberFunction("E8 ?? ?? ?? ?? 80 7B 1D 01")]
     public partial UIModule* GetUIModule();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 4C 8B 44 24 ?? 48 8B C8 48 8B D3")]
+    [MemberFunction("E8 ?? ?? ?? ?? 4C 8B 44 24 ?? 48 8B D7 48 8B C8")]
     public partial UIClipboard* GetUIClipboard();
 
     [MemberFunction("80 B9 ?? ?? ?? ?? 00 74 ?? 48 8B 81 ?? ?? ?? ?? C3")]
@@ -147,4 +156,20 @@ public unsafe partial struct Framework {
     /// <returns>Returns true if the API is ready, false otherwise.</returns>
     [MemberFunction("E8 ?? ?? ?? ?? 88 43 08 84 C0 74 16")]
     public partial bool IsSteamApiInitialized();
+
+    /// <summary>
+    /// Set up the Steam API for the current game instance. This is automatically called when `IsSteam=1` is passed to the game,
+    /// but can be called manually in certain cases. Note that this function *will* re-initialize the Steam API, so ensure that
+    /// the state is checked via <see cref="IsSteamApiInitialized"/> before calling it. This method will also set
+    /// <see cref="IsSteamGame"/> to true, though this seemingly has no effect (??).
+    /// </summary>
+    /// <returns>Returns <c>true</c> if the API was initialized successfully, false otherwise.</returns>
+    [MemberFunction("48 89 5C 24 ?? 57 48 81 EC 40 02 00 00 48 8B 05")]
+    public partial bool SetupSteamApi();
+
+    [GenerateInterop]
+    [StructLayout(LayoutKind.Explicit, Size = 32)]
+    public partial struct ExVersionString {
+        [FieldOffset(0), FixedSizeArray(isString: true)] internal FixedSizeArray32<byte> _version;
+    }
 }

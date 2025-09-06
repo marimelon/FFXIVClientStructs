@@ -1,4 +1,3 @@
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using FFXIVClientStructs.FFXIV.Common;
@@ -7,12 +6,14 @@ using FFXIVClientStructs.FFXIV.Component.Shell;
 namespace FFXIVClientStructs.FFXIV.Client.UI.Shell;
 
 // Client::UI::Shell::RaptureShellModule
-// ctor "E8 ?? ?? ?? ?? 48 8D 8F ?? ?? ?? ?? 4C 8B CF"
 [GenerateInterop]
 [Inherits<ShellCommandModule>]
-[StructLayout(LayoutKind.Explicit, Size = 0x1218)]
+[StructLayout(LayoutKind.Explicit, Size = 0x1250)]
 public unsafe partial struct RaptureShellModule {
-    public static RaptureShellModule* Instance() => Framework.Instance()->GetUIModule()->GetRaptureShellModule();
+    public static RaptureShellModule* Instance() {
+        var uiModule = UI.UIModule.Instance();
+        return uiModule == null ? null : uiModule->GetRaptureShellModule();
+    }
 
     [FieldOffset(0x250)] public ShellCommandInterface ShellCommandInterface;
     [FieldOffset(0x258)] public UIModule* UIModule;
@@ -24,6 +25,8 @@ public unsafe partial struct RaptureShellModule {
     [FieldOffset(0x288)] public ShellCommandInterface* ShellCommandAgent;
     [FieldOffset(0x290)] public TimePoint WaitStartTime;
     [FieldOffset(0x2A8)] public uint WaitTimeMs;
+    [FieldOffset(0x2AD)] public bool ShowCommandErrors;
+    [FieldOffset(0x2B2)] public bool SuppressMacroErrors; // set when using /macroerror off
     [FieldOffset(0x2B3)] public bool MacroLocked;
     [FieldOffset(0x2C0)] public int MacroCurrentLine;
     [FieldOffset(0x2C8)] public Utf8String MacroLineText;
@@ -46,12 +49,16 @@ public unsafe partial struct RaptureShellModule {
     [FieldOffset(0x1208)] public ushort TempTellWorldId;
     [FieldOffset(0x120A)] public ushort TempTellReason;
 
-    [FieldOffset(0x1210)] public uint Flags;
+    [FieldOffset(0x1248)] public uint Flags;
+    [FieldOffset(0x124C)] public uint ErrorData; // ??? seems to be a byte + flags
 
     public bool IsTextCommandUnavailable => (Flags & 1) != 0;
 
-    [MemberFunction("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 8D 4D 28")]
+    [MemberFunction("48 89 5C 24 ?? 41 56 48 83 EC ?? 80 B9 ?? ?? ?? ?? ?? 4C 8B F2")]
     public partial void ExecuteMacro(RaptureMacroModule.Macro* macro);
+
+    [MemberFunction("E8 ?? ?? ?? ?? EB 42 4C 8B C6")]
+    public partial void CancelMacro();
 
     [MemberFunction("E8 ?? ?? ?? ?? 48 BA ?? ?? ?? ?? ?? ?? ?? ?? 84 C0")]
     public partial bool TryGetMacroIconCommand(RaptureMacroModule.Macro* macro, void* resultsOut);
@@ -62,12 +69,12 @@ public unsafe partial struct RaptureShellModule {
     [MemberFunction("E8 ?? ?? ?? ?? 4C 8B 7C 24 ?? EB 34")]
     public partial bool SetContextTellTarget(Utf8String* playerName, Utf8String* worldName, ushort worldId, ulong accountId, ulong contentId, ushort reason, bool setChatType);
 
-    [MemberFunction("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 41 BF ?? ?? ?? ?? 66 83 F9 01")]
+    [MemberFunction("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 49 8B 45 ?? 66 83 F9")]
     public partial void SetContextTellTargetInForay(Utf8String* playerName, Utf8String* worldName, ushort worldId, ulong accountId, ulong contentId, ushort reason);
 
     [MemberFunction("48 89 5C 24 ?? 55 56 57 48 81 EC ?? ?? ?? ?? 48 8B 05 ?? ?? ?? ?? 48 33 C4 48 89 84 24 ?? ?? ?? ?? 48 8B 02 41 0F B7 E9")]
     public partial bool SetTellTargetInForay(Utf8String* playerName, Utf8String* worldName, ushort worldId, ulong accountId, ulong contentId, ushort reason, bool setChatType);
 
-    [MemberFunction("48 89 5C 24 ?? 57 48 83 EC 30 8B B9 ?? ?? ?? ?? 48 8B D9 83 FF FE")]
+    [MemberFunction("E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 8B 8B ?? ?? ?? ?? E8 ?? ?? ?? ?? 8B D0 44 89 64 24")]
     public partial void ReplyInSelectedChatMode();
 }

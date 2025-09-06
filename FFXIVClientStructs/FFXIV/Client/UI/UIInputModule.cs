@@ -1,6 +1,13 @@
 namespace FFXIVClientStructs.FFXIV.Client.UI;
 
 // Client::UI::UIInputModule
-// ctor "E8 ?? ?? ?? ?? 48 8D 8F ?? ?? ?? ?? 48 8B D7 E8 ?? ?? ?? ?? 33 F6"
+[GenerateInterop]
 [StructLayout(LayoutKind.Explicit, Size = 0xF0)]
-public unsafe partial struct UIInputModule;
+public unsafe partial struct UIInputModule {
+    [FieldOffset(0x08)] public UIModule* UIModulePtr;
+
+    [FieldOffset(0x26)] public bool IsPadMouseModeEnabled;
+
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 4B ?? ?? ?? ?? FF 90 ?? ?? ?? ?? 48 8B C8 33 D2 48 83 C4")]
+    public partial void DisablePadMouseMode(bool playSoundEffect = true);
+}

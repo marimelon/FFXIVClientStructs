@@ -12,9 +12,9 @@ namespace FFXIVClientStructs.FFXIV.Client.Game.Character;
 //   Client::Game::Character::ContainerInterface
 [GenerateInterop]
 [Inherits<ContainerInterface>]
-[StructLayout(LayoutKind.Explicit, Size = 0x50)]
+[StructLayout(LayoutKind.Explicit, Size = 0x58)]
 public unsafe partial struct ReaperShroudContainer {
-    [FieldOffset(0x18)] public ushort StanceChangeId;
+    [FieldOffset(0x18)] public byte StanceChangeId;
     [FieldOffset(0x1C)] public uint StanceChangeState;
     [FieldOffset(0x20)] public float Timer;
     [FieldOffset(0x28)] public void* CopyObject;

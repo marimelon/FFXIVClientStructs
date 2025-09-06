@@ -17,8 +17,8 @@ namespace FFXIVClientStructs.FFXIV.Client.UI.Agent;
 public unsafe partial struct AgentContext {
 
     [FieldOffset(0x28), FixedSizeArray] internal FixedSizeArray2<ContextMenu> _contextMenus;
-    [FieldOffset(0x28), CExportIgnore] public ContextMenu MainContextMenu;
-    [FieldOffset(0x6A0), CExportIgnore] public ContextMenu SubContextMenu;
+    [FieldOffset(0x28), CExporterIgnore] public ContextMenu MainContextMenu;
+    [FieldOffset(0x6A0), CExporterIgnore] public ContextMenu SubContextMenu;
     [FieldOffset(0xD18)] public ContextMenu* CurrentContextMenu;
     [FieldOffset(0xD20)] public Utf8String ContextMenuTitle;
     [FieldOffset(0xD88)] public Point Position;
@@ -45,47 +45,56 @@ public unsafe partial struct AgentContext {
 
     [FieldOffset(0x17C8)] public void* UpdateChecker; // AgentContextUpdateChecker*, if handler returns false the menu closes
     [FieldOffset(0x17D0)] public long UpdateCheckerParam; //objectid of the target or list index of an addon or other things
+    [FieldOffset(0x17D8)] public BlockFunctionsFlag ContextMenuBlockFunctionsFlags;
     [FieldOffset(0x17D9)] public byte ContextMenuIndex;
     [FieldOffset(0x17DA)] public byte OpenAtPosition; // if true menu opens at Position else at cursor location
 
-    [MemberFunction("E8 ?? ?? ?? ?? 45 88 74 24")]
+    [MemberFunction("E8 ?? ?? ?? ?? 4C 89 6B ?? E9")]
     public partial void OpenContextMenu(bool bindToOwner = true, bool closeExisting = true);
 
-    [MemberFunction("41 0F B6 C0 89 91")]
+    [MemberFunction("E8 ?? ?? ?? ?? 45 32 C0 E9")]
     public partial void OpenContextMenuForAddon(uint ownerAddonId, bool bindToOwner = true);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 44 39 BB ?? ?? ?? ?? 0F 86 ?? ?? ?? ??")]
+    [MemberFunction("E8 ?? ?? ?? ?? 44 39 A3 ?? ?? ?? ?? 0F 86")]
     public partial bool OpenSubMenu();
 
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B 4B 10 48 8B 01 FF 90 ?? ?? ?? ?? B2 01")]
+    [MemberFunction("E8 ?? ?? ?? ?? 48 8D 4D ?? E8 ?? ?? ?? ?? E9 ?? ?? ?? ?? 48 8B CB E8 ?? ?? ?? ?? 0F B7 B3")]
     [GenerateStringOverloads]
-    public partial void OpenYesNo(byte* text, uint yesId = 576, uint noId = 577, uint checkboxId = 0, bool setOwner = true);
+    public partial void OpenYesNo(CStringPointer text, uint yesId = 576, uint noId = 577, uint checkboxId = 0, bool setOwner = true);
 
     [MemberFunction("E8 ?? ?? ?? ?? 48 6B CE 3C")]
     public partial void ClearMenu();
 
     [MemberFunction("E8 ?? ?? ?? ?? 41 BF ?? ?? ?? ?? 48 8D 44 24 ?? 41 8B D7")]
     [GenerateStringOverloads]
-    public partial void SetMenuTitle(byte* text);
+    public partial void SetMenuTitle(CStringPointer text);
 
     [MemberFunction("E8 ?? ?? ?? ?? FF CE 48 FF CF")]
     [GenerateStringOverloads]
-    public partial void AddMenuItem(byte* text, AtkEventInterface* handler, long handlerParam, bool disabled = false, bool submenu = false);
+    public partial void AddMenuItem(CStringPointer text, AtkEventInterface* handler, long handlerParam, bool disabled = false, bool submenu = false);
 
     [MemberFunction("E8 ?? ?? ?? ?? 83 FD 0D")]
     public partial void AddMenuItem2(uint addonTextId, AtkEventInterface* handler, long handlerParam, bool disabled = false, bool submenu = false);
 
-    [MemberFunction("48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC ?? 48 8B 99 ?? ?? ?? ?? 4C 8B D1")]
+    [MemberFunction("48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC ?? 48 8B 99 ?? ?? ?? ?? 4C 8B D1 41 0F B6 F1 49 8B F8 44 8B DA ?? ?? ?? 66 83 F9 ?? 0F 8D ?? ?? ?? ?? 8D 42 ?? 83 F8 ?? 0F 87 ?? ?? ?? ?? 45 33 C9 45 8D 41 ?? 40 84 F6")]
     [GenerateStringOverloads]
-    public partial void AddContextMenuItem(int eventId, byte* text, bool disabled = false, bool submenu = false, bool copyText = true);
+    public partial void AddContextMenuItem(int eventId, CStringPointer text, bool disabled = false, bool submenu = false, bool copyText = true);
 
     [MemberFunction("E8 ?? ?? ?? ?? 40 84 ED 79 0F")]
-    public partial void AddContextMenuItem2(int eventId, uint addonTextId, bool disabled = false, bool submenu = false, bool copyText = true);
+    public partial void AddContextMenuItem2(int eventId, uint addonTextId, bool disabled = false, bool submenu = false);
 
     public void SetPosition(int x, int y) {
         Position.X = x;
         Position.Y = y;
         OpenAtPosition = 1;
+    }
+
+    [Flags]
+    public enum BlockFunctionsFlag : byte {
+        None = 0,
+        Blacklisted = 1 << 0,
+        Muted = 1 << 1,
+        TermFiltered = 1 << 2
     }
 }
 
@@ -103,6 +112,6 @@ public unsafe partial struct ContextMenu {
 
     [FieldOffset(0x660)] public uint ContextItemDisabledMask;
     [FieldOffset(0x664)] public uint ContextSubMenuMask;
-    [FieldOffset(0x668)] public byte* ContextTitleString;
+    [FieldOffset(0x668)] public CStringPointer ContextTitleString;
     [FieldOffset(0x670)] public byte SelectedContextItemIndex;
 }

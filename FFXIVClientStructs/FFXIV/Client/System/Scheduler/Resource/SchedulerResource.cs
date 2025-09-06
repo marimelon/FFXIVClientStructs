@@ -19,13 +19,13 @@ public unsafe partial struct SchedulerResource {
     public partial struct ResourceName {
         [FieldOffset(0x08)] public byte* DataPointer;
         [FieldOffset(0x10)] public ushort Unk1;
-        [FieldOffset(0x12), FixedSizeArray] internal FixedSizeArray46<byte> _buffer; // TODO: string?
+        [FieldOffset(0x12), FixedSizeArray(isString: true)] internal FixedSizeArray46<byte> _buffer;
     }
 
     /// <summary>
     /// Returns the data from the contained resource handle or null.
     /// </summary>
     /// <param name="dataLength">The length of the returned data.</param>
-    [MemberFunction("E8 ?? ?? ?? ?? 48 8B E8 48 63 87 ?? ?? ?? ??")]
+    [MemberFunction("E8 ?? ?? ?? ?? 4C 8B E8 48 63 8F")]
     public partial byte* GetResourceData(uint* dataLength);
 }

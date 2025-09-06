@@ -8,13 +8,13 @@ namespace FFXIVClientStructs.FFXIV.Client.UI;
 [Addon("WeeklyBingo")]
 [GenerateInterop]
 [Inherits<AtkUnitBase>]
-[StructLayout(LayoutKind.Explicit, Size = 0x23D8)]
+[StructLayout(LayoutKind.Explicit, Size = 0x23E0)]
 public partial struct AddonWeeklyBingo {
-    [FieldOffset(0x230)] public DutySlotList DutySlotList;
+    [FieldOffset(0x238)] public DutySlotList DutySlotList;
 
-    [FieldOffset(0x18F8)] public StringThing StringThing;
-    [FieldOffset(0x1948)] public StickerSlotList StickerSlotList;
-    [FieldOffset(0x1F30)] public uint NumStickersPlaced;
+    [FieldOffset(0x1900)] public StringThing StringThing;
+    [FieldOffset(0x1950)] public StickerSlotList StickerSlotList;
+    [FieldOffset(0x1F38)] public uint NumStickersPlaced;
 }
 
 [StructLayout(LayoutKind.Explicit, Size = 0x16C8)]
@@ -79,21 +79,21 @@ public unsafe struct DutySlot {
 
 [StructLayout(LayoutKind.Explicit, Size = 0x50)]
 public unsafe struct StringThing {
+    // No more seals can be applied. Deliver the journal to Khloe Aliapoh to receive your reward.
     [FieldOffset(0x08)]
-    public byte*
-        FullSealsText; // No more seals can be applied. Deliver the journal to Khloe Aliapoh to receive your reward.
+    public CStringPointer FullSealsText;
 
+    // One or more lines of seals have been completed. Deliver the journal to Khloe Aliapoh to receive your reward or continue adventuring to add more seals.
     [FieldOffset(0x10)]
-    public byte*
-        OneOrMoreLinesText; // One or more lines of seals have been completed. Deliver the journal to Khloe Aliapoh to receive your reward or continue adventuring to add more seals.
+    public CStringPointer OneOrMoreLinesText;
 
+    // Second Chance points can be used to increase your chances of completing lines.
     [FieldOffset(0x18)]
-    public byte*
-        SecondChancePointsText; // Second Chance points can be used to increase your chances of completing lines.
+    public CStringPointer SecondChancePointsText;
 
-    [FieldOffset(0x20)] public byte* ReceiveSealCompleteText; // Select a completed duty to receive a seal.
-    [FieldOffset(0x28)] public byte* ReceiveSealIncompleteText; // Complete a task to receive a seal.
-    [FieldOffset(0x30)] public byte* SecondChanceRetryText; // Select a completed duty to be rendered incomplete.
+    [FieldOffset(0x20)] public CStringPointer ReceiveSealCompleteText; // Select a completed duty to receive a seal.
+    [FieldOffset(0x28)] public CStringPointer ReceiveSealIncompleteText; // Complete a task to receive a seal.
+    [FieldOffset(0x30)] public CStringPointer SecondChanceRetryText; // Select a completed duty to be rendered incomplete.
     [FieldOffset(0x40)] public AddonWeeklyBingo* Addon;
     [FieldOffset(0x48)] public AtkTextNode* TextNode;
 }

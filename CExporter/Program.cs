@@ -2,12 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using YamlDotNet.Serialization;
 
 namespace CExporter;
 
 public class Program {
-    public static void Main(string[] _) {
+    public static void Main(string[] args) {
+        var quiet = args.Contains("--quiet");
+        var noWrite = args.Contains("--no-write");
+        var timeStart = DateTime.Now;
         var dir = new DirectoryInfo(Environment.CurrentDirectory);
         while (dir.FullName.Contains("ida") && !dir.FullName.EndsWith("ida")) {
             dir = dir.Parent!;
@@ -16,7 +20,8 @@ public class Program {
             dir = dir.GetDirectories("ida", SearchOption.AllDirectories).FirstOrDefault() ?? dir.Parent!;
         }
 
-        Exporter.ProcessTypes();
+        Exporter.ProcessTypes(quiet);
+        Exporter.ProcessStaticFunctions(quiet);
 
         Exporter.VerifyNoOverlap();
 
@@ -31,6 +36,10 @@ public class Program {
             .GroupBy(t => t.Key).ToDictionary(t => t.Key, t => t.Select(f => f.Value).ToList());
 
         Exporter.VerifyNoNameOverlap(dataCheck);
+        Exporter.ProcessDefinedVTables(data);
+
+        if (!quiet) Console.WriteLine($"Processed all types in: {DateTime.Now - timeStart}");
+        timeStart = DateTime.Now;
 
         foreach (var warning in ExporterStatics.WarningList) {
             Console.WriteLine(warning);
@@ -44,9 +53,24 @@ public class Program {
             Environment.Exit(1);
         }
 #else
-        new FileInfo(Path.Combine(dir.FullName, "errors.txt")).WriteFile(string.Join("\n", ExporterStatics.ErrorList));
+        if (!noWrite) {
+            if (ExporterStatics.ErrorList.Count > 20) {
+                var sb = new StringBuilder();
+                sb.AppendLine("<details>");
+                sb.AppendLine();
+                foreach (var error in ExporterStatics.ErrorList) {
+                    sb.AppendLine($"{error}");
+                }
+                sb.Append("</details>");
+                new FileInfo(Path.Combine(dir.FullName, "errors.txt")).WriteFile(sb.ToString());
+            }
+            else
+                new FileInfo(Path.Combine(dir.FullName, "errors.txt")).WriteFile(string.Join("\n", ExporterStatics.ErrorList));
+        }
 #endif
-
-        Exporter.Write(dir);
+        if (!noWrite) {
+            Exporter.Write(dir);
+            if (!quiet) Console.WriteLine($"Files written in: {DateTime.Now - timeStart}");
+        }
     }
 }

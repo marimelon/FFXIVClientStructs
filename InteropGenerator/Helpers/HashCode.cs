@@ -1,6 +1,5 @@
 // from https://raw.githubusercontent.com/Sergio0694/ComputeSharp/main/src/ComputeSharp.SourceGeneration/Helpers/HashCode.cs
 
-using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
@@ -426,16 +425,6 @@ internal struct HashCode {
 
         return (int)hash;
     }
-
-    /// <inheritdoc />
-    [Obsolete("HashCode is a mutable struct and should not be compared with other HashCodes. Use ToHashCode to retrieve the computed hash code.", true)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public override int GetHashCode() => throw new NotSupportedException();
-
-    /// <inheritdoc />
-    [Obsolete("HashCode is a mutable struct and should not be compared with other HashCodes.", true)]
-    [EditorBrowsable(EditorBrowsableState.Never)]
-    public override bool Equals(object? obj) => throw new NotSupportedException();
 
     /// <summary>
     ///     Rotates the specified value left by the specified number of bits.

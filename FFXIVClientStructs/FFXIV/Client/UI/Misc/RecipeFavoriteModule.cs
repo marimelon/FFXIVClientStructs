@@ -1,18 +1,19 @@
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using FFXIVClientStructs.FFXIV.Client.UI.Misc.UserFileManager;
+using UserFileEvent = FFXIVClientStructs.FFXIV.Client.UI.Misc.UserFileManager.UserFileEvent;
 
 namespace FFXIVClientStructs.FFXIV.Client.UI.Misc;
 
 // Client::UI::Misc::RecipeFavoriteModule
 //   Client::UI::Misc::UserFileManager::UserFileEvent
-// ctor "E8 ?? ?? ?? ?? 48 8D 8F ?? ?? ?? ?? 49 8B D4 E8 ?? ?? ?? ?? 48 8D 8F ?? ?? ?? ?? 49 8B D4 E8 ?? ?? ?? ?? 48 8D 8F ?? ?? ?? ?? E8 ?? ?? ?? ?? 48 8D 8F ?? ?? ?? ?? E8"
 [GenerateInterop]
 [Inherits<UserFileEvent>]
-[StructLayout(LayoutKind.Explicit, Size = 0x188)]
+[StructLayout(LayoutKind.Explicit, Size = 0x190)]
 public unsafe partial struct RecipeFavoriteModule {
-    public static RecipeFavoriteModule* Instance() => Framework.Instance()->GetUIModule()->GetRecipeFavoriteModule();
+    public static RecipeFavoriteModule* Instance() {
+        var uiModule = UIModule.Instance();
+        return uiModule == null ? null : uiModule->GetRecipeFavoriteModule();
+    }
 
-    [FieldOffset(0x42), FixedSizeArray] internal FixedSizeArray8<CraftingTypeEntry> _craftingTypes;
+    [FieldOffset(0x4A), FixedSizeArray] internal FixedSizeArray8<CraftingTypeEntry> _craftingTypes;
 
     [GenerateInterop]
     [StructLayout(LayoutKind.Explicit, Size = 0x28)]
@@ -29,12 +30,12 @@ public unsafe partial struct RecipeFavoriteModule {
     [MemberFunction("E8 ?? ?? ?? ?? 48 85 C0 B9 ?? ?? ?? ?? 0F 45 F9")]
     public partial RecipeEntry* GetEntry(byte craftType, ushort recipeId);
 
-    [MemberFunction("E8 ?? ?? ?? ?? 84 C0 74 04 41 83 CE 08")]
+    [MemberFunction("E8 ?? ?? ?? ?? 84 C0 74 ?? 41 83 CE ?? 0F B6 B5")]
     public partial bool IsFavorited(byte craftType, ushort recipeId);
 
     [MemberFunction("E8 ?? ?? ?? ?? 44 0F B6 4C 24 ?? 48 8B 74 24 ??")]
     public partial uint RemoveFromFavorites(byte craftType, ushort recipeId); // returns LogMessage RowId
 
-    [MemberFunction("E8 ?? ?? ?? ?? 8B F8 49 8B CE 49 8B 06")]
+    [MemberFunction("E8 ?? ?? ?? ?? 8B D0 48 8B CE E8 ?? ?? ?? ?? 83 BB")]
     public partial uint AddToFavorites(byte craftType, ushort recipeId); // returns LogMessage RowId
 }

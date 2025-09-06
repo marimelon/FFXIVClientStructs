@@ -1,6 +1,7 @@
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using static FFXIVClientStructs.FFXIV.Client.UI.Misc.RaptureGearsetModule;
+using static FFXIVClientStructs.FFXIV.Client.UI.RaptureAtkModule;
 
 namespace FFXIVClientStructs.FFXIV.Client.UI.Agent;
 
@@ -10,9 +11,15 @@ namespace FFXIVClientStructs.FFXIV.Client.UI.Agent;
 [Agent(AgentId.GearSet)]
 [GenerateInterop]
 [Inherits<AgentInterface>]
-[StructLayout(LayoutKind.Explicit, Size = 0xBC0)]
+[StructLayout(LayoutKind.Explicit, Size = 0xBD0)]
 public unsafe partial struct AgentGearSet {
-    [FieldOffset(0x808)] public GearsetCharaView CharaView;
+    [FieldOffset(0x48), FixedSizeArray] internal FixedSizeArray14<ContextMenuParam> _contextMenuParams;
+
+    [FieldOffset(0x120), FixedSizeArray] internal FixedSizeArray13<ItemCache> _itemCaches;
+
+    [FieldOffset(0x880)] public GearsetCharaView CharaView;
+
+    [FieldOffset(0xBB8)] public StdVector<int> GearSetIds;
 
     [MemberFunction("48 89 5C 24 ?? 57 48 83 EC 20 48 8B F9 8B DA 48 8B 49 10 48 8B 01 FF 50 70 4C 8D 44 24")]
     public partial void OpenBannerEditorForGearset(int gearsetId);
@@ -26,6 +33,18 @@ public unsafe partial struct AgentGearSet {
     public void EquipGearset(int gearsetId)
         => SendEvent(4, gearsetId);
 
+    public void ReassignGear(int gearsetId)
+        => SendEvent(6, gearsetId);
+
+    public void ReassignSetNumber(int gearsetId)
+        => SendEvent(7, gearsetId);
+
+    public void MoveSetUp(int gearsetId)
+        => SendEvent(8, gearsetId);
+
+    public void MoveSetDown(int gearsetId)
+        => SendEvent(9, gearsetId);
+
     public void OpenRenameDialog(int gearsetId)
         => SendEvent(10, gearsetId);
 
@@ -35,8 +54,24 @@ public unsafe partial struct AgentGearSet {
     public void OpenGearsetPreview(int gearsetId)
         => SendEvent(12, gearsetId);
 
+    /// <remarks> Only works when Cross Hotbars are enabled. </remarks>
+    public void SetToHotbar(int gearsetId)
+        => SendEvent(13, gearsetId);
+
     public void UpdateGearset(int gearsetId)
         => SendEvent(16, gearsetId);
+
+    public void LinkToGlamourPlate(int gearsetId)
+        => SendEvent(20, gearsetId);
+
+    public void ChangeGlamourPlateLink(int gearsetId)
+        => SendEvent(21, gearsetId);
+
+    public void RemoveGlamourPlateLink(int gearsetId)
+        => SendEvent(22, gearsetId);
+
+    public void EditPortrait(int gearsetId)
+        => SendEvent(23, gearsetId);
 
     private void SendEvent(int evt, int gearsetId = 0) {
         var result = stackalloc AtkValue[1];
@@ -46,11 +81,18 @@ public unsafe partial struct AgentGearSet {
         ReceiveEvent(result, values, 2, 0);
     }
 
+    [StructLayout(LayoutKind.Explicit, Size = 0x0C)]
+    public struct ContextMenuParam {
+        [FieldOffset(0x00)] public int Unk0;
+        [FieldOffset(0x04)] public int EventId;
+        [FieldOffset(0x08)] public int GearSetId;
+    }
+
     // Client::UI::Agent::AgentGearSet::GearsetCharaView
     //   Client::UI::Misc::CharaView
     [GenerateInterop]
     [Inherits<CharaView>]
-    [StructLayout(LayoutKind.Explicit, Size = 0x328)]
+    [StructLayout(LayoutKind.Explicit, Size = 0x330)]
     public unsafe partial struct GearsetCharaView {
         [FieldOffset(0x318)] public bool UpdateVisibility;
         [FieldOffset(0x319)] public bool UpdateItems;
